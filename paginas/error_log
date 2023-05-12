@@ -1,0 +1,190 @@
+[04-Jan-2019 16:08:22 America/Bogota] PHP Fatal error:  Uncaught Error: Call to undefined method NumeroALetras::mesesTraducida() in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php:32
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php on line 32
+[04-Jan-2019 16:08:59 America/Bogota] PHP Fatal error:  Uncaught Error: Call to undefined method NumeroALetras::mesesTraducida() in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php:32
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php on line 32
+[04-Jan-2019 16:09:38 America/Bogota] PHP Fatal error:  Uncaught Error: Call to undefined method NumeroALetras::mesesTraducida() in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php:32
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/clinica/paginas/imprimir_certificado.php on line 32
+[28-Jun-2021 13:36:10 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:37:15 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:37:25 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:37:31 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:44:39 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:47:41 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:48:26 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:50:19 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:50:32 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:50:38 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:51:51 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:52:22 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:53:00 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:53:10 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:53:39 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:53:59 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:54:06 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:55:36 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:56:10 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:56:51 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:59:04 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[28-Jun-2021 13:59:38 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[30-Jul-2021 19:06:07 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[30-Jul-2021 19:12:23 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[31-Jul-2021 09:50:45 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[31-Jul-2021 09:53:33 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[24-May-2022 16:31:17 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[16-Sep-2022 11:21:32 America/Boise] PHP Fatal error:  Cannot declare class MetodosUtiles, because the name is already in use in /home1/villame5/public_html/clinica/paginas/MetodosUtiles.php on line 3
+[08-Nov-2022 08:09:45 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php:95
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php on line 95
+[14-Dec-2022 12:33:36 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php:95
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php on line 95
+[14-Dec-2022 12:33:59 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php:11
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php on line 11
+[14-Dec-2022 12:34:17 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php:11
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php on line 11
+[14-Dec-2022 12:35:16 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php:11
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php on line 11
+[14-Dec-2022 12:35:30 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php:11
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php on line 11
+[22-Dec-2022 09:49:46 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php:95
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php on line 95
+[22-Dec-2022 09:49:46 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php:95
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/historia_clinica.php on line 95
+[22-Dec-2022 09:49:55 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php:11
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_consulta.php on line 11
+[22-Dec-2022 11:53:41 America/Bogota] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_certificado.php:12
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/imprimir_certificado.php on line 12
+[07-Jan-2023 16:46:29 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:47:46 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:52:23 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:52:33 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:54:35 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:56:47 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:58:53 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 16:59:45 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:00:32 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:00:45 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:01:06 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:03:04 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:03:14 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:03:16 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:03:22 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:03:54 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:04:33 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:36 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:36 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:37 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:37 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:37 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php:103
+Stack trace:
+#0 {main}
+  thrown in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/crear_cita.php on line 103
+[07-Jan-2023 17:04:48 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:05:48 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:06:19 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:07:36 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:08:40 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:23:04 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:23:41 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:24:27 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:25:41 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:27:49 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:28:49 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:29:19 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:29:59 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:30:06 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[07-Jan-2023 17:30:15 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[09-Jan-2023 15:18:46 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[09-Jan-2023 15:19:44 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[09-Jan-2023 21:30:59 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[25-Jan-2023 14:01:02 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[03-Apr-2023 10:15:38 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[03-Apr-2023 10:16:07 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[04-Apr-2023 11:48:02 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[04-Apr-2023 11:53:31 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[04-Apr-2023 11:57:15 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[04-Apr-2023 14:08:51 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[04-Apr-2023 14:09:19 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:10:49 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:11:14 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:14:19 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:14:26 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:37:17 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:38:53 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:39:39 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:43:38 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 09:43:52 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 10:05:30 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 10:05:52 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 14:09:34 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 14:10:33 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 15:57:10 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 15:57:25 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 17:32:26 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[12-Apr-2023 17:32:50 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[13-Apr-2023 11:40:17 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[13-Apr-2023 11:41:01 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[14-Apr-2023 10:53:39 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[14-Apr-2023 10:54:02 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[14-Apr-2023 10:58:07 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[14-Apr-2023 10:58:26 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[20-Apr-2023 10:04:08 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[20-Apr-2023 10:04:25 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[20-Apr-2023 10:04:44 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[02-May-2023 13:14:26 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[02-May-2023 13:14:53 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[02-May-2023 17:26:11 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[02-May-2023 17:28:25 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[02-May-2023 17:29:06 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[08-May-2023 12:03:11 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[08-May-2023 12:03:29 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[08-May-2023 12:28:15 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 10:32:45 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 10:34:23 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 10:35:34 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 10:38:39 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 10:39:13 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
+[10-May-2023 14:22:53 America/Boise] PHP Warning:  session_start(): Cannot start session when headers already sent in /home1/villame5/public_html/pruebanotificaciones-villamedyc-com/paginas/header.php on line 2
