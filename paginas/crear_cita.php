@@ -102,8 +102,8 @@ if (isset($status)) {
                                 <?php
 
                                 $servername = "localhost";
-                                $username = "villame5_clinica";
-                                $password = "cl1n1c4p@ssw0rd";
+                                $username = "root";
+                                $password = "";
                                 $dbname = "villame5_bb0";
 
                                 $conn = new mysqli($servername, $username, $password, $dbname);
