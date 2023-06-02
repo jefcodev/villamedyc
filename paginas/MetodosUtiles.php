@@ -7,6 +7,7 @@ class MetodosUtiles {
             case 'doc': return 'Doctor';
             case 'asi': return 'Asistente';
             case 'adm': return 'Administrador';
+            case 'fis': return 'Fisioterapeuta';
             default:
                 break;
         }

@@ -59,47 +59,83 @@ $id_cita = $_GET['id_cita'];
             </div>
         </div><br>
         <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
-            <b style="font-size: 18px">Datos de la consulta</b><br><br>
+            <b style="font-size: 18px">Factores Ocupacionales</b><br><br>
             <div id="crear_consulta">
                 <div class="row">
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Motivo de la consulta" placeholder="Motivo de la consulta" id="motivo_consulta" name="motivo_consulta"></textarea>
-                        <textarea class="form-control" title="Examen físico" placeholder="Examen físico" id="examen_fisico" name="examen_fisico"></textarea>
-                        <textarea class="form-control" title="Tratamiento" placeholder="Tratamiento" id="tratamiento" name="tratamiento"></textarea>
+                        <textarea class="form-control" title="Profesión" placeholder="Profesión" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <textarea class="form-control" title="Tipo de trabajo" placeholder="Tipo de trabajo" id="examen_fisico" name="examen_fisico"></textarea>
+                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                            <option value="Sedestacion Prolongada">Sedestacion Prolongada</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
-                        <select class="selectpicker" data-live-search="true" id="cie_10" title="Cie diez">
-                            <?php
-                            $result_cie_10 = $mysqli->query("SELECT * FROM cie_diez");
-                            while ($row_cie10 = mysqli_fetch_array($result_cie_10)) {
-                                echo '<option data-tokens="' . $row_cie10['codigo'] . '">' . $row_cie10['codigo'] . '-' . $row_cie10['descripcion'] . '</option>';
-                            }
-                            ?>
-                        </select><br><br>
-                        <textarea class="form-control" title="Diagnóstico" placeholder="Diagnóstico" id="diagnostico" name="diagnostico"></textarea>
-                        <textarea class="form-control" title="Observaciones" placeholder="Observaciones" id="observaciones" name="observaciones"></textarea>
-                        <input class="form-control" type="number" title="Días de certificado: no puede exceder los 60 días" placeholder="Días de certificado" id="certificado" name="certificado" min="1" max="60" />
+                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                            <option value="Esfuerzo Fisico">Esfuerzo Fisico</option>
+                            <option value="Bajo">Bajo</option>
+                            <option value="Medio">Medio</option>
+                            <option value="Alto">Alto</option>
+                        </select>
+                        <textarea class="form-control" title="Diagnóstico" placeholder="Hábitos/Otras actividades" id="diagnostico" name="diagnostico"></textarea>
                     </div>
                 </div>
 
 
-                <b style="font-size: 18px">Costo de consulta</b><br><br>
+                <b style="font-size: 18px">Diagnóstico</b><br><br>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <input class="form-control" type="number" title="Precio de consulta" placeholder="Precio de consulta" id="precio" name="precio" min="1" />
+                        <textarea class="form-control" title="Profesión" placeholder="Antecedentes del diagnóstico" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <fieldset>
+                            <input type="radio" name="antecedentes" id="">Si
+                            <input type="radio" name="antecedentes" id="">No
+                        </fieldset>
                     </div>
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Detalles precio" placeholder="Detalles precio" id="descripcion_precio" name="descripcion_precio"></textarea>
+                        <textarea class="form-control" title="Detalles precio" placeholder="Tratamientos anteriores" id="descripcion_precio" name="descripcion_precio"></textarea>
                     </div>
                 </div>
+
+                <b style="font-size: 18px">Palpación y Dolor</b><br><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <textarea class="form-control" title="Profesión" placeholder="Contracturas" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                            <option value="Irradiación">Irradiación</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
+                        <textarea class="form-control" title="Profesión" placeholder="Hacia donde?" id="motivo_consulta" name="motivo_consulta"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea class="form-control" title="Detalles precio" placeholder="Intensidad" id="descripcion_precio" name="descripcion_precio"></textarea>
+                        <textarea class="form-control" title="Profesión" placeholder="Sensaciones" id="motivo_consulta" name="motivo_consulta"></textarea>
+                    </div>
+                </div>
+
+                <b style="font-size: 18px">Limitación de la Movilidad</b><br><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                            <option value="Crujidos">Crujidos</option>
+                            <option value="Osteoarticular">Osteoarticular</option>
+                        </select>
+                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                            <option value="Topes articulares">Topes articulares</option>
+                            <option value="Musculo Tendinosos">Musculo Tendinosos</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
                     </div>
                     <div class="col-md-6">
-                        <input class="btn btn-primary float-left" type="button" value="Crear cita fisioterapeuta" onclick="crear_cita()">
-                        <input class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Guardar datos de la consulta" onclick="crear_consulta()" /><br>
+                        <input class="btn btn-primary float-left" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Ver Detalles" onclick="crear_consulta()" />
+                        <input class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Cobrar" onclick="crear_consulta()" /><br>
                     </div>
                 </div>
             </div>

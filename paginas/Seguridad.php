@@ -1,31 +1,52 @@
 <?php
 
-class Seguridad {
+class Seguridad
+{
     //    public static $PAGINAS = array('lista_pacientes');
 
     /**
      * LISTADO DE PAGINAS Y PERMISOS DE ASISTENTES
      * @var type 
      */
-    public static $ASISTENTE = [array(PAGINAS::LISTA_PACIENTES, ACCIONES::CREAR),
+    public static $ASISTENTE = [
+        array(PAGINAS::LISTA_PACIENTES, ACCIONES::CREAR),
         array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
         array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR),
-        array(PAGINAS::LISTA_CITAS, ACCIONES::EDITAR, ACCIONES::CREAR)];
+        array(PAGINAS::LISTA_CITAS, ACCIONES::EDITAR, ACCIONES::CREAR)
+    ];
 
     /**
-     * LISTADO DE PAGINAS Y PERMISOS DE DOCTORES
-     * @var type 
+     * LISTADO DE PAGINAS Y PERMISOS DE FISITERAEUTAS
+     * @var type
      */
-    public static $DOCTOR = [array(PAGINAS::LISTA_PACIENTES, ACCIONES::EDITAR),
+    public static $FISIOTERAPEUTA = [
+        array(PAGINAS::LISTA_PACIENTES, ACCIONES::EDITAR),
         array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
         array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR, ACCIONES::IMPRIMIR_CLASIFICADO, ACCIONES::EDITAR),
         array(PAGINAS::EDITAR_CONSULTA, ACCIONES::EDITAR),
         array(PAGINAS::INICIO, ACCIONES::ATENDER_CITA),
         array(PAGINAS::LISTA_CITAS, ACCIONES::CREAR),
         array(PAGINAS::LISTA_HISTORIAS, ACCIONES::VER),
-        array(PAGINAS::VER_HISTORIA_CLINICA, ACCIONES::VER)];
+        array(PAGINAS::VER_HISTORIA_CLINICA, ACCIONES::VER)
+    ];
 
-    public static function tiene_permiso($rol, $pagina, $accion) {
+    /**
+     * LISTADO DE PAGINAS Y PERMISOS DE DOCTORES
+     * @var type 
+     */
+    public static $DOCTOR = [
+        array(PAGINAS::LISTA_PACIENTES, ACCIONES::EDITAR),
+        array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
+        array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR, ACCIONES::IMPRIMIR_CLASIFICADO, ACCIONES::EDITAR),
+        array(PAGINAS::EDITAR_CONSULTA, ACCIONES::EDITAR),
+        array(PAGINAS::INICIO, ACCIONES::ATENDER_CITA),
+        array(PAGINAS::LISTA_CITAS, ACCIONES::CREAR),
+        array(PAGINAS::LISTA_HISTORIAS, ACCIONES::VER),
+        array(PAGINAS::VER_HISTORIA_CLINICA, ACCIONES::VER)
+    ];
+
+    public static function tiene_permiso($rol, $pagina, $accion)
+    {
         if ($rol === 'asi') {
             for ($i = 0; $i < count(self::$ASISTENTE); $i++) {
                 if (self::$ASISTENTE[$i][0] === $pagina) {
@@ -52,15 +73,28 @@ class Seguridad {
                 }
             }
         }
+        if ($rol === 'fis') {
+            for ($i = 0; $i < count(self::$FISIOTERAPEUTA); $i++) {
+                if (self::$FISIOTERAPEUTA[$i][0] === $pagina) {
+                    $acciones = self::$FISIOTERAPEUTA[$i];
+                    for ($j = 1; $j < count($acciones); $j++) {
+                        if ($acciones[$j] === $accion) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
         if ($rol === 'adm') {
             return true;
         }
         return false;
     }
-
 }
 
-class ACCIONES {
+class ACCIONES
+{
 
     const EDITAR = 'EDITAR';
     const CREAR = 'CREAR';
@@ -71,10 +105,10 @@ class ACCIONES {
     const IMPRIMIR = 'IMPRIMIR';
     const IMPRIMIR_CLASIFICADO = 'IMPRIMIR_CLASIFICADO';
     const ATENDER_CITA = 'ATENDER_CITA';
-
 }
 
-class PAGINAS {
+class PAGINAS
+{
     const EDITAR_PACIENTE = 'editar_paciente';
     const LISTA_CONSULTAS = 'lista_consultas';
     const EDITAR_CONSULTA = 'editar_consulta';
@@ -86,5 +120,4 @@ class PAGINAS {
     const LISTA_USUARIOS = 'lista_usuarios';
     const CREAR_USUARIOS = 'crear_usuario';
     const EDITAR_USUARIOS = 'editar_usuario';
-
 }
