@@ -120,4 +120,7 @@ class PAGINAS
     const LISTA_USUARIOS = 'lista_usuarios';
     const CREAR_USUARIOS = 'crear_usuario';
     const EDITAR_USUARIOS = 'editar_usuario';
+
+    /* Creación de inventario */
+    const LISTA_PRODUCTOS = 'lista_productos';
 }
