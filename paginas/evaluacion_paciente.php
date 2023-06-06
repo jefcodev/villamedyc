@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-$id_cita = $_GET['id_cita'];
+$id_cita = $_GET['cabecera_id'];
 ?>
 <link rel="stylesheet" href="../css/bootstrap_select.min.css">
 
@@ -8,11 +8,10 @@ $id_cita = $_GET['id_cita'];
     <section class="cuerpo">
         <h1>Atención al paciente</h1><br>
         <?php
-        $sql_datos_cita = "SELECT * FROM citas WHERE id='$id_cita'";
+        $sql_datos_cita = "SELECT * FROM paquete_cabecera WHERE cabecera_id=$id_cita";
         $result_datos_cita = $mysqli->query($sql_datos_cita);
         $rowscita = $result_datos_cita->fetch_assoc();
-        $id_paciente = $rowscita['id_paciente'];
-
+        $id_paciente = $rowscita['PACIENTE_ID'];
         $sql_datos_paciente = "SELECT * FROM pacientes WHERE id='$id_paciente'";
         $result_datos_paciente = $mysqli->query($sql_datos_paciente);
         $rowspaciente = $result_datos_paciente->fetch_assoc();
@@ -66,17 +65,17 @@ $id_cita = $_GET['id_cita'];
                         <textarea class="form-control" title="Profesión" placeholder="Profesión" id="motivo_consulta" name="motivo_consulta"></textarea>
                         <textarea class="form-control" title="Tipo de trabajo" placeholder="Tipo de trabajo" id="examen_fisico" name="examen_fisico"></textarea>
                         <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
-                            <option value="Sedestacion Prolongada">Sedestacion Prolongada</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
+                            <option value="3">Sedestacion Prolongada</option>
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
-                            <option value="Esfuerzo Fisico">Esfuerzo Fisico</option>
-                            <option value="Bajo">Bajo</option>
-                            <option value="Medio">Medio</option>
-                            <option value="Alto">Alto</option>
+                            <option value="0">Esfuerzo Fisico</option>
+                            <option value="1">Bajo</option>
+                            <option value="2">Medio</option>
+                            <option value="3">Alto</option>
                         </select>
                         <textarea class="form-control" title="Diagnóstico" placeholder="Hábitos/Otras actividades" id="diagnostico" name="diagnostico"></textarea>
                     </div>
@@ -88,10 +87,6 @@ $id_cita = $_GET['id_cita'];
                 <div class="row">
                     <div class="col-md-6">
                         <textarea class="form-control" title="Profesión" placeholder="Antecedentes del diagnóstico" id="motivo_consulta" name="motivo_consulta"></textarea>
-                        <fieldset>
-                            <input type="radio" name="antecedentes" id="">Si
-                            <input type="radio" name="antecedentes" id="">No
-                        </fieldset>
                     </div>
                     <div class="col-md-6">
                         <textarea class="form-control" title="Detalles precio" placeholder="Tratamientos anteriores" id="descripcion_precio" name="descripcion_precio"></textarea>
@@ -103,9 +98,9 @@ $id_cita = $_GET['id_cita'];
                     <div class="col-md-6">
                         <textarea class="form-control" title="Profesión" placeholder="Contracturas" id="motivo_consulta" name="motivo_consulta"></textarea>
                         <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
-                            <option value="Irradiación">Irradiación</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
+                            <option value="3">Irradiación</option>
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
                         </select>
                         <textarea class="form-control" title="Profesión" placeholder="Hacia donde?" id="motivo_consulta" name="motivo_consulta"></textarea>
                     </div>
@@ -119,12 +114,11 @@ $id_cita = $_GET['id_cita'];
                 <div class="row">
                     <div class="col-md-6">
                         <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
-                            <option value="Crujidos">Crujidos</option>
-                            <option value="Osteoarticular">Osteoarticular</option>
-                        </select>
-                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
-                            <option value="Topes articulares">Topes articulares</option>
-                            <option value="Musculo Tendinosos">Musculo Tendinosos</option>
+                            <option value="1">Crujidos</option>
+                            <optgroup label="Osteoarticular">
+                                <option value="2">Topes articulares</option>
+                                <option value="3">Musculo Tendinosos</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -134,8 +128,7 @@ $id_cita = $_GET['id_cita'];
                         <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
                     </div>
                     <div class="col-md-6">
-                        <input class="btn btn-primary float-left" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Ver Detalles" onclick="crear_consulta()" />
-                        <input class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Cobrar" onclick="crear_consulta()" /><br>
+                        <input class="btn btn-primary float-left" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Guardar" onclick="crear_consulta()" />
                     </div>
                 </div>
             </div>

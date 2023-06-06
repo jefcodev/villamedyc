@@ -74,143 +74,180 @@ if (isset($status)) {
 </header>
 
 <body>
-    <div class="row mt-5">
-
-
-
-
-
-
+    <div>
         <section class="cuerpo">
-            <div id="mensajes" <?php echo $class; ?>>
-                <?php echo isset($error) ? $error : ''; ?>
-            </div>
-            <h1>Crear Paquete</h1><br>
-            <div class="row">
-
-                <div class="col-md-12">
-                    <form action="adm_citas.php" method="post">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b style="color: #28a745">Seleccione Servicios</b><br><br>
-                                    </div>
-                                </div>
-
-                                <select class="select2 form-control" data-rel="chosen" name="" id="servicios">
-                                    <!-- <option value="" selected="" hidden="">Agregar Servicios</option> -->
-                                    <option value="1">Displacia de cadera</option>
-                                    <option value="2">Pie plano</option>
-                                    <optgroup label="Tumores óseos">
-                                        <option value="3">Artrosis de rodilla</option>
-                                        <option value="4">Hernias discales</option>
-                                        <option value="5">Tratamientos con células madre</option>
-                                        <option value="6">Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares</option>
-                                        <option value="7">Reemplazo Articulares</option>
-                                        <option value="8">Tratamientos para el adulto</option>
-                                        <option value="9">Esguinces</option>
-                                        <option value="10">Fracturas</option>
-                                        <option value="11">Artrosis</option>
-                                        <option value="12">Dolores crónicos</option>
-                                        <option value="13">Fortalecimiento pulmonar</option>
-                                        <option value="14">Enfermedades crónicas respiratorias</option>
-                                        <option value="15">Pacientes post-COVID</option>
-                                        <option value="16">Mejora de calidad del sueño</option>
-                                        <option value="17">Ayuda a la concentración y memoria</option>
-                                        <option value="18">Elimina contracturas musculares</option>
-                                        <option value="19">Incontinecia urinaria</option>
-                                        <option value="20">Prolapsos</option>
-                                        <option value="21">Dolores en relaciones sexuales</option>
-                                        <option value="22">Eyaculación precoz</option>
-                                        <option value="23">Problemas de erección</option>
-                                        <option value="24">Programa de hidroterapia personalizado</option>
-                                    </optgroup>
-                                    <option value="25">Elimina contracturas musculares</option>
-                                </select>
-
-                                <br><br>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b style="color: #28a745">Seleccione Productos</b><br><br>
-                                    </div>
-                                </div>
-
-                                <select class="form-control" id="doctor" name="doctor" required>
-                                    <option value="" selected="" hidden="">Seleccione Producto</option>
-                                    <?php
-                                    $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'doc' OR rol = 'fis'";
-                                    $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
-                                    while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
-                                        echo "<option value='" . $row['id'] . "'>" . $row['nombre'] . ' ' . $row['apellidos'] . "</option>";
-                                    }
-                                    ?>
-                                </select>
-
-                                <!-- <input type='hidden' id='id_paciente' name='id_paciente'/> -->
-                                <!-- <input class="form-control" type="text" autocomplete="off" placeholder="Fecha y hora de la cita" id="fecha_cita" name="fecha_cita" required /><br> -->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b style="color: #28a745">Ingrese el numero de sesiones</b><br><br>
-                                    </div>
-                                </div>
-                                <input type="number" name="" id="" value="Ingrese numero de sesiones">
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <b style="color: #28a745">Servicios</b><br><br>
-                                <table class="table table-bordered table-hover" id="table">
-                                    <thead class="tabla_cabecera">
-                                        <tr>
-                                            <th>Servicio</th>
-                                            <th>Costo</th>
-                                            <th>Accion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="indexconsultas">
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <b style="color: #28a745">Productos</b><br><br>
-                                <table class="table table-bordered table-hover">
-                                    <thead class="tabla_cabecera">
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Producto</th>
-                                            <th>Costo</th>
-                                            <th>Accion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="indexconsultas">
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <input class="btn btn-primary" type="submit" name="btn_crear_cita" id="btn_crear_cita" value="Aceptar" />
-                            </div>
-                        </div>
-                    </form>
+            <div class="d-flex justify-content-center">
+                <div class="alert alert-primary d-none" id="alert-primary" role="alert">
+                    Este es un mensaje de información.
                 </div>
 
+                <div class="alert alert-success d-none" id="alert-success" role="alert">
+                    Cita creada correctamente.
+                </div>
+
+                <div class="alert alert-danger d-none" id="alert-danger" role="alert">
+                    Este es un mensaje de error.
+                </div>
+            </div>
+            <h1 class="text-center">Crear Cita Fisioterapeuta</h1><br>
+            <?php
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "villame5_bb0";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            $query = "SELECT MAX(CABECERA_ID) AS id FROM `paquete_cabecera`";
+            $result = $conn->query($query);
+            while ($row = mysqli_fetch_array($result)) {
+                $id_historia = (int)$row['id'];
+                if ($id_historia == NULL) {
+                    echo "<div id='id_paquete' class='d-none' data-paquete-id='1'>1</div>";
+                } else {
+                    $id_historia = $id_historia + 1;
+                    echo "<div id='id_paquete' data-paquete-id='" . $id_historia . "'>" . $id_historia . "</div>";
+                }
+            }
+            ?>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?php
+                    $sql = "SELECT * FROM `pacientes`";
+                    $result = $conn->query($sql);
+                    ?>
+                    <!-- <label for="id_paciente">Buscar paciente por Nombres, Apellidos o C.I.</label> -->
+                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
+                        <option value="0" selected>Seleccione el Paciente</option>
+                        <?php
+                        if ($result) {
+                            while ($fila = mysqli_fetch_array($result)) {
+                                echo "<option value='" . $fila['id'] . "'>" . $fila["numero_identidad"] . "  " .  $fila["nombres"] . "  " . $fila["apellidos"] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <!-- <label for="doctor">Seleccione doctor</label> -->
+                    <select class="select2 form-control" data-rel="chosen" id="doctor" name="doctor">
+                        <option value="" selected="" hidden="">Seleccione el Fisioterapeuta</option>
+                        <?php
+                        $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'fis'";
+                        $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
+                        while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
+                            echo "<option value='" . $row['id'] . "'>" . $row['nombre'] . ' ' . $row['apellidos'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
             </div><br>
             <div class="row">
-                <div class="col-md-8">
-                    <div id="miDiv" class="alert alert-danger" role="alert" style="display: none"></div>
+                <div class="col-md-12">Agregar Servicios</div><br><br>
+                <div class="col-md-6">
+                    <!-- <label for="servicios">Selecciones los servicios</label> -->
+                    <select class="select2 form-control" data-rel="chosen" name="servicios" id="servicios">
+                        <option value="0" selected>Seleccione Servicio</option>
+                        <option value="1">Displacia de cadera</option>
+                        <option value="2">Pie plano</option>
+                        <optgroup label="Tumores óseos">
+                            <option value="3">Artrosis de rodilla</option>
+                            <option value="4">Hernias discales</option>
+                            <option value="5">Tratamientos con células madre</option>
+                            <option value="6">Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares</option>
+                            <option value="7">Reemplazo Articulares</option>
+                            <option value="8">Tratamientos para el adulto</option>
+                            <option value="9">Esguinces</option>
+                            <option value="10">Fracturas</option>
+                            <option value="11">Artrosis</option>
+                            <option value="12">Dolores crónicos</option>
+                            <option value="13">Fortalecimiento pulmonar</option>
+                            <option value="14">Enfermedades crónicas respiratorias</option>
+                            <option value="15">Pacientes post-COVID</option>
+                            <option value="16">Mejora de calidad del sueño</option>
+                            <option value="17">Ayuda a la concentración y memoria</option>
+                            <option value="18">Elimina contracturas musculares</option>
+                            <option value="19">Incontinecia urinaria</option>
+                            <option value="20">Prolapsos</option>
+                            <option value="21">Dolores en relaciones sexuales</option>
+                            <option value="22">Eyaculación precoz</option>
+                            <option value="23">Problemas de erección</option>
+                            <option value="24">Programa de hidroterapia personalizado</option>
+                        </optgroup>
+                        <option value="25">Elimina contracturas musculares</option>
+                    </select><br><br>
+                    <!-- <label for="numero_sesion">Nº de sesiones</label> -->
+                    <input type="number" placeholder="Nº de sesiones" name="numero_sesion" id="numero_sesion" value="Ingrese numero de sesiones">
+                    <input type="button" value="Agregar" id="agregar_servicio">
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered table-hover" id="table">
+                        <thead class="tabla_cabecera">
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Valor</th>
+                                <th>Nº Sesiones</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_servicio">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-md-12 tex">Agregar Productos</div><br><br>
+                <div class="col-md-6">
+                    <!-- <label for="">Seleccione los productos</label> -->
+                    <select class="select2 form-control" id="productos" name="productos" required>
+                        <option value="" selected="" hidden="">Seleccione Producto</option>
+                        <?php
+                        $sql_traer_productos = "SELECT * FROM productos";
+                        $consulta_traer_productos = $mysqli->query($sql_traer_productos);
+                        while ($row = mysqli_fetch_array($consulta_traer_productos)) {
+                            echo "<option data-cost='" . $row['precio_v'] . "'data-count='" . $row['stock'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
+                        }
+                        ?>
+                    </select><br><br>
+                    <!-- <div class="col-md-6">Ingrese cantidad</div> -->
+                    <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1" value="Cantidad">
+                    <input type="button" value="Agregar" id="agregar_producto">
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered table-hover">
+                        <thead class="tabla_cabecera">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Valor</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_producto">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="box mx-5">
+                                <div>Total Sesiones</div>
+                                <div id="total_sesiones">00</div>
+                            </div>
+                            <div class="box mx-5">
+                                <div>Total Pago</div>
+                                <div id="total_pago">00</div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div class="d-flex justify-content-center">
+                        <input class="btn btn-primary" type="submit" name="btn_crear_paquete" id="btn_crear_paquete" value="Cobrar" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -224,139 +261,191 @@ if (isset($status)) {
         var servicios = [{
                 'id': '1',
                 'name': 'Displacia de cadera',
-                'cost': 0
+                'cost': 10,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '2',
                 'name': 'Pie plano',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '3',
                 'name': 'Artrosis de rodilla',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '4',
                 'name': 'Hernias discales',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '5',
                 'name': 'Tratamientos con células madre',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '6',
                 'name': 'Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '7',
                 'name': 'Reemplazo Articulares',
-                'cost': 0
+                'cost': 10,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '8',
                 'name': 'Tratamientos para el adulto',
-                'cost': 0
+                'cost': 40,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '9',
                 'name': 'Esguinces',
-                'cost': 0
+                'cost': 50,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '10',
                 'name': 'Fracturas',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '11',
                 'name': 'Artrosis',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '12',
                 'name': 'Dolores crónicos',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '13',
                 'name': 'Fortalecimiento pulmonar',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '14',
                 'name': 'Enfermedades crónicas respiratorias',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '15',
                 'name': 'Pacientes post-COVID',
-                'cost': 0
+                'cost': 40,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '16',
                 'name': 'Mejora de calidad del sueño',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '17',
                 'name': 'Ayuda a la concentración y memoria',
-                'cost': 0
+                'cost': 10,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '18',
                 'name': 'Elimina contracturas musculares',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '19',
                 'name': 'Incontinecia urinaria',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '20',
                 'name': 'Prolapsos',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '21',
                 'name': 'Dolores en relaciones sexuales',
-                'cost': 0
+                'cost': 40,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '22',
                 'name': 'Eyaculación precoz',
-                'cost': 0
+                'cost': 50,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '23',
                 'name': 'Problemas de erección',
-                'cost': 0
+                'cost': 30,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '24',
                 'name': 'Programa de hidroterapia personalizado',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             },
             {
                 'id': '25',
                 'name': 'Elimina contracturas musculares',
-                'cost': 0
+                'cost': 20,
+                'sesiones': 0,
+                'total': 0
             }
         ];
 
-        $('#servicios').on('change', function() {
+        $('#agregar_servicio').on('click', function() {
             let idA = $('#servicios').val();
-            agregar(idA);
+            let numeroSesiones = $('#numero_sesion').val();
+            if (idA > 0 && numeroSesiones != undefined && numeroSesiones != 0) {
+                agregar(idA, numeroSesiones);
+            }
         });
 
         var arrayServicios = [];
 
-        function agregar(idA) {
-
+        function agregar(idA, numeroSesiones) {
             var servicioaa = servicios.filter(function(item) {
                 return item.id === idA;
             });
@@ -366,9 +455,13 @@ if (isset($status)) {
             });
 
             if (validacion.length === 0) {
+                servicioaa[0].sesiones = numeroSesiones;
+                servicioaa[0].total = servicioaa[0].sesiones * servicioaa[0].cost;
                 arrayServicios.push(servicioaa[0]);
+                mostrarTabla();
+                totalizarPago();
+                totalizarSesiones();
             }
-            mostrarTabla();
         }
 
         function mostrarTabla() {
@@ -376,12 +469,14 @@ if (isset($status)) {
                 let template = `<tr id='${item.id}'>
                                     <td> ${item.name} </td>
                                     <td> ${item.cost} </td>
-                                    <td><button id='eliminar'>Eliminar</button></td>
+                                    <td> ${item.sesiones} </td>
+                                    <td> ${item.total} </td>
+                                    <td><a class='btn btn-danger btn-sm ml-1' id='eliminar_servicio'><i class='fas fa-trash-alt table-icon'></i></a></td>
                                 </tr>`;
                 return template;
             });
-            $('#indexconsultas').html(foo);
-            const del = document.querySelectorAll("#eliminar");
+            $('#table_servicio').html(foo);
+            const del = document.querySelectorAll("#eliminar_servicio");
             del.forEach((card, i) => {
                 card.addEventListener('click', () => {
                     var id = card.parentElement.parentElement.id;
@@ -398,13 +493,165 @@ if (isset($status)) {
             if (index !== -1) arrayServicios.splice(index, 1);
 
             mostrarTabla();
+            totalizarPago();
+            totalizarSesiones();
         }
 
-        // $(document).on('click', '#eliminar', function() {
-        //     let element = $('#eliminar')[0].parentElement.parentElement;
-        //     let id = $(element).attr('id');
-        //     console.log(id);
-        // });
+        $('#agregar_producto').on('click', function() {
+            let idA = $('#productos').val();
+            let cantidad = Number($('#cantidad_producto').val());
+            var selectElement = document.querySelector('#productos');
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var stock = selectedOption.getAttribute('data-count');
+            if (idA > 0 && cantidad > 0 && cantidad <= stock) {
+                var producto = {
+                    'id': idA,
+                    'name': selectedOption.getAttribute('data-name'),
+                    'cost': selectedOption.getAttribute('data-cost'),
+                    'count': cantidad,
+                    'total': selectedOption.getAttribute('data-cost') * cantidad
+                }
+                agregarProductos(producto);
+            }
+        });
+
+        var arrayProductos = [];
+
+        function agregarProductos(producto) {
+            console.log(arrayProductos);
+            var validacion = arrayProductos.filter(function(item) {
+                return item.id === producto.id;
+            });
+
+            if (validacion.length === 0) {
+                arrayProductos.push(producto);
+                mostrarTablaProductos();
+                totalizarPago();
+            }
+        }
+
+        function mostrarTablaProductos() {
+            var foo = arrayProductos.map(function(item) {
+                let template = `<tr id='${item.id}'>
+                                    <td> ${item.name} </td>
+                                    <td> ${item.cost} </td>
+                                    <td> ${item.count} </td>
+                                    <td> ${item.total} </td>
+                                    <td><a class='btn btn-danger btn-sm ml-1' id='eliminar_producto'><i class='fas fa-trash-alt table-icon'></i></a></td>
+                                </tr>`;
+                return template;
+            });
+            $('#table_producto').html(foo);
+            const del = document.querySelectorAll("#eliminar_producto");
+            del.forEach((card, i) => {
+                card.addEventListener('click', () => {
+                    var id = card.parentElement.parentElement.id;
+                    eliminarProducto(id);
+                });
+            });
+        }
+
+        function eliminarProducto(id) {
+            var index = arrayProductos.findIndex(function(o) {
+                return o.id === id;
+            });
+
+            if (index !== -1) arrayProductos.splice(index, 1);
+
+            mostrarTablaProductos();
+            totalizarPago();
+        }
+
+        function totalizarPago() {
+            var total = arrayServicios.reduce((acumulador, servicio) => acumulador + servicio.total, 0);
+            total += arrayProductos.reduce((acumulador, producto) => acumulador + producto.total, 0);
+            $('#total_pago').html(total);
+        }
+
+        function totalizarSesiones() {
+            var total = arrayServicios.reduce((acumulador, servicio) => acumulador + Number(servicio.sesiones), 0);
+            $('#total_sesiones').html(total);
+        }
+
+        function validar() {
+            let validator = true;
+            var alertElement = document.getElementById('alert-danger');
+            var duracion = 3000;
+            if (Number($('#id_paciente').val()) === 0) {
+                validator = false;
+                $('#alert-danger').html('Seleccione Paciente');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+            if (Number($('#doctor').val()) === 0) {
+                $('#alert-danger').html('Seleccione Fisioterapeuta');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+            if (arrayServicios.length === 0) {
+                validator = false;
+                $('#alert-danger').html('Seleccione Servicios');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            return validator;
+        }
+
+        function crear() {
+            if (validar()) {
+                const FD = new FormData();
+                FD.append('cabecera_id', Number($('#id_paquete').text()));
+                FD.append('paciente_id', Number($('#id_paciente').val()))
+                FD.append('usuario_id', Number($("#doctor").val()));
+                FD.append('total', Number($('#total_pago').text()));
+                FD.append('servicios', JSON.stringify(arrayServicios));
+                console.log(arrayProductos);
+                if (arrayProductos.length > 0) {
+                    FD.append('productos', JSON.stringify(arrayProductos));
+                }
+                fetch("crear_paquete_ajax.php", {
+                        method: 'POST',
+                        body: FD
+                    }).then(respuesta => respuesta.text())
+                    .then(decodificado => {
+                        console.log(decodificado);
+                        var alertElement = document.getElementById('alert-success');
+                        alertElement.classList.remove('d-none');
+                        setTimeout(function() {
+                            alertElement.classList.add('d-none');
+                        }, 3000);
+                    })
+                    .catch(function(error) {
+                        console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    });
+
+                // $.ajax({
+                //     url: 'crear_paquete_ajax.php',
+                //     type: 'post',
+                //     data: {
+                //         FD
+                //     },
+                //     success: function(response) {
+                //         var alertElement = document.getElementById('alert-success');
+                //         alertElement.classList.remove('d-none');
+                //         setTimeout(function() {
+                //             alertElement.classList.add('d-none');
+                //         }, 3000);
+                //     }
+                // });
+            }
+        }
+
+        $('#btn_crear_paquete').on('click', function() {
+            crear();
+        });
     </script>
 </body>
 

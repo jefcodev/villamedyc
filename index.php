@@ -8,7 +8,8 @@ if (!empty($_POST)) {
     $contrasenna = mysqli_real_escape_string($mysqli, $_POST['contrasenna']);
     $error = '';
 
-    $shal_pass = sha1($contrasenna);
+    // $shal_pass = sha1($contrasenna);
+    $shal_pass = $contrasenna;
     $sql = "SELECT id, usuario, rol, activo FROM usuarios WHERE usuario = '$usuario' AND contrasena = '$shal_pass'";
     $resul = $mysqli->query($sql);
     $rows = $resul->num_rows;
@@ -24,7 +25,11 @@ if (!empty($_POST)) {
         $_SESSION['usuario'] = $rows['usuario'];
         $_SESSION['rol'] = $rows['rol'];
         $_SESSION["ultimoAcceso"] = time();
-        header("location: paginas/inicio.php");
+        if ($rows['rol'] == 'fis') {
+            header("location: paginas/historias_clinicas.php");
+        } else {
+            header("location: paginas/inicio.php");
+        }
     } else
         $error = "El nombre o contraseña son incorrectos";
 }

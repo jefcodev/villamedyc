@@ -39,6 +39,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                         <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
+                            <li class="nav-item"><a class="nav-link" href="crear_paquetes.php">PAQUETES</a></li>
                         <?php } ?>
                     </ul>
                     <ul class="navbar-nav mt-md-0 margen-float-right">
