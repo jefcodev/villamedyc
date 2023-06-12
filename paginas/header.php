@@ -20,6 +20,10 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
         <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
     </head>
     <header class="encabezado">
         <div class="container">
@@ -39,7 +43,16 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                         <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
-                            <li class="nav-item"><a class="nav-link" href="crear_paquetes.php">PAQUETES</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    PAQUETES
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="crear_paquetes.php">Crear</a>
+                                    <a class="dropdown-item" href="lista_paquetes.php">Lista</a>
+                                    <a class="dropdown-item" href="logout.php">Venta</a>
+                                </div>
+                            </li>
                         <?php } ?>
                     </ul>
                     <ul class="navbar-nav mt-md-0 margen-float-right">
