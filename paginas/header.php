@@ -17,7 +17,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
         <title>Clínica</title>
         <link rel="stylesheet" href="../css/bootstrap.css">
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
 
@@ -50,7 +50,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="crear_paquetes.php">Crear</a>
                                     <a class="dropdown-item" href="lista_paquetes.php">Lista</a>
-                                    <a class="dropdown-item" href="logout.php">Venta</a>
+                                    <a class="dropdown-item" href="venta.php">Venta</a>
                                 </div>
                             </li>
                         <?php } ?>

@@ -28,51 +28,39 @@ ADD COLUMN factura VARCHAR(100);
 /*==============================================================*/
 create table paquete_cabecera
 (
-   cabecera_id          int not null auto_increment,
-   usuario_id           int,
-   paciente_id          int,
+   paquete_id           int not null auto_increment,
+   titulo_paquete       varchar(500) not null,
+   tipo_paquete         int not null,
+   numero_sesiones      int not null,
    total                decimal(10,2) not null,
-   primary key (cabecera_id),
-   FOREIGN KEY (paciente_id) REFERENCES pacientes (id),
-   FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+   primary key (paquete_id)
 );
 
 /*==============================================================*/
-/* Table: paquete_detalle_producto                              */
+/* Table: paquete_detalle                                       */
 /*==============================================================*/
-create table paquete_detalle_producto
+create table paquete_detalle
 (
-   cabecera_id          int,
-   producto_id          int,
-   costo_producto       decimal(10,2) not null,
+   paquete_id           int,
+   pro_ser_id           int,
+   nombre               varchar(1240) not null,
+   tipo                 varchar(100) not null,
+   costo                decimal(10,2) not null,
    cantidad             int not null,
    total                decimal(10,2) not null,
-   FOREIGN KEY (cabecera_id) REFERENCES paquete_cabecera (cabecera_id),
-   FOREIGN KEY (producto_id) REFERENCES productos (id)
+   FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
 
 /*==============================================================*/
-/* Table: paquete_detalle_servicio                              */
+/* Table: consultas_fisioterapeuta                              */
 /*==============================================================*/
-create table paquete_detalle_servicio
+create table consultas_fisioterapeuta
 (
-   cabecera_id          int,
-   servicio_id          int not null,
-   numero_sesiones      int not null,
-   sesiones_realizadas  int not null,
-   total                decimal(10,2) not null,
-   FOREIGN KEY (cabecera_id) REFERENCES paquete_cabecera (cabecera_id)
-);
-
-/*==============================================================*/
-/* Table: historia_clinica_fisio                              */
-/*==============================================================*/
-create table historia_clinica_fisio
-(
-   historia_fisio_id          int not null auto_increment,
+   consulta_fisio_id          int not null auto_increment,
    paciente_id                int,
    usuario_id                 int,
    numero_historia            varchar(50),
+   fecha                      date,
    profesion                  varchar(500),
    tipo_trabajo               varchar(500),
    sedestacion_prolongada     boolean,
@@ -86,7 +74,7 @@ create table historia_clinica_fisio
    intensidad                 varchar(500),
    sensaciones                varchar(500),
    limitacion_movilidad       int,    
-   primary key (historia_fisio_id),
+   primary key (consulta_fisio_id),
    FOREIGN KEY (paciente_id) REFERENCES pacientes (id),
    FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
 );

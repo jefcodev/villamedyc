@@ -40,11 +40,11 @@ if (isset($status)) {
                     <h4>Agregar Detalles del Paquete</h4>
                 </div><br><br>
                 <div class="col-md-6">
-                    <input type="text" name="" id="" placeholder="Ingrese titulo del paquete">
-                    <input type="number" name="" id="" placeholder="Ingrese el número de sesiones para este paquete">
+                    <input type="text" name="titulo_paquete" id="titulo_paquete" placeholder="Ingrese titulo del paquete">
+                    <input type="number" name="numero_sesiones" id="numero_sesiones" placeholder="Ingrese el número de sesiones para este paquete">
                 </div>
                 <div class="col-md-6">
-                    <select name="" id="">
+                    <select name="tipo_paquete" id="tipo_paquete">
                         <option value="0">Seleccione Tipo de Paquete</option>
                         <option value="1">Básico</option>
                         <option value="2">Plus</option>
@@ -93,24 +93,6 @@ if (isset($status)) {
                     <input type="button" value="Agregar" id="agregar_servicio">
                 </div>
                 <div class="col-md-12">
-                    <table class="table table-bordered table-hover" id="table">
-                        <thead class="tabla_cabecera">
-                            <tr>
-                                <th>Servicio</th>
-                                <th>Valor</th>
-                                <th>Nº Sesiones</th>
-                                <th>Total</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_servicio">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div><br>
-            <div class="row">
-                <div class="col-md-12">
                     <h4>Agregar Productos</h4>
                 </div><br><br>
                 <div class="col-md-12">
@@ -128,21 +110,23 @@ if (isset($status)) {
                     <input type="button" value="Agregar" id="agregar_producto">
                 </div>
                 <div class="col-md-12">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover" id="table">
                         <thead class="tabla_cabecera">
                             <tr>
-                                <th>Producto</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
                                 <th>Valor</th>
                                 <th>Cantidad</th>
                                 <th>Total</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="table_producto">
+                        <tbody id="table_detalle">
+
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div><br>
             <div class="row">
                 <div class="col-md-12">
                     <div class="text-center">
@@ -154,49 +138,11 @@ if (isset($status)) {
                         </div>
                     </div><br>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Ver Resumen
-                        </button>
-                        <!-- <input class="btn btn-primary" type="submit" name="btn_crear_paquete" id="btn_crear_paquete" value="Crear Paquete" /> -->
+                        <input class="btn btn-primary" type="submit" name="btn_crear_paquete" id="crear_paquete" value="Crear Paquete" />
                     </div>
                 </div>
             </div>
         </section>
-    </div>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Resumen Paquete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div>Titulo Paquete: Contracturas</div>
-                    <div>Tipo de Paquete: Plus</div>
-                    <div>Nº de Sesiones: 15</div>
-                    <table class="table table-bordered table-hover">
-                        <thead class="tabla_cabecera">
-                            <tr>
-                                <th>Servicio/Producto</th>
-                                <th>Valor</th>
-                                <th>Nº Sesiones/Cantidad</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_producto">
-                        </tbody>
-                    </table>
-                    <div>Total: 00</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Crear Paquete</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- <script type="text/javascript">
@@ -205,179 +151,129 @@ if (isset($status)) {
     <script language="javascript" src="../js/jquery.datetimepicker.full.min.js"></script>
     <script>
         var servicios = [{
-                'id': '1',
+                'id': 1,
                 'name': 'Displacia de cadera',
-                'cost': 10,
-                'sesiones': 0,
-                'total': 0
+                'cost': 10
             },
             {
-                'id': '2',
+                'id': 2,
                 'name': 'Pie plano',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '3',
+                'id': 3,
                 'name': 'Artrosis de rodilla',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '4',
+                'id': 4,
                 'name': 'Hernias discales',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '5',
+                'id': 5,
                 'name': 'Tratamientos con células madre',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '6',
+                'id': 6,
                 'name': 'Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '7',
+                'id': 7,
                 'name': 'Reemplazo Articulares',
-                'cost': 10,
-                'sesiones': 0,
-                'total': 0
+                'cost': 10
             },
             {
-                'id': '8',
+                'id': 8,
                 'name': 'Tratamientos para el adulto',
-                'cost': 40,
-                'sesiones': 0,
-                'total': 0
+                'cost': 40
             },
             {
-                'id': '9',
+                'id': 9,
                 'name': 'Esguinces',
-                'cost': 50,
-                'sesiones': 0,
-                'total': 0
+                'cost': 50
             },
             {
-                'id': '10',
+                'id': 10,
                 'name': 'Fracturas',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '11',
+                'id': 11,
                 'name': 'Artrosis',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '12',
+                'id': 12,
                 'name': 'Dolores crónicos',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '13',
+                'id': 13,
                 'name': 'Fortalecimiento pulmonar',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '14',
+                'id': 14,
                 'name': 'Enfermedades crónicas respiratorias',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '15',
+                'id': 15,
                 'name': 'Pacientes post-COVID',
-                'cost': 40,
-                'sesiones': 0,
-                'total': 0
+                'cost': 40
             },
             {
-                'id': '16',
+                'id': 16,
                 'name': 'Mejora de calidad del sueño',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '17',
+                'id': 17,
                 'name': 'Ayuda a la concentración y memoria',
-                'cost': 10,
-                'sesiones': 0,
-                'total': 0
+                'cost': 10
             },
             {
-                'id': '18',
+                'id': 18,
                 'name': 'Elimina contracturas musculares',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '19',
+                'id': 19,
                 'name': 'Incontinecia urinaria',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '20',
+                'id': 20,
                 'name': 'Prolapsos',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '21',
+                'id': 21,
                 'name': 'Dolores en relaciones sexuales',
-                'cost': 40,
-                'sesiones': 0,
-                'total': 0
+                'cost': 40
             },
             {
-                'id': '22',
+                'id': 22,
                 'name': 'Eyaculación precoz',
-                'cost': 50,
-                'sesiones': 0,
-                'total': 0
+                'cost': 50
             },
             {
-                'id': '23',
+                'id': 23,
                 'name': 'Problemas de erección',
-                'cost': 30,
-                'sesiones': 0,
-                'total': 0
+                'cost': 30
             },
             {
-                'id': '24',
+                'id': 24,
                 'name': 'Programa de hidroterapia personalizado',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             },
             {
-                'id': '25',
+                'id': 25,
                 'name': 'Elimina contracturas musculares',
-                'cost': 20,
-                'sesiones': 0,
-                'total': 0
+                'cost': 20
             }
         ];
 
@@ -385,63 +281,20 @@ if (isset($status)) {
             let idA = $('#servicios').val();
             let numeroSesiones = $('#numero_sesion').val();
             if (idA > 0 && numeroSesiones != undefined && numeroSesiones != 0) {
-                agregar(idA, numeroSesiones);
+                var service = servicios.filter(function(item) {
+                    return item.id === Number(idA);
+                });
+                var element = {
+                    'id': service[0].id,
+                    'name': service[0].name,
+                    'type': "Servicio",
+                    'cost': service[0].cost,
+                    'amount': numeroSesiones,
+                    'total': service[0].cost * numeroSesiones
+                }
+                agregar(element);
             }
         });
-
-        var arrayServicios = [];
-
-        function agregar(idA, numeroSesiones) {
-            var servicioaa = servicios.filter(function(item) {
-                return item.id === idA;
-            });
-
-            var validacion = arrayServicios.filter(function(item) {
-                return item.id === idA;
-            });
-
-            if (validacion.length === 0) {
-                servicioaa[0].sesiones = numeroSesiones;
-                servicioaa[0].total = servicioaa[0].sesiones * servicioaa[0].cost;
-                arrayServicios.push(servicioaa[0]);
-                mostrarTabla();
-                totalizarPago();
-                totalizarSesiones();
-            }
-        }
-
-        function mostrarTabla() {
-            var foo = arrayServicios.map(function(item) {
-                let template = `<tr id='${item.id}'>
-                                    <td> ${item.name} </td>
-                                    <td> ${item.cost} </td>
-                                    <td> ${item.sesiones} </td>
-                                    <td> ${item.total} </td>
-                                    <td><a class='btn btn-danger btn-sm ml-1' id='eliminar_servicio'><i class='fas fa-trash-alt table-icon'></i></a></td>
-                                </tr>`;
-                return template;
-            });
-            $('#table_servicio').html(foo);
-            const del = document.querySelectorAll("#eliminar_servicio");
-            del.forEach((card, i) => {
-                card.addEventListener('click', () => {
-                    var id = card.parentElement.parentElement.id;
-                    eliminar(id);
-                });
-            });
-        }
-
-        function eliminar(id) {
-            var index = arrayServicios.findIndex(function(o) {
-                return o.id === id;
-            });
-
-            if (index !== -1) arrayServicios.splice(index, 1);
-
-            mostrarTabla();
-            totalizarPago();
-            totalizarSesiones();
-        }
 
         $('#agregar_producto').on('click', function() {
             let idA = $('#productos').val();
@@ -450,97 +303,76 @@ if (isset($status)) {
             var selectedOption = selectElement.options[selectElement.selectedIndex];
             var stock = selectedOption.getAttribute('data-count');
             if (idA > 0 && cantidad > 0 && cantidad <= stock) {
-                var producto = {
-                    'id': idA,
+                var element = {
+                    'id': Number(idA),
                     'name': selectedOption.getAttribute('data-name'),
+                    'type': "Producto",
                     'cost': selectedOption.getAttribute('data-cost'),
-                    'count': cantidad,
+                    'amount': cantidad,
                     'total': selectedOption.getAttribute('data-cost') * cantidad
                 }
-                agregarProductos(producto);
+                agregar(element);
             }
         });
 
-        var arrayProductos = [];
+        var listaPaquete = [];
 
-        function agregarProductos(producto) {
-            console.log(arrayProductos);
-            var validacion = arrayProductos.filter(function(item) {
-                return item.id === producto.id;
+        function agregar(elemento) {
+            var validacion = listaPaquete.filter(function(item) {
+                return (item.id === elemento.id && item.type === elemento.type);
             });
 
             if (validacion.length === 0) {
-                arrayProductos.push(producto);
-                mostrarTablaProductos();
+                listaPaquete.push(elemento);
+                mostrarTabla();
                 totalizarPago();
             }
         }
 
-        function mostrarTablaProductos() {
-            var foo = arrayProductos.map(function(item) {
-                let template = `<tr id='${item.id}'>
+        function mostrarTabla() {
+            var foo = listaPaquete.map(function(item) {
+                let template = `<tr id='${item.id}' data-type='${item.type}'>
                                     <td> ${item.name} </td>
+                                    <td> ${item.type} </td>
                                     <td> ${item.cost} </td>
-                                    <td> ${item.count} </td>
+                                    <td> ${item.amount} </td>
                                     <td> ${item.total} </td>
-                                    <td><a class='btn btn-danger btn-sm ml-1' id='eliminar_producto'><i class='fas fa-trash-alt table-icon'></i></a></td>
+                                    <td><a class='btn btn-danger btn-sm ml-1' id='eliminar_servicio'><i class='fas fa-trash-alt table-icon'></i></a></td>
                                 </tr>`;
                 return template;
             });
-            $('#table_producto').html(foo);
-            const del = document.querySelectorAll("#eliminar_producto");
+            $('#table_detalle').html(foo);
+            const del = document.querySelectorAll("#eliminar_servicio");
             del.forEach((card, i) => {
                 card.addEventListener('click', () => {
                     var id = card.parentElement.parentElement.id;
-                    eliminarProducto(id);
+                    var type = card.parentElement.parentElement.getAttribute('data-type');
+                    eliminar(id, type);
                 });
             });
         }
 
-        function eliminarProducto(id) {
-            var index = arrayProductos.findIndex(function(o) {
-                return o.id === id;
+        function eliminar(id, type) {
+            var index = listaPaquete.findIndex(function(o) {
+                return (o.id === Number(id) && o.type === type);
             });
-
-            if (index !== -1) arrayProductos.splice(index, 1);
-
-            mostrarTablaProductos();
+            if (index !== -1) listaPaquete.splice(index, 1);
+            mostrarTabla();
             totalizarPago();
         }
 
         function totalizarPago() {
-            var total = arrayServicios.reduce((acumulador, servicio) => acumulador + servicio.total, 0);
-            total += arrayProductos.reduce((acumulador, producto) => acumulador + producto.total, 0);
+            var total = listaPaquete.reduce((acumulador, servicio) => acumulador + servicio.total, 0);
             $('#total_pago').html(total);
-        }
-
-        function totalizarSesiones() {
-            var total = arrayServicios.reduce((acumulador, servicio) => acumulador + Number(servicio.sesiones), 0);
-            $('#total_sesiones').html(total);
         }
 
         function validar() {
             let validator = true;
             var alertElement = document.getElementById('alert-danger');
             var duracion = 3000;
-            if (Number($('#id_paciente').val()) === 0) {
+            if (listaPaquete.length === 0) {
                 validator = false;
-                $('#alert-danger').html('Seleccione Paciente');
-                alertElement.classList.remove('d-none');
-                setTimeout(function() {
-                    alertElement.classList.add('d-none');
-                }, duracion);
-            }
-            if (Number($('#doctor').val()) === 0) {
-                $('#alert-danger').html('Seleccione Fisioterapeuta');
-                alertElement.classList.remove('d-none');
-                setTimeout(function() {
-                    alertElement.classList.add('d-none');
-                }, duracion);
-            }
-            if (arrayServicios.length === 0) {
-                validator = false;
-                $('#alert-danger').html('Seleccione Servicios');
+                $('#alert-danger').html('Seleccione Servicios o Productos');
                 alertElement.classList.remove('d-none');
                 setTimeout(function() {
                     alertElement.classList.add('d-none');
@@ -551,18 +383,15 @@ if (isset($status)) {
         }
 
         function crear() {
-            if (validar()) {
+            // if (validar()) {
                 const FD = new FormData();
-                FD.append('cabecera_id', Number($('#id_paquete').text()));
-                FD.append('paciente_id', Number($('#id_paciente').val()))
-                FD.append('usuario_id', Number($("#doctor").val()));
+                FD.append('action', "crear_paquete");
+                FD.append('titulo_paquete', $('#titulo_paquete').val());
+                FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
+                FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
                 FD.append('total', Number($('#total_pago').text()));
-                FD.append('servicios', JSON.stringify(arrayServicios));
-                console.log(arrayProductos);
-                if (arrayProductos.length > 0) {
-                    FD.append('productos', JSON.stringify(arrayProductos));
-                }
-                fetch("crear_paquete_ajax.php", {
+                FD.append('lista', JSON.stringify(listaPaquete));
+                fetch("paquete_ajax.php", {
                         method: 'POST',
                         body: FD
                     }).then(respuesta => respuesta.text())
@@ -577,25 +406,10 @@ if (isset($status)) {
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
                     });
-
-                // $.ajax({
-                //     url: 'crear_paquete_ajax.php',
-                //     type: 'post',
-                //     data: {
-                //         FD
-                //     },
-                //     success: function(response) {
-                //         var alertElement = document.getElementById('alert-success');
-                //         alertElement.classList.remove('d-none');
-                //         setTimeout(function() {
-                //             alertElement.classList.add('d-none');
-                //         }, 3000);
-                //     }
-                // });
-            }
+            // }
         }
 
-        $('#btn_crear_paquete').on('click', function() {
+        $('#crear_paquete').on('click', function() {
             crear();
         });
     </script>

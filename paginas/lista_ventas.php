@@ -8,15 +8,17 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
 
 <body>
     <section class="cuerpo">
-        <h1>Listado de Paquetes</h1>
+        <h1>Listado de Ventas</h1>
         <div class="row">
             <div class="col-md-12">
-                <a href="crear_paquetes.php" class="btn btn-success float-right"> Crear nuevo paquete</a>
+                <a href="venta.php" class="btn btn-success float-right"> Crear nueva venta</a>
                 <br><br>
                 <table class="table table-bordered table-hover" id="indexusuarios">
                     <thead class="tabla_cabecera">
                         <tr>
-                            <th>Nombre Paquete</th>
+                            <th>Cliente</th>
+                            <th>Numero Historia</th>
+                            <th>Paquete</th>
                             <th>Tipo Paquete</th>
                             <th>Nº Sesiones</th>
                             <th>Total</th>
