@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-$id_cita = $_GET['cabecera_id'];
+$id_cita = $_GET['consulta_fisio_id'];
 ?>
 <link rel="stylesheet" href="../css/bootstrap_select.min.css">
 
@@ -8,52 +8,20 @@ $id_cita = $_GET['cabecera_id'];
     <section class="cuerpo">
         <h1>Atención al paciente</h1><br>
         <?php
-        $sql_datos_cita = "SELECT * FROM paquete_cabecera WHERE cabecera_id=$id_cita";
+        $sql_datos_cita = "SELECT cf.*, p.id, p.numero_identidad, CONCAT(p.nombres,' ',p.apellidos) as nombres_paciente, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc 
+        WHERE p.id=cf.paciente_id AND pc.paquete_id=cf.paquete_id AND consulta_fisio_id=$id_cita";
         $result_datos_cita = $mysqli->query($sql_datos_cita);
         $rowscita = $result_datos_cita->fetch_assoc();
-        $id_paciente = $rowscita['PACIENTE_ID'];
-        $sql_datos_paciente = "SELECT * FROM pacientes WHERE id='$id_paciente'";
-        $result_datos_paciente = $mysqli->query($sql_datos_paciente);
-        $rowspaciente = $result_datos_paciente->fetch_assoc();
         ?>
         <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
-            <b style="font-size: 18px">Datos del paciente</b><br><br>
+            <b style="font-size: 18px">Datos de consulta</b><br>
             <div class="row" id="edicion_paciente">
                 <div class="col-md-4">
-                    <input type="hidden" id="id_paciente" name="id_paciente" value="<?php echo $rowspaciente['id']; ?>" />
-                    <input class="form-control" title="Cédula o Pasaporte" placeholder="Cédula o Pasaporte" value="<?php echo $rowspaciente['numero_identidad']; ?>" id="numero_identidad" name="numero_identidad" />
-                    <input class="form-control" title="Nombres" placeholder="Nombres" value="<?php echo $rowspaciente['nombres']; ?>" id="nombres" name="nombres" />
-                    <input class="form-control" title="Apellidos" placeholder="Apellidos" value="<?php echo $rowspaciente['apellidos']; ?>" id="apellidos" name="apellidos" />
-                    <input class="form-control" title="Fecha nacimiento" placeholder="Fecha nacimiento" value="<?php echo $rowspaciente['fecha_nacimiento']; ?>" id="fecha_nacimiento" name="fecha_nacimiento" />
-                    <select class="form-control" id="genero" name="genero" title="Seleccione el Género">
-                        <option value="<?php echo $rowspaciente['genero']; ?>" selected=""><?php echo $rowspaciente['genero']; ?></option>
-                        <option value="Masculino">Maculino</option>
-                        <option value="Femenino">Femenino</option>
-                    </select>
-                    <input class="form-control" title="Teléfono fijo" placeholder="Teléfono fijo" value="<?php echo $rowspaciente['telefono_fijo']; ?>" id="telefono_fijo" name="telefono_fijo" />
-                </div>
-                <div class="col-md-4">
-                    <input class="form-control" title="Teléfono móvil" placeholder="Teléfono móvil" value="<?php echo $rowspaciente['telefono_movil']; ?>" id="telefono_movil" name="telefono_movil" />
-                    <input class="form-control" title="Dirección" placeholder="Dirección" value="<?php echo $rowspaciente['direccion']; ?>" id="direccion" name="direccion" />
-                    <select class="form-control" id="raza" name="raza" title="Seleccione la Raza">
-                        <option value="<?php echo $rowspaciente['raza']; ?>" selected=""><?php echo $rowspaciente['raza']; ?></option>
-                        <option value="Mestiza">Mestiza</option>
-                        <option value="Negra">Negra</option>
-                        <option value="Blanca">Blanca</option>
-                    </select>
-                    <input class="form-control" title="Ocupación" placeholder="Ocupación" value="<?php echo $rowspaciente['ocupacion']; ?>" id="ocupacion" name="ocupacion" />
-                    <select class="form-control" id="estado_civil" name="estado_civil" title="Seleccione Estado Civil">
-                        <option value="<?php echo $rowspaciente['estado_civil']; ?>" selected=""><?php echo $rowspaciente['estado_civil']; ?></option>
-                        <option value="Casado">Casado</option>
-                        <option value="Soltero">Soltero</option>
-                        <option value="Union libre">Unión libre</option>
-                    </select>
-                    <input class="form-control" title="Correo electrónico" placeholder="Correo electrónico" value="<?php echo $rowspaciente['correo_electronico']; ?>" id="correo_electronico" name="correo_electronico" />
-                </div>
-                <div class="col-md-4">
-                    <textarea class="form-control" title="Antecedentes personales" placeholder="Antecedentes personales" id="antecedentes_personales" name="antecedentes_personales"><?php echo $rowspaciente['antecedentes_personales']; ?></textarea>
-                    <textarea class="form-control" title="Antecedentes familiares" placeholder="Antecedentes familiares" id="antecedentes_familiares" name="antecedentes_familiares"><?php echo $rowspaciente['antecedentes_familiares']; ?></textarea><br><br><br>
-                    <input class="btn btn-primary float-right" type="button" name="btn_actualizar_paciente" id="btn_actualizar_paciente" value="Guardar datos del paciente" onclick="editar_paciente()" />
+                    <div><?php echo $rowscita['numero_historia'] ?></div>
+                    <div><?php echo $rowscita['numero_identidad'] ?></div>
+                    <div><?php echo $rowscita['nombres_paciente'] ?></div>
+                    <div><?php echo $rowscita['titulo_paquete'] ?></div>
+                    <div><?php echo $rowscita['numero_sesiones'] ?></div>
                 </div>
             </div>
         </div><br>

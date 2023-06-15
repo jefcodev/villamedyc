@@ -1,10 +1,39 @@
-<?php
-include 'header.php';
-$pagina = PAGINAS::LISTA_USUARIOS;
-if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
-    header("location:./inicio.php?status=AD");
-}
-?>
+<!DOCTYPE html>
+<html><?php
+        include 'header.php';
+        $pagina = PAGINAS::LISTA_USUARIOS;
+        if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
+            header("location:./inicio.php?status=AD");
+        }
+        ?>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PHP MySQL Select2 Example</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
+    <title>Clínica</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="../css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+</head>
 
 <body>
     <section class="cuerpo">
@@ -53,8 +82,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             echo "<td>
                                     <a class='btn btn-primary btn-sm ml-1' href='historia_clinica.php?idusuario=" . $row['id'] . "' data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
                                     <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='editar_paquete' ><i class='fas fa-edit table-icon'></i></a>
-                                    <a class='btn btn-danger btn-sm ml-1' id='eliminar_paquete'><i class='fas fa-trash-alt table-icon'></i></a>
-                                </td>";
+                                    </td>";
                             echo "</tr>";
                         }
                         ?>
@@ -93,7 +121,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     <div class="modal-body">
                         <h5 id="paquete_id" data-id="">Detalles del Paquete</h5>
                         <input type="text" name="titulo_paquete" id="titulo_paquete" placeholder="Ingrese titulo del paquete">
-                        <input type="number" name="numero_sesiones" id="numero_sesiones" placeholder="Ingrese el número de sesiones para este paquete">
+                        <input type="number" name="numero_sesiones" id="numero_sesiones" placeholder="Ingrese el número de sesiones para este paquete" min="1">
 
                         <select name="tipo_paquete" id="tipo_paquete">
                             <option value="0">Seleccione Tipo de Paquete</option>
@@ -104,7 +132,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             <option value="5">Convenios</option>
                         </select>
                         <h5>Servicios</h5>
-                        <select name="servicios" id="servicios">
+                        <select class="select2 form-control" data-rel="chosen" name="servicios" id="servicios">
                             <option value="0">Seleccione Servicio</option>
                             <option value="1">Displacia de cadera</option>
                             <option value="2">Pie plano</option>
@@ -134,10 +162,10 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             </optgroup>
                             <option value="25">Elimina contracturas musculares</option>
                         </select>
-                        <input type="number" placeholder="Nº de sesiones" name="numero_sesion" id="numero_sesion" value="Ingrese numero de sesiones">
+                        <input type="number" placeholder="Nº de sesiones" name="numero_sesion" id="numero_sesion" min="1">
                         <input type="button" value="Agregar" id="agregar_servicio">
                         <h5>Productos</h5>
-                        <select id="productos" name="productos" required>
+                        <select class="select2 form-control" data-rel="chosen" id="productos" name="productos" required>
                             <option value="" selected="" hidden="">Seleccione Producto</option>
                             <?php
                             $sql_traer_productos = "SELECT * FROM productos";
@@ -147,7 +175,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             }
                             ?>
                         </select>
-                        <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1" value="Cantidad">
+                        <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1">
                         <input type="button" value="Agregar" id="agregar_producto">
                         <table class="table table-bordered table-hover" id="table">
                             <thead class="tabla_cabecera">
@@ -181,10 +209,9 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
             </div>
         </div>
     </section>
-    <br>
-    <?php
-    include 'footer.php';
-    ?>
+    <script type="text/javascript">
+        $('.select2').select2({});
+    </script>
     <script src="../js/jquerysearch.js"></script>
     <script>
         $(document).ready(function() {
@@ -359,6 +386,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
             const FD = new FormData();
             FD.append('action', "ver_paquete");
             FD.append("paquete_id", id);
+            console.log(id);
             fetch("paquete_ajax.php", {
                     method: 'POST',
                     body: FD

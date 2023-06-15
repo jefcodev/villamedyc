@@ -17,13 +17,10 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
         <title>Clínica</title>
         <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
-
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
     </head>
     <header class="encabezado">
         <div class="container">

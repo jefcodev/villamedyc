@@ -89,7 +89,7 @@ function actualizarPaquete($mysqli)
     $TIPO_PAQUETE = $_POST['tipo_paquete'];
     $NUMERO_SESIONES = $_POST['numero_sesiones'];
     $TOTAL = $_POST['total'];
-    
+
     $query = "UPDATE `paquete_cabecera` SET `titulo_paquete`='$TITULO_PAQUETE',  
                 `tipo_paquete`=$TIPO_PAQUETE, `numero_sesiones`=$NUMERO_SESIONES, `total`=$TOTAL 
                 WHERE paquete_id=$PAQUETE_ID";
@@ -119,17 +119,16 @@ function actualizarPaquete($mysqli)
 function eliminarPaquete($mysqli)
 {
     $PAQUETE_ID = $_POST['paquete_id'];
-    $query = "DELETE FROM `paquete_detalle` WHERE paquete_id = $PAQUETE_ID";
-    $result = $mysqli->query($query);
-    if (!$result) {
-        die('Query Failed.');
-    }
+    $mysqli->begin_transaction();
+    try {
+        $query = "DELETE FROM `paquete_detalle` WHERE paquete_id = $PAQUETE_ID";
+        $mysqli->query($query);
 
-    $query = "DELETE FROM `paquete_cabecera` WHERE paquete_id = $PAQUETE_ID";
-    $result = $mysqli->query($query);
-    if (!$result) {
-        die('Query Failed.');
+        $query2 = "DELETE FROM `paquete_cabecera` WHERE paquete_id = $PAQUETE_ID";
+        $mysqli->query($query2);
+        $mysqli->commit();
+        echo ("Paquete Eliminado Correctamente");
+    } catch (Exception $e) {
+        echo ("Error: " . $e->getMessage());
     }
-
-    echo ("Paquete Eliminado Correctamente");
 }

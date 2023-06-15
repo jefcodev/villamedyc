@@ -59,8 +59,9 @@ create table consultas_fisioterapeuta
    consulta_fisio_id          int not null auto_increment,
    paciente_id                int,
    usuario_id                 int,
+   paquete_id                 int,
    numero_historia            varchar(50),
-   fecha                      date,
+   fecha                      datetime,
    profesion                  varchar(500),
    tipo_trabajo               varchar(500),
    sedestacion_prolongada     boolean,
@@ -74,9 +75,11 @@ create table consultas_fisioterapeuta
    intensidad                 varchar(500),
    sensaciones                varchar(500),
    limitacion_movilidad       int,    
+   estado_atencion            int,
    primary key (consulta_fisio_id),
    FOREIGN KEY (paciente_id) REFERENCES pacientes (id),
-   FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+   FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
+   FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
 
 
