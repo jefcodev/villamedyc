@@ -39,20 +39,29 @@ if (isset($status)) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <style>
+        .floating-alert {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
     <section class="cuerpo">
         <div class="d-flex justify-content-center">
-            <div class="alert alert-primary d-none" id="alert-primary" role="alert">
+            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
                 Este es un mensaje de información.
             </div>
 
-            <div class="alert alert-success d-none" id="alert-success" role="alert">
+            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
                 Cita creada correctamente.
             </div>
 
-            <div class="alert alert-danger d-none" id="alert-danger" role="alert">
+            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
                 Este es un mensaje de error.
             </div>
         </div>
@@ -66,7 +75,7 @@ if (isset($status)) {
                 <input type="number" name="numero_sesiones" id="numero_sesiones" placeholder="Ingrese el número de sesiones para este paquete">
             </div>
             <div class="col-md-6">
-                <select name="tipo_paquete" id="tipo_paquete">
+                <select class="form-control" name="tipo_paquete" id="tipo_paquete">
                     <option value="0">Seleccione Tipo de Paquete</option>
                     <option value="1">Básico</option>
                     <option value="2">Plus</option>
@@ -334,6 +343,14 @@ if (isset($status)) {
                     'total': selectedOption.getAttribute('data-cost') * cantidad
                 }
                 agregar(element);
+            } else {
+                var alertElement = document.getElementById('alert-danger');
+                var duracion = 3000;
+                $('#alert-danger').html('Cantidad no disponible en stock');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
             }
         });
 
@@ -348,6 +365,14 @@ if (isset($status)) {
                 listaPaquete.push(elemento);
                 mostrarTabla();
                 totalizarPago();
+            } else {
+                var alertElement = document.getElementById('alert-danger');
+                var duracion = 3000;
+                $('#alert-danger').html('Servicio/Producto ya agregado');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
             }
         }
 
@@ -392,9 +417,36 @@ if (isset($status)) {
             let validator = true;
             var alertElement = document.getElementById('alert-danger');
             var duracion = 3000;
-            if (listaPaquete.length === 0) {
+            if ($('#titulo_paquete').val() == '') {
                 validator = false;
-                $('#alert-danger').html('Seleccione Servicios o Productos');
+                $('#alert-danger').html('Ingrese titulo del paquete');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if ($('#numero_sesiones').val() < 1) {
+                validator = false;
+                $('#alert-danger').html('Ingrese numero de sesiones correctas');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if ($('#tipo_paquete').val() == 0) {
+                validator = false;
+                $('#alert-danger').html('Seleccione tipo de paquete');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if (listaPaquete.length == 0) {
+                validator = false;
+                $('#alert-danger').html('Agregue pòr lo menos un servicio');
                 alertElement.classList.remove('d-none');
                 setTimeout(function() {
                     alertElement.classList.add('d-none');
@@ -405,30 +457,30 @@ if (isset($status)) {
         }
 
         function crear() {
-            // if (validar()) {
-            const FD = new FormData();
-            FD.append('action', "crear_paquete");
-            FD.append('titulo_paquete', $('#titulo_paquete').val());
-            FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
-            FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
-            FD.append('total', Number($('#total_pago').text()));
-            FD.append('lista', JSON.stringify(listaPaquete));
-            fetch("paquete_ajax.php", {
-                    method: 'POST',
-                    body: FD
-                }).then(respuesta => respuesta.text())
-                .then(decodificado => {
-                    console.log(decodificado);
-                    var alertElement = document.getElementById('alert-success');
-                    alertElement.classList.remove('d-none');
-                    setTimeout(function() {
-                        alertElement.classList.add('d-none');
-                    }, 3000);
-                })
-                .catch(function(error) {
-                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
-                });
-            // }
+            if (validar()) {
+                const FD = new FormData();
+                FD.append('action', "crear_paquete");
+                FD.append('titulo_paquete', $('#titulo_paquete').val());
+                FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
+                FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
+                FD.append('total', Number($('#total_pago').text()));
+                FD.append('lista', JSON.stringify(listaPaquete));
+                fetch("paquete_ajax.php", {
+                        method: 'POST',
+                        body: FD
+                    }).then(respuesta => respuesta.text())
+                    .then(decodificado => {
+                        console.log(decodificado);
+                        var alertElement = document.getElementById('alert-success');
+                        alertElement.classList.remove('d-none');
+                        setTimeout(function() {
+                            alertElement.classList.add('d-none');
+                        }, 3000);
+                    })
+                    .catch(function(error) {
+                        console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    });
+            }
         }
 
         $('#crear_paquete').on('click', function() {

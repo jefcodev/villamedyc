@@ -7,6 +7,9 @@ $ACTION = $_POST['action'];
 if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     if (isset($ACTION) && !empty($ACTION)) {
         switch ($ACTION) {
+            case 'ver_paquetes':
+                verPaquetes($mysqli);
+                break;
             case 'crear_paquete':
                 crearPaquete($mysqli);
                 break;
@@ -50,6 +53,27 @@ function crearPaquete($mysqli)
             die('Query Failed.');
         }
     }
+}
+
+function verPaquetes($mysqli)
+{
+    $query = "SELECT * from paquete_cabecera";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'paquete_id' => $row['paquete_id'],
+            'titulo_paquete' => $row['titulo_paquete'],
+            'tipo_paquete' => $row['tipo_paquete'],
+            'numero_sesiones' => $row['numero_sesiones'],
+            'total' => $row['total']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
 }
 
 function verPaquete($mysqli)

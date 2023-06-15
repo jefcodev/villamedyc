@@ -52,40 +52,8 @@
                             <th style="width: 125px">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                        $sql_usuarios = "SELECT * from paquete_cabecera";
-                        $result_usuarios = $mysqli->query($sql_usuarios);
+                    <tbody id="tabla_paquetes">
 
-                        while ($row = mysqli_fetch_array($result_usuarios)) {
-                            $type = "";
-                            if ($row['tipo_paquete'] == 1) {
-                                $type = "Básico";
-                            }
-                            if ($row['tipo_paquete'] == 2) {
-                                $type = "Plus";
-                            }
-                            if ($row['tipo_paquete'] == 3) {
-                                $type = "Premium";
-                            }
-                            if ($row['tipo_paquete'] == 4) {
-                                $type = "Empresas";
-                            }
-                            if ($row['tipo_paquete'] == 5) {
-                                $type = "Convenios";
-                            }
-                            echo "<tr id='" . $row['paquete_id'] . "' >";
-                            echo "<td>" . $row['titulo_paquete'] . "</td>";
-                            echo "<td>" . $type . "</td>";
-                            echo "<td>" . $row['numero_sesiones'] . "</td>";
-                            echo "<td>" . $row['total'] . "</td>";
-                            echo "<td>
-                                    <a class='btn btn-primary btn-sm ml-1' href='historia_clinica.php?idusuario=" . $row['id'] . "' data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
-                                    <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='editar_paquete' ><i class='fas fa-edit table-icon'></i></a>
-                                    </td>";
-                            echo "</tr>";
-                        }
-                        ?>
                     </tbody>
                 </table>
             </div>
@@ -214,6 +182,8 @@
     </script>
     <script src="../js/jquerysearch.js"></script>
     <script>
+        
+        mostrarPaquetes();
         $(document).ready(function() {
             $('#indexusuarios').DataTable({
                 language: {
@@ -242,7 +212,6 @@
                 }
             });
         });
-
         var servicios = [{
                 'id': 1,
                 'name': 'Displacia de cadera',
@@ -371,16 +340,77 @@
         ];
 
         /**
+         * OBTENER PAQUETES
+         */
+
+
+        function mostrarPaquetes() {
+            const FD = new FormData();
+            FD.append('action', "ver_paquetes");
+            fetch("paquete_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    let template = "";
+                    data.forEach(paquete => {
+                        let tipo = "";
+                        console.log(paquete.tipo_paquete);
+                        if (paquete.tipo_paquete === '1') {
+                            tipo = "Básico";
+                        }
+                        if (paquete.tipo_paquete === '2') {
+                            tipo = "Plus";
+                        }
+                        if (paquete.tipo_paquete === '3') {
+                            tipo = "Premium";
+                        }
+                        if (paquete.tipo_paquete === '4') {
+                            tipo = "Empresas";
+                        }
+                        if (paquete.tipo_paquete === '5') {
+                            tipo = "Convenio";
+                        }
+                        template += `<tr id='${paquete.paquete_id}'>
+                                        <td> ${paquete.titulo_paquete} </td>
+                                        <td> ${tipo} </td>
+                                        <td> ${paquete.numero_sesiones} </td>
+                                        <td> ${paquete.total} </td>
+                                        <td>
+                                            <a class='btn btn-primary btn-sm ml-1' href="" data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
+                                            <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='editar_paquete' ><i class='fas fa-edit table-icon'></i></a>
+                                        </td>
+                                    </tr>`;
+                    });
+                    $('#tabla_paquetes').html(template);
+                    const verResumen = document.querySelectorAll("#ver_resumen");
+                    verResumen.forEach((card, i) => {
+                        card.addEventListener('click', () => {
+                            var id = card.parentElement.parentElement.id;
+                            mostrar(id);
+                        });
+                    });
+
+                    const editar = document.querySelectorAll("#editar_paquete");
+                    editar.forEach((card, i) => {
+                        card.addEventListener('click', () => {
+                            var id = card.parentElement.parentElement.id;
+                            editarPaquete(id);
+                        });
+                    });
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
+
+        /**
          * VER PAQUETE
          */
 
-        const verResumen = document.querySelectorAll("#ver_resumen");
-        verResumen.forEach((card, i) => {
-            card.addEventListener('click', () => {
-                var id = card.parentElement.parentElement.id;
-                mostrar(id);
-            });
-        });
+
 
         function mostrar(id) {
             const FD = new FormData();
@@ -450,13 +480,7 @@
          * EDITAR PAQUETE
          */
 
-        const editar = document.querySelectorAll("#editar_paquete");
-        editar.forEach((card, i) => {
-            card.addEventListener('click', () => {
-                var id = card.parentElement.parentElement.id;
-                editarPaquete(id);
-            });
-        });
+
 
         var listaPaquete = [];
 
@@ -592,6 +616,7 @@
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
                     console.log(decodificado);
+                    mostrarPaquetes();
                 })
                 .catch(function(error) {
                     console.log('Hubo un problema con la petición Fetch: ' + error.message);
