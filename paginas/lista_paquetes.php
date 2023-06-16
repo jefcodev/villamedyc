@@ -31,12 +31,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
+    <style>
+        .floating-alert {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
 
 </head>
 
 <body>
     <section class="cuerpo">
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
+                Este es un mensaje de información.
+            </div>
+
+            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
+                Paquete acutilizado correctamente.
+                Por favor actualice la página para ver los cambios.
+                <button onclick="location.reload()">Actualizar</button>
+            </div>
+
+            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
+                Este es un mensaje de error.
+            </div>
+        </div>
         <h1>Listado de Paquetes</h1>
         <div class="row">
             <div class="col-md-12">
@@ -52,8 +75,40 @@
                             <th style="width: 125px">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="tabla_paquetes">
+                    <tbody>
+                        <?php
+                        $sql_usuarios = "SELECT * from paquete_cabecera";
+                        $result_usuarios = $mysqli->query($sql_usuarios);
 
+                        while ($row = mysqli_fetch_array($result_usuarios)) {
+                            $type = "";
+                            if ($row['tipo_paquete'] == 1) {
+                                $type = "Básico";
+                            }
+                            if ($row['tipo_paquete'] == 2) {
+                                $type = "Plus";
+                            }
+                            if ($row['tipo_paquete'] == 3) {
+                                $type = "Premium";
+                            }
+                            if ($row['tipo_paquete'] == 4) {
+                                $type = "Empresas";
+                            }
+                            if ($row['tipo_paquete'] == 5) {
+                                $type = "Convenios";
+                            }
+                            echo "<tr id='" . $row['paquete_id'] . "' >";
+                            echo "<td>" . $row['titulo_paquete'] . "</td>";
+                            echo "<td>" . $type . "</td>";
+                            echo "<td>" . $row['numero_sesiones'] . "</td>";
+                            echo "<td>" . $row['total'] . "</td>";
+                            echo "<td>
+                                    <a class='btn btn-primary btn-sm ml-1' href='historia_clinica.php?idusuario=" . $row['id'] . "' data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
+                                    <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='editar_paquete' ><i class='fas fa-edit table-icon'></i></a>
+                                    </td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -182,8 +237,6 @@
     </script>
     <script src="../js/jquerysearch.js"></script>
     <script>
-        
-        mostrarPaquetes();
         $(document).ready(function() {
             $('#indexusuarios').DataTable({
                 language: {
@@ -212,6 +265,7 @@
                 }
             });
         });
+
         var servicios = [{
                 'id': 1,
                 'name': 'Displacia de cadera',
@@ -340,77 +394,16 @@
         ];
 
         /**
-         * OBTENER PAQUETES
-         */
-
-
-        function mostrarPaquetes() {
-            const FD = new FormData();
-            FD.append('action', "ver_paquetes");
-            fetch("paquete_ajax.php", {
-                    method: 'POST',
-                    body: FD
-                }).then(respuesta => respuesta.text())
-                .then(decodificado => {
-                    // console.log(decodificado);
-                    const data = JSON.parse(decodificado);
-                    let template = "";
-                    data.forEach(paquete => {
-                        let tipo = "";
-                        console.log(paquete.tipo_paquete);
-                        if (paquete.tipo_paquete === '1') {
-                            tipo = "Básico";
-                        }
-                        if (paquete.tipo_paquete === '2') {
-                            tipo = "Plus";
-                        }
-                        if (paquete.tipo_paquete === '3') {
-                            tipo = "Premium";
-                        }
-                        if (paquete.tipo_paquete === '4') {
-                            tipo = "Empresas";
-                        }
-                        if (paquete.tipo_paquete === '5') {
-                            tipo = "Convenio";
-                        }
-                        template += `<tr id='${paquete.paquete_id}'>
-                                        <td> ${paquete.titulo_paquete} </td>
-                                        <td> ${tipo} </td>
-                                        <td> ${paquete.numero_sesiones} </td>
-                                        <td> ${paquete.total} </td>
-                                        <td>
-                                            <a class='btn btn-primary btn-sm ml-1' href="" data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
-                                            <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='editar_paquete' ><i class='fas fa-edit table-icon'></i></a>
-                                        </td>
-                                    </tr>`;
-                    });
-                    $('#tabla_paquetes').html(template);
-                    const verResumen = document.querySelectorAll("#ver_resumen");
-                    verResumen.forEach((card, i) => {
-                        card.addEventListener('click', () => {
-                            var id = card.parentElement.parentElement.id;
-                            mostrar(id);
-                        });
-                    });
-
-                    const editar = document.querySelectorAll("#editar_paquete");
-                    editar.forEach((card, i) => {
-                        card.addEventListener('click', () => {
-                            var id = card.parentElement.parentElement.id;
-                            editarPaquete(id);
-                        });
-                    });
-                })
-                .catch(function(error) {
-                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
-                });
-        }
-
-        /**
          * VER PAQUETE
          */
 
-
+        const verResumen = document.querySelectorAll("#ver_resumen");
+        verResumen.forEach((card, i) => {
+            card.addEventListener('click', () => {
+                var id = card.parentElement.parentElement.id;
+                mostrar(id);
+            });
+        });
 
         function mostrar(id) {
             const FD = new FormData();
@@ -480,7 +473,13 @@
          * EDITAR PAQUETE
          */
 
-
+        const editar = document.querySelectorAll("#editar_paquete");
+        editar.forEach((card, i) => {
+            card.addEventListener('click', () => {
+                var id = card.parentElement.parentElement.id;
+                editarPaquete(id);
+            });
+        });
 
         var listaPaquete = [];
 
@@ -557,6 +556,14 @@
                     'total': selectedOption.getAttribute('data-cost') * cantidad
                 }
                 agregar(element);
+            } else {
+                var alertElement = document.getElementById('alert-danger');
+                var duracion = 3000;
+                $('#alert-danger').html('Cantidad no disponible en stock');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
             }
         });
 
@@ -569,6 +576,14 @@
                 listaPaquete.push(elemento);
                 mostrarTabla();
                 totalizarPago();
+            } else {
+                var alertElement = document.getElementById('alert-danger');
+                var duracion = 3000;
+                $('#alert-danger').html('Servicio/Producto ya agregado');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
             }
         }
 
@@ -595,33 +610,80 @@
             });
         }
 
+        function validar() {
+            let validator = true;
+            var alertElement = document.getElementById('alert-danger');
+            var duracion = 3000;
+            if ($('#titulo_paquete').val() == '') {
+                validator = false;
+                $('#alert-danger').html('Ingrese titulo del paquete');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if ($('#numero_sesiones').val() < 1) {
+                validator = false;
+                $('#alert-danger').html('Ingrese numero de sesiones correctas');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if ($('#tipo_paquete').val() == 0) {
+                validator = false;
+                $('#alert-danger').html('Seleccione tipo de paquete');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if (listaPaquete.length == 0) {
+                validator = false;
+                $('#alert-danger').html('Agregue pòr lo menos un servicio');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            return validator;
+        }
+
         $('#actualizar_paquete').on('click', function() {
             const id = Number($('#paquete_id').attr('data-id'));
             actualizar(id);
         });
 
         function actualizar(paquete_id) {
-            // if (validar()) {
-            const FD = new FormData();
-            FD.append('action', "actualizar_paquete");
-            FD.append('paquete_id', paquete_id)
-            FD.append('titulo_paquete', $('#titulo_paquete').val());
-            FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
-            FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
-            FD.append('total', Number($('#total_pago').text()));
-            FD.append('lista', JSON.stringify(listaPaquete));
-            fetch("paquete_ajax.php", {
-                    method: 'POST',
-                    body: FD
-                }).then(respuesta => respuesta.text())
-                .then(decodificado => {
-                    console.log(decodificado);
-                    mostrarPaquetes();
-                })
-                .catch(function(error) {
-                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
-                });
-            // }
+            if (validar()) {
+                const FD = new FormData();
+                FD.append('action', "actualizar_paquete");
+                FD.append('paquete_id', paquete_id)
+                FD.append('titulo_paquete', $('#titulo_paquete').val());
+                FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
+                FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
+                FD.append('total', Number($('#total_pago').text()));
+                FD.append('lista', JSON.stringify(listaPaquete));
+                fetch("paquete_ajax.php", {
+                        method: 'POST',
+                        body: FD
+                    }).then(respuesta => respuesta.text())
+                    .then(decodificado => {
+                        console.log(decodificado);
+                        var alertElement = document.getElementById('alert-success');
+                        alertElement.classList.remove('d-none');
+                        setTimeout(function() {
+                            alertElement.classList.add('d-none');
+                        }, 3000);
+                    })
+                    .catch(function(error) {
+                        console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    });
+            }
         }
 
         function eliminar(id, type) {
