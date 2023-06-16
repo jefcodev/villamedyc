@@ -143,7 +143,7 @@ if (isset($status)) {
                 var date = $('#test').val();
                 var today = new Date();
                 var day = moment(today).format('YYYY-MM-DD');
-                
+
                 if (date == 1 || date == 0) {
                     var dateIni = day + ' 000000';
                     var dateFin = day + ' 235959';

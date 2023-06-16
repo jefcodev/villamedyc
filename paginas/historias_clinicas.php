@@ -62,10 +62,10 @@ if (isset($status)) {
                         <table class="table table-bordered table-hover" id="indexconsultas">
                             <thead class="tabla_cabecera">
                                 <tr>
+                                    <th>Fecha</th>
                                     <th>No Historia</th>
                                     <th>Cédula</th>
                                     <th>Paciente</th>
-                                    <th>No Sesiones</th>
                                     <?php
                                     if (Seguridad::tiene_permiso($rol, $pagina, ACCIONES::ATENDER_CITA)) {
                                         // if ($rol == 'adm' or $rol == 'doc') { 
@@ -83,29 +83,29 @@ if (isset($status)) {
                                 $mes_hoy = date("m");
                                 $anio_hoy = date("Y");
                                 if ($rol === 'adm' || $rol === 'fis') {
-                                    $sql_citas_hoy = "SELECT pc.cabecera_id, pc.numero_historia, pc.usuario_id, pds.numero_sesiones, p.numero_identidad as cedula, CONCAT(p.nombres,' ', p.apellidos) as paciente 
-                                                        FROM paquete_cabecera pc, paquete_detalle_servicio pds, pacientes p 
-                                                        WHERE pc.cabecera_id = pds.cabecera_id AND pc.paciente_id = p.id ";
+                                    $sql_citas_hoy = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.fecha, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
+                                                        FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
+                                                        WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id AND cf.estado_consulta=0";
                                 }
                                 $result_citas_hoy = $mysqli->query($sql_citas_hoy);
                                 if ($result_citas_hoy->num_rows == 0) {
                                     echo "<tr><td colspan='5' style='text-align: center'>No hay sesiones agregadas</td></tr>";
                                 }
                                 while ($row = mysqli_fetch_array($result_citas_hoy)) {
-                                    $id = $row['cabecera_id'];
-                                    echo "<tr>";
+                                    $id = $row['consulta_fisio_id'];
+                                    echo "<tr id='" . $row['consulta_fisio_id'] . "'>";
+                                    echo "<td>" . $row['fecha'] . "</td>";
                                     echo "<td>" . $row['numero_historia'] . "</td>";
-                                    echo "<td>" . $row['cedula'] . "</td>";
-                                    echo "<td>" . $row['paciente'] . "</td>";
-                                    echo "<td>" . $row['numero_sesiones'] . "</td>";
+                                    echo "<td>" . $row['numero_identidad'] . "</td>";
+                                    echo "<td>" . $row['nombres'] . "</td>";
 
                                     if (Seguridad::tiene_permiso($rol, $pagina, ACCIONES::ATENDER_CITA)) {
-                                    echo "<td>";
-                                    if ($rol == 'adm' or $row['usuario_id'] == $id_usuario) {
+                                        echo "<td>";
+                                        // if ($rol == 'adm' or $row['usuario_id'] == $id_usuario) {
                                         // echo "<a class='btn btn-success btn-sm' href='bandeja_de_atencion.php?id_cita=$id'>Ver Detalles</a>";
-                                        echo "<a class='btn btn-success btn-sm' href='evaluacion_paciente.php?cabecera_id=$id'>Atender</a>";
-                                    }
-                                    echo "</td>";
+                                        echo "<a class='btn btn-success btn-sm' href='evaluacion_paciente.php?consulta_fisio_id=$id'>Atender</a>";
+                                        // }
+                                        echo "</td>";
                                     }
 
                                     echo "</tr>";
