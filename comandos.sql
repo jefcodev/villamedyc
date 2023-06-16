@@ -1,4 +1,4 @@
-// Escribir los script sql que se ingresan a la base de datos
+/* Escribir los script sql que se ingresan a la base de datos*/
 
 CREATE TABLE productos (
   id INT AUTO_INCREMENT PRIMARY KEY,
