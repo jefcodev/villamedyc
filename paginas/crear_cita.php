@@ -2,6 +2,7 @@
 <html>
 <?php
 include 'header.php';
+include '../conection/conection.php';
 $status = $_GET['status'];
 $class = '';
 if (isset($status)) {
@@ -101,16 +102,9 @@ if (isset($status)) {
 
                                 <?php
 
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $dbname = "villame5_bb0";
-
-                                $conn = new mysqli($servername, $username, $password, $dbname);
-
                                 $sql = "SELECT * FROM `pacientes`";
 
-                                $result = $conn->query($sql);
+                                $result = $mysqli->query($sql);
 
                                 ?>
                                 <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>

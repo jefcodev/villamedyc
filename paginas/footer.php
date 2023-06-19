@@ -3,7 +3,7 @@
     <div class="row footer-credit ">
         <div class="col-md-2"></div>
         <div class="col-md-6">
-            <a>Todos los derechos reservados 2018 - Desarrollo: mmjimenez</a>                
+            <a>Todos los derechos reservados 2023 - Powered By System Code EC</a>                
         </div>
         <div class="col-md-2">
             <a href="#"><i class="fab fa-facebook-f social-icon"></i></a>                

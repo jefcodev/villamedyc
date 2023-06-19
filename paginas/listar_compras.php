@@ -1,9 +1,9 @@
 <?php
 include 'header.php';
-$pagina = PAGINAS::LISTA_PRODUCTOS;
-$status = $_GET['status'];
-$class = '';
-$close = '';
+$pagina = PAGINAS::LISTA_USUARIOS;
+if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
+    header("location:./inicio.php?status=AD");
+}
 if (isset($status)) {
     $close = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -24,17 +24,8 @@ if (isset($status)) {
 <body>
    
     <section class="cuerpo">
-         <h1>Listado de Productos
-         <?php
-                $permisoCrear = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
-                if ($permisoCrear) {
-                    echo ' <a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
-                }
-                else {
-                    
-                    echo ' <a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
-                }
-                ?>
+         <h1>Listado de Compras
+        
         </h1>
         
         
@@ -55,41 +46,23 @@ if (isset($status)) {
                 <table class="table table-bordered table-hover" id="indexpacientes">
                     <thead class="tabla_cabecera">
                         <tr>                            
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Precio compra</th> 
-                            <th>Precio venta</th>
-                            <th>Stock</th>
-                            <th style="width: 93px">Acciones</th>
+                            <th>Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Precio Total</th>
                             
-                            <?php
-                           /*  if ($permisoEdicion) {
-                                echo '<th style="width: 93px">Acciones</th>';
-                            } */
-                            ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql_citas = "SELECT * from productos";
+                        $sql_citas = "SELECT * from compra_cabecera";
                         $result_citas = $mysqli->query($sql_citas);
 
                         while ($row = mysqli_fetch_array($result_citas)) {
                             echo "<tr>";
-                            echo "<td>" . $row['codigo'] . "</td>";
-                            echo "<td>" . $row['nombre'] . "</td>";
-                            echo "<td>" . $row['descripcion'] . "</td>";
-                            echo "<td>" . $row['precio_c'] . "</td>";
-                            echo "<td>" . $row['precio_v'] . "</td>";
-                            echo "<td>" . $row['stock'] . "</td>";
-                            echo "<td><a class='btn btn-success btn-sm' href='editar_producto.php?id_producto=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a></td>";
+                            echo "<td>" . $row['fecha'] . "</td>";
+                            echo "<td>" . $row['proveedor'] . "</td>";
+                            echo "<td>" . $row['total'] . "</td>";}
                             
-                            //if ($permisoEdicion) {
-                              //  echo "<td><a class='btn btn-success btn-sm' //href='editar_paciente.php?id_paciente=" . //$row['id'] . "'><i class='fas fa-edit table//-icon'></i></a></td>";
-                            //}
-                            //echo "</tr>";
-                        }
                         ?>
                     </tbody>
                 </table>

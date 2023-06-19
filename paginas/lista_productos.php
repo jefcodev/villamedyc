@@ -1,9 +1,9 @@
 <?php
 include 'header.php';
-$pagina = PAGINAS::LISTA_PRODUCTOS;
-$status = $_GET['status'];
-$class = '';
-$close = '';
+$pagina = PAGINAS::LISTA_USUARIOS;
+if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
+    header("location:./inicio.php?status=AD");
+}
 if (isset($status)) {
     $close = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -85,6 +85,7 @@ if (isset($status)) {
                             echo "<td>" . $row['stock'] . "</td>";
                             echo "<td><a class='btn btn-success btn-sm' href='editar_producto.php?id_producto=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a></td>";
                             
+                    
                             //if ($permisoEdicion) {
                               //  echo "<td><a class='btn btn-success btn-sm' //href='editar_paciente.php?id_paciente=" . //$row['id'] . "'><i class='fas fa-edit table//-icon'></i></a></td>";
                             //}

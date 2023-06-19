@@ -10,18 +10,21 @@ CREATE TABLE productos (
   stock INT DEFAULT 0
 );
 
-CREATE TABLE compras (
+CREATE TABLE compra_cabecera (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  fecha DATE NOT NULL,
-  producto_id INT NOT NULL,
-  cantidad INT NOT NULL,
-  FOREIGN KEY (producto_id) REFERENCES productos(id)
+  fecha DATE,
+  proveedor VARCHAR(100)
 );
 
-ALTER TABLE compras
-ADD COLUMN proveedor VARCHAR(100);
-ALTER TABLE compras
-ADD COLUMN factura VARCHAR(100);
+CREATE TABLE compra_detalle (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  cabecera_id INT,
+  producto_codigo INT,
+  cantidad INT,
+  FOREIGN KEY (cabecera_id) REFERENCES compra_cabecera(id),
+  FOREIGN KEY (producto_codigo) REFERENCES productos(id)
+);
+
 
 /*==============================================================*/
 /* Table: paquete_cabecera                                      */

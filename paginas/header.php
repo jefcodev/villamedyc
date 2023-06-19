@@ -38,7 +38,21 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                         <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
+                        
                         <?php if ($rol == 'adm') { ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    INVENTARIO
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="crear_producto.php">Crear Producto</a>
+                                    <a class="dropdown-item" href="lista_productos.php">Listar Productos</a>
+                                    <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
+                                    <a class="dropdown-item" href="listar_compras.php">Listar Compras</a>
+                                </div>
+                            </li>
+
+
                             <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
