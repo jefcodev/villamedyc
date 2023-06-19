@@ -6,8 +6,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
 }
 if (isset($status)) {
     $close = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>';
+        <span aria-hidden="true">&times;</span>
+    </button>';
     if ($status === 'OK') {
         $error = 'Producto creado correctamente';
         $class = 'class="alert alert-success alert-dismissible fade show" role="alert"';
@@ -17,52 +17,70 @@ if (isset($status)) {
     }
 }
 ?>
+
 <head>
     <title>Lista de productos</title>
     <link href="../css/search.min.css" rel="stylesheet">
 </head>
+
 <body>
-   
     <section class="cuerpo">
-         <h1>Listado de Compras
-        
+        <h1>Listado de Compras
+            <a href="reporte_compras.php?fecha_inicio=<?php echo $_GET['fecha_inicio']; ?>&fecha_fin=<?php echo $_GET['fecha_fin']; ?>" target="_blank" class="btn btn-primary float-right">
+                <i class="fas fa-file-pdf"></i> Crear reporte
+            </a>
+
         </h1>
-        
-        
-        <div id="mensajes" <?php echo $class; ?> >
+
+        <div id="mensajes" <?php echo $class; ?>>
             <?php echo isset($error) ? $error : ''; ?>
             <?php echo $close; ?>
         </div>
-        <div class="row">
-                            
-            <div class="col-md-12">
 
-             <!--<a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>
-                -->
-                
-                
-                
-                
+        <form method="GET" action="">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="fecha_inicio">Fecha de inicio:</label>
+                    <input type="date" name="fecha_inicio" class="form-control" required value="<?php echo isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : ''; ?>">
+                </div>
+                <div class="col-md-3">
+                    <label for="fecha_fin">Fecha de fin:</label>
+                    <input type="date" name="fecha_fin" class="form-control" required value="<?php echo isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : ''; ?>">
+                </div>
+                <div class="col-md-3">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
                 <table class="table table-bordered table-hover" id="indexpacientes">
                     <thead class="tabla_cabecera">
-                        <tr>                            
+                        <tr>
                             <th>Fecha</th>
                             <th>Proveedor</th>
                             <th>Precio Total</th>
-                            
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql_citas = "SELECT * from compra_cabecera";
-                        $result_citas = $mysqli->query($sql_citas);
+                        if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
+                            $fechaInicio = $_GET['fecha_inicio'];
+                            $fechaFin = $_GET['fecha_fin'];
 
-                        while ($row = mysqli_fetch_array($result_citas)) {
-                            echo "<tr>";
-                            echo "<td>" . $row['fecha'] . "</td>";
-                            echo "<td>" . $row['proveedor'] . "</td>";
-                            echo "<td>" . $row['total'] . "</td>";}
-                            
+                            $sql_citas = "SELECT * FROM compra_cabecera WHERE fecha BETWEEN '$fechaInicio' AND '$fechaFin'";
+                            $result_citas = $mysqli->query($sql_citas);
+
+                            while ($row = mysqli_fetch_array($result_citas)) {
+                                echo "<tr>";
+                                echo "<td>" . $row['fecha'] . "</td>";
+                                echo "<td>" . $row['proveedor'] . "</td>";
+                                echo "<td>" . $row['total'] . "</td>";
+                                echo "</tr>";
+                            }
+                        }
                         ?>
                     </tbody>
                 </table>
@@ -70,12 +88,14 @@ if (isset($status)) {
         </div>
     </section>
     <br>
-<?php
-include 'footer.php';
-?>
+
+    <?php
+    include 'footer.php';
+    ?>
+
     <script src="../js/jquerysearch.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#indexpacientes').DataTable({
                 language: {
                     sProcessing: "Procesando...",
@@ -103,10 +123,13 @@ include 'footer.php';
                 }
             });
         });
-        $(document).ready(function () {
-            setTimeout(function () {
+
+        $(document).ready(function() {
+            setTimeout(function() {
                 $("#mensajes").fadeOut(1500);
             }, 2500);
         });
     </script>
 </body>
+
+</html>

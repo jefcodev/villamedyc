@@ -17,54 +17,66 @@ if (isset($status)) {
     }
 }
 ?>
+
 <head>
     <title>Lista de productos</title>
     <link href="../css/search.min.css" rel="stylesheet">
+    <style>
+        .clearfix {
+            clear: both;
+            margin-bottom: 10px;
+            /* Ajusta el valor del margen según tus necesidades */
+        }
+    </style>
 </head>
+
 <body>
-   
+
     <section class="cuerpo">
-         <h1>Listado de Productos
-         <?php
-                $permisoCrear = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
-                if ($permisoCrear) {
-                    echo ' <a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
-                }
-                else {
-                    
-                    echo ' <a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
-                }
-                ?>
-        </h1>
-        
-        
-        <div id="mensajes" <?php echo $class; ?> >
+        <h1>Listado de Productos</h1>
+        <a href="reporte_stock.php" target="_blank" class="btn btn-primary float-right">
+            <i class="fas fa-file-pdf"></i> Crear reporte
+        </a>
+        <?php
+        $permisoCrear = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
+        if ($permisoCrear) {
+            echo '<div class="clearfix"></div>'; // Agregamos un div vacío para limpiar el float
+            echo '<a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
+        } else {
+            echo '<div class="clearfix"></div>'; // Agregamos un div vacío para limpiar el float
+            echo '<a href="crear_producto.php" class="btn btn-success float-right"> Crear nuevo producto</a><br><br>';
+        }
+        ?>
+
+
+
+        <div id="mensajes" <?php echo $class; ?>>
             <?php echo isset($error) ? $error : ''; ?>
             <?php echo $close; ?>
         </div>
         <div class="row">
-                            
+
             <div class="col-md-12">
 
-             <!--<a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>
+                <!--<a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>
                 -->
-                
-                
-                
-                
+
+
+
+
                 <table class="table table-bordered table-hover" id="indexpacientes">
                     <thead class="tabla_cabecera">
-                        <tr>                            
+                        <tr>
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
-                            <th>Precio compra</th> 
+                            <th>Precio compra</th>
                             <th>Precio venta</th>
                             <th>Stock</th>
                             <th style="width: 93px">Acciones</th>
-                            
+
                             <?php
-                           /*  if ($permisoEdicion) {
+                            /*  if ($permisoEdicion) {
                                 echo '<th style="width: 93px">Acciones</th>';
                             } */
                             ?>
@@ -84,10 +96,10 @@ if (isset($status)) {
                             echo "<td>" . $row['precio_v'] . "</td>";
                             echo "<td>" . $row['stock'] . "</td>";
                             echo "<td><a class='btn btn-success btn-sm' href='editar_producto.php?id_producto=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a></td>";
-                            
-                    
+
+
                             //if ($permisoEdicion) {
-                              //  echo "<td><a class='btn btn-success btn-sm' //href='editar_paciente.php?id_paciente=" . //$row['id'] . "'><i class='fas fa-edit table//-icon'></i></a></td>";
+                            //  echo "<td><a class='btn btn-success btn-sm' //href='editar_paciente.php?id_paciente=" . //$row['id'] . "'><i class='fas fa-edit table//-icon'></i></a></td>";
                             //}
                             //echo "</tr>";
                         }
@@ -98,12 +110,12 @@ if (isset($status)) {
         </div>
     </section>
     <br>
-<?php
-include 'footer.php';
-?>
+    <?php
+    include 'footer.php';
+    ?>
     <script src="../js/jquerysearch.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#indexpacientes').DataTable({
                 language: {
                     sProcessing: "Procesando...",
@@ -131,8 +143,8 @@ include 'footer.php';
                 }
             });
         });
-        $(document).ready(function () {
-            setTimeout(function () {
+        $(document).ready(function() {
+            setTimeout(function() {
                 $("#mensajes").fadeOut(1500);
             }, 2500);
         });
