@@ -9,6 +9,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $fecha_hora = date("Y-m-d H:i:s");
     $id_paciente = $_POST['id_paciente'];
     $precio = $_POST['precio'];
+    $estado = 'pendiente';
     $descripcion_precio = $_POST['descripcion_precio'];
     $motivo_consulta = $_POST['motivo_consulta'];
     $examen_fisico = $_POST['examen_fisico'];
@@ -17,7 +18,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $observaciones = $_POST['observaciones'];
     $id_cita = $_POST['id_cita'];
     $certificado = $_POST['certificado'];
-    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio')";
+    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio, estado) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio','$estado')";
     $result = $mysqli->query($sql);
     $resultado = "";
     if ($result === true) {

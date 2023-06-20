@@ -98,7 +98,7 @@ $id_cita = $_GET['id_cita'];
                         <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
                     </div>
                     <div class="col-md-6">
-                        <input class="btn btn-primary float-left" type="button" value="Crear cita fisioterapeuta" onclick="crear_cita()">
+                        
                         <input class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Guardar datos de la consulta" onclick="crear_consulta()" /><br>
                     </div>
                 </div>

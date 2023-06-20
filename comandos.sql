@@ -13,7 +13,8 @@ CREATE TABLE productos (
 CREATE TABLE compra_cabecera (
   id INT AUTO_INCREMENT PRIMARY KEY,
   fecha DATE,
-  proveedor VARCHAR(100)
+  proveedor VARCHAR(100),
+  total DECIMAL (10,2)
 );
 
 CREATE TABLE compra_detalle (
@@ -85,4 +86,16 @@ create table consultas_fisioterapeuta
    FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
 
+
+CREATE TABLE ventas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  fecha_venta DATE,
+  id_consulta int,
+  id_paquete int,
+  total double,
+  FOREIGN KEY (id_consulta) REFERENCES consultas(id),
+  FOREIGN KEY (id_paquete) REFERENCES paquete_cabecera(paquete_id)
+);
+
+ALTER TABLE consultas ADD estado VARCHAR(255);
 

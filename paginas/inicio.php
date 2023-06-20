@@ -1,4 +1,7 @@
 <?php
+
+use GuzzleHttp\Psr7\Query;
+
 include 'header.php';
 $status = $_GET['status'];
 $pagina = PAGINAS::INICIO;
@@ -117,6 +120,44 @@ if (isset($status)) {
                                 ?>
                             </tbody>
                         </table>
+
+
+                        <table class="table table-bordered table-hover" id="indexconsultas">
+                            <thead class="tabla_cabecera">
+                                <tr>
+                                    <th>Fecha cita</th>
+                                    <th>Doctor</th>
+                                    <th>Paciente</th>
+                                    <th>Valor</th>
+                                    <th>Acciones </th>
+                                </tr>
+                            </thead>
+                            <tbody id="indexconsultas">
+                                <?php
+
+                                $pagos = "SELECT * FROM consultas_datos WHERE estado = 'pendiente'";
+                                $resulPagos = $mysqli->query($pagos);
+                                while ($row = mysqli_fetch_array($resulPagos)) {
+                                    $id = $row['id_consulta'];
+                                    echo "<td>" . $row['fecha_hora'] . "</td>";
+                                    echo "<td>" . $row['nombre_doctor'] . " " . $row['apellidos_paciente'] . "</td>";
+                                    echo "<td>" . $row['nombres'] . ' ' . $row['apellidos'] . "</td>";
+                                    echo "<td>" . $row['precio'] . "</td>";
+                                    echo "<td>";
+                                    if ($rol == 'adm') {
+                                        echo "<a class='btn btn-success btn-sm' href='cobrar.php?id_cita=$id'>Cobrar</a>";
+                                        echo "&nbsp;&nbsp;";
+                                        echo "<a class='btn btn-success btn-sm' href=''>Agregar</a>";
+                                    }
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+
+
+                                ?>
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
