@@ -85,7 +85,7 @@ if (isset($status)) {
                                 if ($rol === 'adm' || $rol === 'fis') {
                                     $sql_citas_hoy = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.fecha, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
                                                         FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
-                                                        WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id AND cf.estado_consulta=0";
+                                                        WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id AND cf.estado_atencion='Cita Asignada'";
                                 }
                                 $result_citas_hoy = $mysqli->query($sql_citas_hoy);
                                 if ($result_citas_hoy->num_rows == 0) {

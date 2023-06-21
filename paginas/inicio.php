@@ -135,7 +135,7 @@ if (isset($status)) {
                             <tbody id="indexconsultas">
                                 <?php
 
-                                $pagos = "SELECT * FROM consultas_datos WHERE estado = 'pendiente'";
+                                $pagos = "SELECT * FROM consultas WHERE estado = 'pendiente'";
                                 $resulPagos = $mysqli->query($pagos);
                                 while ($row = mysqli_fetch_array($resulPagos)) {
                                     $id = $row['id_consulta'];

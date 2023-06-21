@@ -32,13 +32,18 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav mr-auto mt-2 mt-md-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="inicio.php">INICIO</a>
+                            <?php if ($rol == 'fis') { ?>
+                                <a class="nav-link" href="historias_clinicas.php">INICIO</a>
+
+                            <?php } else { ?>
+                                <a class="nav-link" href="inicio.php">INICIO</a>
+                            <?php } ?>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="lista_pacientes.php">PACIENTES</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
-                        
+
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -30,22 +30,22 @@ $id_cita = $_GET['consulta_fisio_id'];
             <div id="crear_consulta">
                 <div class="row">
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Profesión" placeholder="Profesión" id="motivo_consulta" name="motivo_consulta"></textarea>
-                        <textarea class="form-control" title="Tipo de trabajo" placeholder="Tipo de trabajo" id="examen_fisico" name="examen_fisico"></textarea>
-                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                        <textarea class="form-control" title="Profesión" placeholder="Profesión" id="profesion" name="profesion"></textarea>
+                        <textarea class="form-control" title="Tipo de trabajo" placeholder="Tipo de trabajo" id="tipo_trabajo" name="tipo_trabajo"></textarea>
+                        <select class="form-control" id="sedestacion_prolongada" name="sedestacion_prolongada" title="Sedestación Prolongada">
                             <option value="3">Sedestacion Prolongada</option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                        <select class="form-control" id="esfuerzo_fisico" name="esfuerzo_fisico" title="Esfuerzo Físico">
                             <option value="0">Esfuerzo Fisico</option>
                             <option value="1">Bajo</option>
                             <option value="2">Medio</option>
                             <option value="3">Alto</option>
                         </select>
-                        <textarea class="form-control" title="Diagnóstico" placeholder="Hábitos/Otras actividades" id="diagnostico" name="diagnostico"></textarea>
+                        <textarea class="form-control" title="Hábitos/Otras actividades" placeholder="Hábitos/Otras actividades" id="habitos" name="habitos"></textarea>
                     </div>
                 </div>
 
@@ -54,34 +54,34 @@ $id_cita = $_GET['consulta_fisio_id'];
 
                 <div class="row">
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Profesión" placeholder="Antecedentes del diagnóstico" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <textarea class="form-control" title="Antecedentes del diagnóstico" placeholder="Antecedentes del diagnóstico" id="antecendentes_diagnostico" name="antecendentes_diagnostico"></textarea>
                     </div>
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Detalles precio" placeholder="Tratamientos anteriores" id="descripcion_precio" name="descripcion_precio"></textarea>
+                        <textarea class="form-control" title="Tratamientos anteriores" placeholder="Tratamientos anteriores" id="tratamientos_anteriores" name="tratamientos_anteriores"></textarea>
                     </div>
                 </div>
 
                 <b style="font-size: 18px">Palpación y Dolor</b><br><br>
                 <div class="row">
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Profesión" placeholder="Contracturas" id="motivo_consulta" name="motivo_consulta"></textarea>
-                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                        <textarea class="form-control" title="Contracturas" placeholder="Contracturas" id="contracturas" name="contracturas"></textarea>
+                        <select class="form-control" id="irradiacion" name="irradiacion" title="Irradiación">
                             <option value="3">Irradiación</option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
-                        <textarea class="form-control" title="Profesión" placeholder="Hacia donde?" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <textarea class="form-control" title="Hacia donde?" placeholder="Hacia donde?" id="hacia_donde" name="hacia_donde"></textarea>
                     </div>
                     <div class="col-md-6">
-                        <textarea class="form-control" title="Detalles precio" placeholder="Intensidad" id="descripcion_precio" name="descripcion_precio"></textarea>
-                        <textarea class="form-control" title="Profesión" placeholder="Sensaciones" id="motivo_consulta" name="motivo_consulta"></textarea>
+                        <textarea class="form-control" title="Intensidad" placeholder="Intensidad" id="intensidad" name="intensidad"></textarea>
+                        <textarea class="form-control" title="Sensaciones" placeholder="Sensaciones" id="sensaciones" name="sensaciones"></textarea>
                     </div>
                 </div>
 
                 <b style="font-size: 18px">Limitación de la Movilidad</b><br><br>
                 <div class="row">
                     <div class="col-md-6">
-                        <select class="form-control" id="estado_civil" name="estado_civil" title="Sedestación Prolongada">
+                        <select class="form-control" id="limitacion_movilidad" name="limitacion_movilidad" title="Limitación de la Movilidad">
                             <option value="1">Crujidos</option>
                             <optgroup label="Osteoarticular">
                                 <option value="2">Topes articulares</option>
@@ -96,7 +96,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                         <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
                     </div>
                     <div class="col-md-6">
-                        <input class="btn btn-primary float-left" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Guardar" onclick="crear_consulta()" />
+                        <input class="btn btn-primary float-left" type="button" name="guardar_evaluacion" id="guardar_evaluacion" value="Guardar" />
                     </div>
                 </div>
             </div>
@@ -109,88 +109,44 @@ $id_cita = $_GET['consulta_fisio_id'];
 
     <script src="../js/bootstrap-select.js"></script>
     <script type="text/javascript">
-        var select = document.getElementById("cie_10");
-        var tArea = document.getElementById("diagnostico");
-        select.onchange = function() {
-            if (tArea.value.length === 0) {
-                tArea.value = select.options[select.selectedIndex].value;
-            } else {
-                tArea.value = tArea.value + '\n' + select.options[select.selectedIndex].value;
-            }
-        }
+        $('#guardar_evaluacion').on('click', function() {
+            const id = $('#id_cita').val();
+            actualizarEvaluacion(id);
+        });
 
-        function editar_paciente() {
-            var id_paciente = $("#id_paciente").val();
-            var numero_identidad = $("#numero_identidad").val();
-            var nombres = $("#nombres").val();
-            var apellidos = $("#apellidos").val();
-            var fecha_nacimiento = $("#fecha_nacimiento").val();
-            var genero = document.getElementById("genero").value;
-            var telefono_fijo = $("#telefono_fijo").val();
-            var telefono_movil = $("#telefono_movil").val();
-            var direccion = $("#direccion").val();
-            var raza = document.getElementById("raza").value;
-            var ocupacion = $("#ocupacion").val();
-            var estado_civil = document.getElementById("estado_civil").value;
-            var correo_electronico = $("#correo_electronico").val();
-            var antecedentes_personales = document.getElementById("antecedentes_personales").value;
-            var antecedentes_familiares = document.getElementById("antecedentes_familiares").value;
-            $.ajax({
-                url: 'editar_paciente_ajax.php',
-                type: 'post',
-                data: {
-                    id_paciente: id_paciente,
-                    numero_identidad: numero_identidad,
-                    nombres: nombres,
-                    apellidos: apellidos,
-                    fecha_nacimiento: fecha_nacimiento,
-                    genero: genero,
-                    telefono_fijo: telefono_fijo,
-                    telefono_movil: telefono_movil,
-                    direccion: direccion,
-                    raza: raza,
-                    ocupacion: ocupacion,
-                    estado_civil: estado_civil,
-                    correo_electronico: correo_electronico,
-                    antecedentes_personales: antecedentes_personales,
-                    antecedentes_familiares: antecedentes_familiares,
-                },
-                success: function(response) {
-                    $("#edicion_paciente").html(response);
-                }
-            });
-        }
 
-        function crear_consulta() {
-            var id_paciente = $("#id_paciente").val();
-            var motivo_consulta = document.getElementById("motivo_consulta").value;
-            var precio = $("#precio").val();
-            var descripcion_precio = document.getElementById("descripcion_precio").value;
-            var examen_fisico = document.getElementById("examen_fisico").value;
-            var diagnostico = document.getElementById("diagnostico").value;
-            var observaciones = document.getElementById("observaciones").value;
-            var tratamiento = $("#tratamiento").val();
-            var certificado = $("#certificado").val();
-            var id_cita = $("#id_cita").val();
-            $.ajax({
-                url: 'crear_consulta.php',
-                type: 'post',
-                data: {
-                    id_paciente: id_paciente,
-                    motivo_consulta: motivo_consulta,
-                    examen_fisico: examen_fisico,
-                    diagnostico: diagnostico,
-                    tratamiento: tratamiento,
-                    id_cita: id_cita,
-                    certificado: certificado,
-                    observaciones: observaciones,
-                    precio: precio,
-                    descripcion_precio: descripcion_precio
-                },
-                success: function(response) {
-                    $("#crear_consulta").html(response);
-                }
-            });
+        function actualizarEvaluacion(consulta_fisio_id) {
+            const FD = new FormData();
+            FD.append('action', "actualizar_evaluacion");
+            FD.append('consulta_fisio_id', consulta_fisio_id);
+            FD.append('profesion', $("#profesion").val());
+            FD.append('tipo_trabajo', $("#tipo_trabajo").val());
+            FD.append('sedestacion_prolongada', $("#sedestacion_prolongada").val());
+            FD.append('esfuerzo_fisico', $("#esfuerzo_fisico").val());
+            FD.append('habitos', $("#habitos").val());
+            FD.append('antecendentes_diagnostico', $("#antecendentes_diagnostico").val());
+            FD.append('tratamientos_anteriores', $("#tratamientos_anteriores").val());
+            FD.append('contracturas', $("#contracturas").val());
+            FD.append('irradiacion', $("#irradiacion").val());
+            FD.append('hacia_donde', $("#hacia_donde").val());
+            FD.append('intensidad', $("#intensidad").val());
+            FD.append('sensaciones', $("#sensaciones").val());
+            FD.append('limitacion_movilidad', $("#limitacion_movilidad").val());
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    console.log(decodificado);
+                    // var alertElement = document.getElementById('alert-success');
+                    // alertElement.classList.remove('d-none');
+                    // setTimeout(function() {
+                    //     alertElement.classList.add('d-none');
+                    // }, 3000);
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
         }
     </script>
 </body>

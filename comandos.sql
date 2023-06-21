@@ -56,7 +56,7 @@ create table paquete_detalle
 );
 
 /*==============================================================*/
-/* Table: consultas_fisioterapeuta                              */
+/* Table: consultas_fisioterapeuta                     */
 /*==============================================================*/
 create table consultas_fisioterapeuta
 (
@@ -68,24 +68,23 @@ create table consultas_fisioterapeuta
    fecha                      datetime,
    profesion                  varchar(500),
    tipo_trabajo               varchar(500),
-   sedestacion_prolongada     boolean,
+   sedestacion_prolongada     int,
    esfuerzo_fisico            int,
    habitos                    varchar(500),
    antecendentes_diagnostico  varchar(500),
    tratamientos_anteriores    varchar(500),
    contracturas               varchar(500),
-   irradiacion                boolean,
+   irradiacion                int,
    hacia_donde                varchar(500),
    intensidad                 varchar(500),
    sensaciones                varchar(500),
    limitacion_movilidad       int,    
-   estado_atencion            int,
+   estado_atencion            varchar(255),
    primary key (consulta_fisio_id),
    FOREIGN KEY (paciente_id) REFERENCES pacientes (id),
    FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
    FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
-
 
 CREATE TABLE ventas (
   id INT AUTO_INCREMENT PRIMARY KEY,
