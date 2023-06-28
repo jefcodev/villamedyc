@@ -91,6 +91,40 @@ $id_cita = $_GET['consulta_fisio_id'];
                     </div>
                 </div>
 
+                <b style="font-size: 18px">Procedimiento realizado</b><br><br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="checkbox" name="electroestimulacion" id="electroestimulacion">
+                        <label for="electroestimulacion">Electroestimulación</label>
+                        <input type="checkbox" name="ultrasonido" id="ultrasonido">
+                        <label for="ultrasonido">Ultrasonido</label>
+                        <input type="checkbox" name="magnetoterapia" id="magnetoterapia">
+                        <label for="magnetoterapia">Magnetoterapia</label>
+                        <input type="checkbox" name="laserterapia" id="laserterapia">
+                        <label for="laserterapia">Laserterapia</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="checkbox" name="termoterapia" id="termoterapia">
+                        <label for="termoterapia">Termoterapia</label>
+                        <input type="checkbox" name="masoterapia" id="masoterapia">
+                        <label for="masoterapia">Masoterapia</label>
+                        <input type="checkbox" name="crioterapia" id="crioterapia">
+                        <label for="crioterapia">Crioterapia</label>
+                        <input type="checkbox" name="malibre" id="malibre">
+                        <label for="malibre">Movilidad Activa Libre</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="checkbox" name="maasistida" id="maasistida">
+                        <label for="maasistida">Movilidad Activa Asistida</label>
+                        <input type="checkbox" name="fmuscular" id="fmuscular">
+                        <label for="fmuscular">Fortalecimiento Muscular</label>
+                        <input type="checkbox" name="propiocepcion" id="propiocepcion">
+                        <label for="propiocepcion">Propiocepción</label>
+                        <input type="checkbox" name="epunta" id="epunta">
+                        <label for="epunta">Eliminación de Punta</label>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
@@ -132,6 +166,20 @@ $id_cita = $_GET['consulta_fisio_id'];
             FD.append('intensidad', $("#intensidad").val());
             FD.append('sensaciones', $("#sensaciones").val());
             FD.append('limitacion_movilidad', $("#limitacion_movilidad").val());
+
+            FD.append('electroestimulacion', $("#electroestimulacion").is(":checked"));
+            FD.append('ultrasonido', $("#ultrasonido").is(":checked"));
+            FD.append('magnetoterapia', $("#magnetoterapia").is(":checked"));
+            FD.append('laserterapia', $("#laserterapia").is(":checked"));
+            FD.append('termoterapia', $("#termoterapia").is(":checked"));
+            FD.append('masoterapia', $("#masoterapia").is(":checked"));
+            FD.append('crioterapia', $("#crioterapia").is(":checked"));
+            FD.append('malibre', $("#malibre").is(":checked"));
+            FD.append('maasistida', $("maasistida").is(":checked"));
+            FD.append('fmuscular', $("#fmuscular").is(":checked"));
+            FD.append('propiocepcion', $("#propiocepcion").is(":checked"));
+            FD.append('epunta', $("#epunta").is(":checked"));
+
             fetch("ventas_ajax.php", {
                     method: 'POST',
                     body: FD

@@ -136,18 +136,48 @@ function actualizarEvaluacion($mysqli)
     $INTENSIDAD = $_POST['intensidad'];
     $SENSACIONES = $_POST['sensaciones'];
     $LIMITACION_MOVILIDAD = $_POST['limitacion_movilidad'];
+    $mysqli->begin_transaction();
+    try {
+        $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
+                    `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`=$SEDESTACION_PROLONGADA, 
+                    `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecendentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
+                    `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
+                    `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
+                    `limitacion_movilidad`=$LIMITACION_MOVILIDAD, `estado_atencion`='Atendido'
+                    WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
 
-    $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
-                `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`=$SEDESTACION_PROLONGADA, 
-                `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecendentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
-                `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
-                `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
-                `limitacion_movilidad`=$LIMITACION_MOVILIDAD, `estado_atencion`='Atendido'
-                WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
-    $result = $mysqli->query($query);
-    if (!$result) {
-        die('Query Failed.');
+        $ELECTROESTIMULACION = $_POST['electroestimulacion'];
+        $ULTRASONIDO = $_POST['ultrasonido'];
+        $MAGNETOTERAPIA = $_POST['magnetoterapia'];
+        $LASERTERAPIA = $_POST['laserterapia'];
+        $TERMOTERAPIA = $_POST['termoterapia'];
+        $MASOTERAPIA = $_POST['masoterapia'];
+        $CRIOTERAPIA = $_POST['crioterapia'];
+        $MALIBRE = $_POST['malibre'];
+        $MAASISTIDA = $_POST['maasistida'];
+        $FMUSCULAR = $_POST['fmuscular'];
+        $PROPIOCEPCION = $_POST['propiocepcion'];
+        $EPUNTA = $_POST['epunta'];
+
+        $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, 
+                    `electroestimulacion`, `ultrasonido`, `magnoterapia`, `laserterapia`, 
+                    `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
+                    `fmuscular`, `propiocepcion`, `epunta`) 
+                    VALUES ($CONSULTA_FISIO_ID, $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
+                    $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
+                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA)";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
+
+        $mysqli->commit();
+        echo "Evaluación Actualizada";
+    } catch (Exception $e) {
+        echo ("Error: " . $e->getMessage());
     }
-
-    echo "Evaluación Actualizada";
 }
