@@ -56,6 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function() {
             var productosSeleccionados = [];
@@ -186,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="col-md-6">
                 <label for="producto">Producto:</label>
-                <select id="producto" name="producto" class="form-control">
+                <select id="producto" name="producto" class="select2 form-control">
                     <option value="">Seleccionar</option>
                     <?php foreach ($productos as $codigo => $producto) { ?>
                         <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
@@ -233,6 +237,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </section>
+
+    <script type="text/javascript">
+        $('.select2').select2({});
+    </script>
 </body>
 
 </html>

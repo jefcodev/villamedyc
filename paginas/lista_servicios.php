@@ -28,6 +28,9 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 </head>
 
 <body>
@@ -82,7 +85,7 @@ if ($result->num_rows > 0) {
                     <div class="col-10">
                         <div class="col-md-6">
                             <label for="producto">Producto:</label>
-                            <select id="producto" name="producto" class="form-control">
+                            <select id="producto" name="producto" class="select2 form-control">
                                 <option value="">Seleccionar</option>
                                 <?php
                                 $sql = "SELECT id, nombre, precio_c, stock FROM productos";
@@ -145,6 +148,10 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        $('.select2').select2({});
+    </script>
 
 
     <script>
@@ -239,6 +246,8 @@ if ($result->num_rows > 0) {
                         console.log(decodificado);
                         // const data = JSON.parse(decodificado);
                         // console.log(data);
+                        location.reload();
+                        alert(decodificado);
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
