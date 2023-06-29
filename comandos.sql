@@ -98,7 +98,8 @@ ADD
 
 CREATE TABLE servicios (
   id_servicio INT AUTO_INCREMENT PRIMARY KEY,
-   total decimal(10, 2) not null,
+  titulo_servicio varchar(500),
+  total decimal(10, 2) not null,
   valor_adicional decimal(10, 2) not null
 );
 
