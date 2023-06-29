@@ -21,9 +21,13 @@ if ($result->num_rows > 0) {
 
 <head>
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" /> -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -67,129 +71,136 @@ if ($result->num_rows > 0) {
     </section>
 
     <!-- Modal de Edición de Servicio -->
-    <div id="editarServicioModal" class="modal" style="width: 100%">
-        <div class="modal-dialog">
+    <div id="editarServicioModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="editarServicioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarServicioModalLabel">Editar Servicio</h5>
+                    <button type="button" class="close" data-modal-close>&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-10">
+                        <div class="col-md-6">
+                            <label for="producto">Producto:</label>
+                            <select id="producto" name="producto" class="form-control">
+                                <option value="">Seleccionar</option>
+                                <?php
+                                $sql = "SELECT id, nombre, precio_c, stock FROM productos";
+                                $result = $conn->query($sql);
+                                $productos = [];
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        $productos[$row["id"]] = [
+                                            "nombre" => $row["nombre"],
+                                            "precio" => $row["precio_c"],
+                                            "stock" => $row["stock"]
+                                        ];
+                                    }
+                                } else {
+                                    echo "No hay productos disponibles.";
+                                }
+                                foreach ($productos as $codigo => $producto) { ?>
+                                    <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cantidad">Cantidad:</label>
+                            <input type="number" id="cantidad" name="cantidad" value="1" min="1" class="form-control">
+                        </div>
+                        <div class="col-md-12">
+                            <button id="agregar_producto" class="btn btn-primary">Agregar</button>
+                        </div>
 
-            <div class="modal-header">
-                <h5 class="modal-title">Editar Servicio</h5>
-                <button type="button" class="close" data-modal-close>&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="editarServicioForm">
+                    </div>
                     <input type="hidden" id="editarServicioId" value="">
-                    <div class="form-group">
-                        <label for="editarServicioTotal">Total</label>
-                        <input type="text" class="form-control" id="editarServicioTotal" name="total" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="editarServicioValorAdicional">Valor Adicional</label>
-                        <input type="text" class="form-control" id="editarServicioValorAdicional" name="valor_adicional" value="">
-                    </div>
+
                     <h5>Detalle del servicio:</h5>
                     <table class="table" id="editarServicioDetalleTable">
                         <thead>
                             <tr>
-                                <th>ID Detalle</th>
-                                <th>ID Producto</th>
+                                <th>Id</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th>Subtotal</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="tabla_body"></tbody>
                     </table>
-                </form>
+                    <div class="col-md-6">
+                        <label for="total_pago">Total</label>
+                        <span id="total_pago">0.00</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="valor_adicional">Valor Adicional:</label>
+                        <input type="number" id="valor_adicional" name="valor_adicional" step="0.01" min="0" value="0" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-modal-close>Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button>
-            </div>
-
         </div>
     </div>
 
 
     <script>
-        $(document).ready(function() {
-            // Evento de clic en el botón de editar servicio
-            $(".editarServicioBtn").click(function() {
-                var servicioId = $(this).data("id");
-                var servicio = <?php echo json_encode($servicios); ?>;
-                obtenerDetalleServicio(servicioId); // Llama a la función para obtener los detalles del servicio
-                llenarFormularioEdicion(servicioId, servicio[servicioId]);
-                $("#editarServicioModal").modal("show");
-            });
+        // $(document).ready(function() {
 
-            // Evento de clic en el botón de cerrar modal
-            $("[data-modal-close]").click(function() {
-                $(this).closest(".modal").modal("hide");
-            });
+        // });
+
+        var productosSeleccionados = [];
+
+        // Evento de clic en el botón de editar servicio
+        $(".editarServicioBtn").click(function() {
+            var servicioId = $(this).data("id");
+            var servicio = <?php echo json_encode($servicios); ?>;
+            obtenerDetalleServicio(servicioId); // Llama a la función para obtener los detalles del servicio
+            llenarFormularioEdicion(servicioId, servicio[servicioId]);
+            $("#editarServicioModal").modal("show");
+        });
+
+        // Evento de clic en el botón de cerrar modal
+        $("[data-modal-close]").click(function() {
+            $(this).closest(".modal").modal("hide");
         });
 
         function obtenerDetalleServicio(servicioId) {
-            // Realizar una consulta a la base de datos para obtener el detalle del servicio
-            // Utiliza el servicioId para filtrar los registros de la tabla "deatelle_servicio"
-            // y devuelve los resultados como un arreglo
-
-            // Realizar la consulta SQL para obtener los detalles del servicio
-            <?php
-            try {
-                //code...
-                $detalleSql = "SELECT * FROM deatelle_servicio WHERE id_servicio = ?";
-
-
-                $detalleStmt = $conn->prepare($detalleSql);
-                $detalleStmt->bind_param("i", $servicioId);
-                $detalleStmt->execute();
-                if (!$detalleStmt->execute()) {
-                    echo "Error enasas la consulta: " . $detalleStmt->error;
-                    return;
-                }
-
-                $detalleResult = $detalleStmt->get_result();
-
-                $detalleServicio = [];
-                if ($detalleResult->num_rows > 0) {
-                    while ($detalleRow = $detalleResult->fetch_assoc()) {
-                        $detalleServicio[] = [
-                            "id_detalle_servicio" => $detalleRow["id_det_servicio"],
-                            "id_producto" => $detalleRow["id_producto"],
-                            "nombre" => $detalleRow["nombre"],
-                            "precio" => $detalleRow["precio"],
-                            "cantidad" => $detalleRow["cantidad"],
-                            "subtotal" => $detalleRow["subtotal"],
-                        ];
-                    }
-                }
-
-                // Convertir los detalles del servicio en formato PHP a JSON para utilizarlo en JavaScript
-                $detalleServicioJson = json_encode($detalleServicio);
-            } catch (\Throwable $th) {
-                echo $th;
-
-                throw $th;
-            }
-
-            ?>
-
-            var detalleServicio = <?php echo $detalleServicioJson; ?>;
-            mostrarDetalleServicio(detalleServicio);
+            const FD = new FormData();
+            FD.append('action', "ver_servicio");
+            FD.append("servicio_id", servicioId);
+            fetch("servicio.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    // console.log(data);
+                    var detalleServicio = data;
+                    mostrarDetalleServicio(detalleServicio);
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
         }
 
         function mostrarDetalleServicio(detalleServicio) {
             var detalleTableId = "#editarServicioDetalleTable";
             var detalleTableBody = $(detalleTableId + " tbody");
             detalleTableBody.empty();
-
-            detalleServicio.forEach(function(detalle) {
+            productosSeleccionados = detalleServicio;
+            productosSeleccionados.forEach(function(detalle, index) {
                 var detalleRow = "<tr>" +
-                    "<td>" + detalle.id_detalle_servicio + "</td>" +
                     "<td>" + detalle.id_producto + "</td>" +
                     "<td>" + detalle.nombre + "</td>" +
                     "<td>" + detalle.precio + "</td>" +
                     "<td>" + detalle.cantidad + "</td>" +
                     "<td>" + detalle.subtotal + "</td>" +
+                    "<td><button class='eliminar-producto' data-index='" + index + "'>Eliminar</button></td>" +
                     "</tr>";
                 detalleTableBody.append(detalleRow);
             });
@@ -197,8 +208,8 @@ if ($result->num_rows > 0) {
 
         function llenarFormularioEdicion(servicioId, servicio) {
             $("#editarServicioId").val(servicioId);
-            $("#editarServicioTotal").val(servicio.total);
-            $("#editarServicioValorAdicional").val(servicio.valor_adicional);
+            $("#total_pago").text(servicio.total);
+            $("#valor_adicional").val(servicio.valor_adicional);
 
             // Agregar el ID seleccionado al campo correspondiente en el modal
             $("#editarServicioId").text(servicioId);
@@ -207,20 +218,102 @@ if ($result->num_rows > 0) {
         function guardarCambiosServicio() {
             // Obtener los valores del formulario de edición
             var servicioId = $("#editarServicioId").val();
-            var total = $("#editarServicioTotal").val();
-            var valorAdicional = $("#editarServicioValorAdicional").val();
+            var total = $("#total_pago").text();
+            var valorAdicional = $("#valor_adicional").val();
 
-            console.log(servicioId)
-
-            console.log(total)
-
-            console.log(valorAdicional)
+            if (productosSeleccionados.length > 0) {
+                // console.log(servicioId)
+                // console.log(total)
+                // console.log(valorAdicional)
+                const FD = new FormData();
+                FD.append('action', "actualizar_servicio");
+                FD.append("servicio_id", servicioId);
+                FD.append("productos", JSON.stringify(productosSeleccionados));
+                FD.append("total_pago", total);
+                FD.append("valor_adicional", valorAdicional);
+                fetch("servicio.php", {
+                        method: 'POST',
+                        body: FD
+                    }).then(respuesta => respuesta.text())
+                    .then(decodificado => {
+                        console.log(decodificado);
+                        // const data = JSON.parse(decodificado);
+                        // console.log(data);
+                    })
+                    .catch(function(error) {
+                        console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    });
+            } else {
+                alert('Debe ingresar un título de servicio y seleccionar al menos un producto');
+            }
 
             // Realizar una petición AJAX para guardar los cambios en la base de datos
 
             // Cerrar el modal de edición
 
         }
+
+        function actualizarTablaProductos() {
+            var tablaProductosBody = $('#tabla_body');
+            tablaProductosBody.empty();
+
+            productosSeleccionados.forEach(function(detalle, index) {
+                var fila = "<tr>" +
+                    "<td>" + detalle.id_producto + "</td>" +
+                    "<td>" + detalle.nombre + "</td>" +
+                    "<td>" + detalle.precio + "</td>" +
+                    "<td>" + detalle.cantidad + "</td>" +
+                    "<td>" + detalle.subtotal + "</td>" +
+                    "<td><button class='eliminar-producto' data-index='" + index + "'>Eliminar</button></td>" +
+                    "</tr>";
+                tablaProductosBody.append(fila);
+            });
+        }
+
+        function actualizarTotalPago() {
+            var total = productosSeleccionados.reduce((acumulador, producto) => acumulador + Number(producto.subtotal), 0);
+            $('#total_pago').text(total);
+        }
+
+        $('#agregar_producto').click(function() {
+            console.log(productosSeleccionados);
+            var selectedOption = $('#producto').find('option:selected');
+            var id = selectedOption.val();
+            var nombre = selectedOption.text();
+            var precio = parseFloat(selectedOption.data('precio'));
+            var cantidad = parseInt($('#cantidad').val());
+
+            if (id && nombre && precio && cantidad) {
+                // Verificar si el producto ya está en la lista
+                var productoExistente = productosSeleccionados.find(function(producto) {
+                    return producto.id_producto == id;
+                });
+
+                if (productoExistente) {
+                    alert('El producto ya se encuentra en la lista.');
+                } else {
+                    var producto = {
+                        id_producto: id,
+                        nombre: nombre,
+                        precio: precio,
+                        cantidad: cantidad,
+                        subtotal: precio * cantidad
+                    };
+
+                    productosSeleccionados.push(producto);
+                    actualizarTablaProductos();
+                    actualizarTotalPago();
+                }
+            }
+        });
+
+        $('#tabla_body').on('click', '.eliminar-producto', function() {
+            var index = $(this).data('index');
+            var producto = productosSeleccionados[index];
+            productosSeleccionados.splice(index, 1);
+            actualizarTablaProductos();
+            actualizarTotalPago();
+        });
     </script>
 </body>
 
