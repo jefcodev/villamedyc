@@ -93,6 +93,34 @@ $id_cita = $_GET['consulta_fisio_id'];
 
                 <b style="font-size: 18px">Procedimiento realizado</b><br><br>
                 <div class="row">
+                    <?php
+                    $sql = "SELECT * FROM servicios";
+                    $result = $mysqli->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $nombre = $row['titulo_servicio'];
+                            $id_servicio = $row['id_servicio'];
+                            echo "<div class='col-md-3'>
+                                    <div class='card'>
+                                        <div class='card-body'>
+                                            <input type='checkbox' name='$nombre' id='$id_servicio'>
+                                            <label for='$nombre'>$nombre</label>
+                                        </div>
+                                    </div>
+                                </div>";
+                        }
+                    } else {
+                        echo "<div class='col-md-3'>
+                                    <div class='card'>
+                                        <div class='card-body'>
+                                            <label >No hay servicios disponibles.</label>
+                                        </div>
+                                    </div>
+                                </div>";
+                    }
+                    ?>
+                </div>
+                <!-- <div class="row">
                     <div class="col-md-12">
                         <input type="checkbox" name="electroestimulacion" id="electroestimulacion">
                         <label for="electroestimulacion">Electroestimulación</label>
@@ -123,7 +151,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                         <input type="checkbox" name="epunta" id="epunta">
                         <label for="epunta">Eliminación de Punta</label>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-md-6">
