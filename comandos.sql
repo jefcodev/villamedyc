@@ -114,3 +114,4 @@ CREATE TABLE servicios (
     FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio),
     FOREIGN KEY (id_producto) REFERENCES productos(id)
   );
+  ALTER TABLE consultas_fisioterapeuta ADD numero_sesiones INTEGER;
