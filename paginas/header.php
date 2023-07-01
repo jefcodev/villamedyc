@@ -21,6 +21,10 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
         <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Fin jQuery -->
     </head>
     <header class="encabezado">
         <div class="container">
@@ -61,6 +65,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                     <a class="dropdown-item" href="lista_productos.php">Listar Productos</a>
                                     <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
                                     <a class="dropdown-item" href="listar_compras.php">Listar Compras</a>
+                                    <a class="dropdown-item" href="listar_ventas.php">Listar Ventas</a>
                                 </div>
                             </li>
 
