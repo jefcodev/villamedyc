@@ -92,35 +92,15 @@ if (isset($status)) {
             <div class="col-md-12">
                 <select class="select2 form-control" data-rel="chosen" name="servicios" id="servicios">
                     <option value="0">Seleccione Servicio</option>
-                    <option value="1">Displacia de cadera</option>
-                    <option value="2">Pie plano</option>
-                    <optgroup label="Tumores óseos">
-                        <option value="3">Artrosis de rodilla</option>
-                        <option value="4">Hernias discales</option>
-                        <option value="5">Tratamientos con células madre</option>
-                        <option value="6">Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares</option>
-                        <option value="7">Reemplazo Articulares</option>
-                        <option value="8">Tratamientos para el adulto</option>
-                        <option value="9">Esguinces</option>
-                        <option value="10">Fracturas</option>
-                        <option value="11">Artrosis</option>
-                        <option value="12">Dolores crónicos</option>
-                        <option value="13">Fortalecimiento pulmonar</option>
-                        <option value="14">Enfermedades crónicas respiratorias</option>
-                        <option value="15">Pacientes post-COVID</option>
-                        <option value="16">Mejora de calidad del sueño</option>
-                        <option value="17">Ayuda a la concentración y memoria</option>
-                        <option value="18">Elimina contracturas musculares</option>
-                        <option value="19">Incontinecia urinaria</option>
-                        <option value="20">Prolapsos</option>
-                        <option value="21">Dolores en relaciones sexuales</option>
-                        <option value="22">Eyaculación precoz</option>
-                        <option value="23">Problemas de erección</option>
-                        <option value="24">Programa de hidroterapia personalizado</option>
-                    </optgroup>
-                    <option value="25">Elimina contracturas musculares</option>
+                    <?php
+                    $sql_traer_servicios = "SELECT * FROM servicios";
+                    $consulta_traer_servicios = $mysqli->query($sql_traer_servicios);
+                    while ($row = mysqli_fetch_array($consulta_traer_servicios)) {
+                        echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
+                    }
+                    ?>
                 </select>
-                <input type="number" placeholder="Nº de sesiones" name="numero_sesion" id="numero_sesion" value="Ingrese numero de sesiones">
+                <input type="number" placeholder="Ingrese numero de sesiones" name="numero_sesion" id="numero_sesion">
                 <input type="button" value="Agregar" id="agregar_servicio">
             </div>
             <div class="col-md-12">
@@ -137,7 +117,7 @@ if (isset($status)) {
                     }
                     ?>
                 </select>
-                <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1" value="Cantidad">
+                <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1">
                 <input type="button" value="Agregar" id="agregar_producto">
             </div>
             <div class="col-md-12">
@@ -181,149 +161,52 @@ if (isset($status)) {
     include 'footer.php';
     ?>
     <script>
-        var servicios = [{
-                'id': 1,
-                'name': 'Displacia de cadera',
-                'cost': 10
-            },
-            {
-                'id': 2,
-                'name': 'Pie plano',
-                'cost': 20
-            },
-            {
-                'id': 3,
-                'name': 'Artrosis de rodilla',
-                'cost': 30
-            },
-            {
-                'id': 4,
-                'name': 'Hernias discales',
-                'cost': 20
-            },
-            {
-                'id': 5,
-                'name': 'Tratamientos con células madre',
-                'cost': 30
-            },
-            {
-                'id': 6,
-                'name': 'Tratamientos para artrosis, enfermedades degenerativas, osteomusculares y osteoarticulares',
-                'cost': 20
-            },
-            {
-                'id': 7,
-                'name': 'Reemplazo Articulares',
-                'cost': 10
-            },
-            {
-                'id': 8,
-                'name': 'Tratamientos para el adulto',
-                'cost': 40
-            },
-            {
-                'id': 9,
-                'name': 'Esguinces',
-                'cost': 50
-            },
-            {
-                'id': 10,
-                'name': 'Fracturas',
-                'cost': 30
-            },
-            {
-                'id': 11,
-                'name': 'Artrosis',
-                'cost': 20
-            },
-            {
-                'id': 12,
-                'name': 'Dolores crónicos',
-                'cost': 30
-            },
-            {
-                'id': 13,
-                'name': 'Fortalecimiento pulmonar',
-                'cost': 20
-            },
-            {
-                'id': 14,
-                'name': 'Enfermedades crónicas respiratorias',
-                'cost': 30
-            },
-            {
-                'id': 15,
-                'name': 'Pacientes post-COVID',
-                'cost': 40
-            },
-            {
-                'id': 16,
-                'name': 'Mejora de calidad del sueño',
-                'cost': 20
-            },
-            {
-                'id': 17,
-                'name': 'Ayuda a la concentración y memoria',
-                'cost': 10
-            },
-            {
-                'id': 18,
-                'name': 'Elimina contracturas musculares',
-                'cost': 20
-            },
-            {
-                'id': 19,
-                'name': 'Incontinecia urinaria',
-                'cost': 20
-            },
-            {
-                'id': 20,
-                'name': 'Prolapsos',
-                'cost': 30
-            },
-            {
-                'id': 21,
-                'name': 'Dolores en relaciones sexuales',
-                'cost': 40
-            },
-            {
-                'id': 22,
-                'name': 'Eyaculación precoz',
-                'cost': 50
-            },
-            {
-                'id': 23,
-                'name': 'Problemas de erección',
-                'cost': 30
-            },
-            {
-                'id': 24,
-                'name': 'Programa de hidroterapia personalizado',
-                'cost': 20
-            },
-            {
-                'id': 25,
-                'name': 'Elimina contracturas musculares',
-                'cost': 20
-            }
-        ];
-
         $('#agregar_servicio').on('click', function() {
             let idA = $('#servicios').val();
             let numeroSesiones = $('#numero_sesion').val();
             if (idA > 0 && numeroSesiones != undefined && numeroSesiones != 0) {
-                var service = servicios.filter(function(item) {
-                    return item.id === Number(idA);
-                });
+                // var service = servicios.filter(function(item) {
+                //     return item.id === Number(idA);
+                // });
+                var selectedOption = $('#servicios').find('option:selected');
+                //var idA = selectedOption.val();
+                var nombre = selectedOption.text();
+                var precio = parseFloat(selectedOption.data('cost'));
+
                 var element = {
-                    'id': service[0].id,
-                    'name': service[0].name,
+                    'id': idA,
+                    'name': nombre,
                     'type': "Servicio",
-                    'cost': service[0].cost,
-                    'amount': numeroSesiones,
-                    'total': service[0].cost * numeroSesiones
+                    'cost': precio,
+                    'amount': Number(numeroSesiones),
+                    'total': precio * numeroSesiones
                 }
                 agregar(element);
+                const FD = new FormData();
+                FD.append('action', "buscar_productos_servicio");
+                FD.append('id_servicio', idA);
+                fetch("paquete_ajax.php", {
+                        method: 'POST',
+                        body: FD
+                    }).then(respuesta => respuesta.text())
+                    .then(decodificado => {
+                        console.log(decodificado);
+                        const data = JSON.parse(decodificado);
+                        data.forEach(datos => {
+                            var element = {
+                                'id': Number(datos.id_producto),
+                                'name': datos.nombre,
+                                'type': "Producto",
+                                'cost': Number(datos.precio),
+                                'amount': Number(datos.cantidad),
+                                'total': Number(datos.subtotal)
+                            }
+                            agregar(element);
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    });
             }
         });
 

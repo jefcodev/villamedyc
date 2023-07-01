@@ -13,6 +13,9 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
             case 'crear_paquete':
                 crearPaquete($mysqli);
                 break;
+            case 'buscar_productos_servicio':
+                buscarProductosServicio($mysqli);
+                break;
             case 'ver_paquete':
                 verPaquete($mysqli);
                 break;
@@ -55,9 +58,30 @@ function crearPaquete($mysqli)
     }
 }
 
+function buscarProductosServicio($mysqli)
+{
+    $query = "SELECT * FROM `deatelle_servicio`";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'id_producto' => $row['id_producto'],
+            'nombre' => $row['nombre'],
+            'precio' => $row['precio'],
+            'cantidad' => $row['cantidad'],
+            'subtotal' => $row['subtotal']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
 function verPaquetes($mysqli)
 {
-    $query = "SELECT * from paquete_cabecera";
+    $query = "SELECT * FROM paquete_cabecera";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');

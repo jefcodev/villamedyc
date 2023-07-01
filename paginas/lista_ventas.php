@@ -7,7 +7,30 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
 ?>
 
 <body>
+    <style>
+        .floating-alert {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
     <section class="cuerpo">
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
+                Este es un mensaje de información.
+            </div>
+
+            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
+                Cita Asignada/Actualizada
+                <button onclick="location.reload()">Actualizar</button>
+            </div>
+
+            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
+                Este es un mensaje de error.
+            </div>
+        </div>
         <h1>Listado de Ventas</h1>
         <div class="row">
             <div class="col-md-12">
@@ -19,8 +42,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             <th>Numero Historia</th>
                             <th>Cédula</th>
                             <th>Cliente</th>
+                            <th>Estado</th>
                             <th>Paquete</th>
-                            <th>Tipo Paquete</th>
                             <th>Nº Sesiones</th>
                             <th>Total</th>
                             <th style="width: 125px">Acciones</th>
@@ -28,7 +51,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     </thead>
                     <tbody>
                         <?php
-                        $sql_ventas = "SELECT cf.consulta_fisio_id, cf.numero_historia, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
+                        $sql_ventas = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.estado_atencion, pc.titulo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
                                             FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
                                             WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id";
                         $result = $mysqli->query($sql_ventas);
@@ -38,8 +61,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             echo "<td>" . $row['numero_historia'] . "</td>";
                             echo "<td>" . $row['numero_identidad'] . "</td>";
                             echo "<td>" . $row['nombres'] . "</td>";
+                            echo "<td>" . $row['estado_atencion'] . "</td>";
                             echo "<td>" . $row['titulo_paquete'] . "</td>";
-                            echo "<td>" . $row['tipo_paquete'] . "</td>";
                             echo "<td>" . $row['numero_sesiones'] . "</td>";
                             echo "<td>" . $row['total'] . "</td>";
                             echo "<td>
@@ -82,7 +105,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h5 id="paquete_id" data-id="">Detalles del Paquete</h5>
+                        <h5 id="paquete_id" data-id="">Detalles</h5>
                         <select class="form-control" id="doctor" name="doctor" required>
                             <option value="" selected="" hidden="">Seleccione Fisioterapeuta</option>
                             <?php
@@ -97,7 +120,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="actualizar_paquete">Actualizar Paquete</button>
+                        <button type="button" class="btn btn-primary" id="actualizar_paquete">Crear/Actualizar Cita</button>
                     </div>
                 </div>
             </div>
@@ -409,8 +432,30 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
             card.addEventListener('click', () => {
                 var id = card.parentElement.parentElement.id;
                 $('#paquete_id').attr("data-id", id);
+                mostrarCita(id);
             });
         });
+
+        function mostrarCita(id) {
+            const FD = new FormData();
+            FD.append('action', "ver_fecha_cita");
+            FD.append("consulta_fisio_id", id);
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    // if (data[0].estado_atencion !== 'Por Asignar Cita') {
+                        $('#doctor').val(Number(data[0].usuario_id));
+                        $("#fecha_cita").val(data[0].fecha);
+                    // }
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
 
         $('#actualizar_paquete').on('click', function() {
             const id = Number($('#paquete_id').attr('data-id'));
@@ -430,6 +475,11 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
                     console.log(decodificado);
+                    var alertElement = document.getElementById('alert-success');
+                    alertElement.classList.remove('d-none');
+                    setTimeout(function() {
+                        alertElement.classList.add('d-none');
+                    }, 5000);
                 })
                 .catch(function(error) {
                     console.log('Hubo un problema con la petición Fetch: ' + error.message);
