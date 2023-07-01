@@ -28,6 +28,12 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
             case 'ver_productos':
                 verProductos($mysqli);
                 break;
+            case 'ver_evaluacion':
+                verEvaluacion($mysqli);
+                break;
+            case 'ver_sesion':
+                verSesion($mysqli);
+                break;
             case 'crear_cita':
                 crearCita($mysqli);
                 break;
@@ -251,6 +257,68 @@ function verProductos($mysqli)
             'cantidad' => $row['cantidad'],
             'total' => $row['total'],
             'stock' => $row['stock']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
+function verEvaluacion($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $query = "SELECT * FROM consultas_fisioterapeuta WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'profesion' => $row['profesion'],
+            'tipo_trabajo' => $row['tipo_trabajo'],
+            'sedestacion_prolongada' => $row['sedestacion_prolongada'],
+            'esfuerzo_fisico' => $row['esfuerzo_fisico'],
+            'habitos' => $row['habitos'],
+            'antecendentes_diagnostico' => $row['antecendentes_diagnostico'],
+            'tratamientos_anteriores' => $row['tratamientos_anteriores'],
+            'contracturas' => $row['contracturas'],
+            'irradiacion' => $row['irradiacion'],
+            'hacia_donde' => $row['hacia_donde'],
+            'intensidad' => $row['intensidad'],
+            'sensaciones' => $row['sensaciones'],
+            'limitacion_movilidad' => $row['limitacion_movilidad']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
+function verSesion($mysqli)
+{
+    $CONSULTA_FISIO_DETALLE_ID = $_POST['consulta_fisio_detalle_id'];
+    $query = "SELECT cfd.*, CONCAT(u.nombre, ' ', u.apellidos) as nombres FROM consultas_fisioterapeuta_detalle cfd, usuarios u 
+                WHERE cfd.usuario_id=u.id AND cfd.consulta_fisio_detalle_id =$CONSULTA_FISIO_DETALLE_ID";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'fecha' => $row['fecha'],
+            'nombres' => $row['nombres'],
+            'electroestimulacion' => $row['electroestimulacion'],
+            'ultrasonido' => $row['ultrasonido'],
+            'magnetoterapia' => $row['magnetoterapia'],
+            'laserterapia' => $row['laserterapia'],
+            'termoterapia' => $row['termoterapia'],
+            'masoterapia' => $row['masoterapia'],
+            'crioterapia' => $row['crioterapia'],
+            'malibre' => $row['malibre'],
+            'maasistida' => $row['maasistida'],
+            'fmuscular' => $row['fmuscular'],
+            'propiocepcion' => $row['propiocepcion'],
+            'epunta' => $row['epunta']
         );
     }
     $jsonstring = json_encode($json);

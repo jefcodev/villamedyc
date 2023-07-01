@@ -119,7 +119,7 @@ if (isset($status)) {
                         $sql_traer_servicios = "SELECT * FROM servicios";
                         $consulta_traer_servicios = $mysqli->query($sql_traer_servicios);
                         while ($row = mysqli_fetch_array($consulta_traer_servicios)) {
-                            echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
+                            echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' data-adicional='" . $row['valor_adicional'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
                         }
                         ?>
                     </select>
@@ -218,6 +218,7 @@ if (isset($status)) {
                 //var idA = selectedOption.val();
                 var nombre = selectedOption.text();
                 var precio = parseFloat(selectedOption.data('cost'));
+                var valorAdicional = parseFloat(selectedOption.data('adicional'));
 
                 var element = {
                     'id': idA,
@@ -225,7 +226,7 @@ if (isset($status)) {
                     'type': "Servicio",
                     'cost': precio,
                     'amount': Number(numeroSesiones),
-                    'total': precio * numeroSesiones
+                    'total': precio * numeroSesiones + valorAdicional
                 }
                 agregar(element);
                 const FD = new FormData();

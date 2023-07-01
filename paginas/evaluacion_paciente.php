@@ -53,11 +53,11 @@ $id_cita = $_GET['consulta_fisio_id'];
                     </div>
                 </div>
             </div>
-            <input type="button" class="btn btn-primary" value="Ver Resumen" data-toggle='modal' data-target='#exampleModal'>
         </div><br>
         <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
             Evaluación
             <input type="button" class="btn btn-primary" value="Evaluar" data-toggle='modal' data-target='#exampleModal'>
+            <input type="button" class="btn btn-primary" value="Ver Evaluación" data-toggle='modal' data-target='#resumenModal' id="ver_evaluacion">
         </div><br>
 
         <div id="procedimientos">
@@ -123,7 +123,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                                 <select class="form-control" id="irradiacion" name="irradiacion" title="Irradiación">
                                     <option value="0">Irradiación</option>
                                     <option value="1">Si</option>
-                                    <option value="3">No</option>
+                                    <option value="2">No</option>
                                 </select>
                                 <textarea class="form-control" title="Hacia donde?" placeholder="Hacia donde?" id="hacia_donde" name="hacia_donde"></textarea>
                             </div>
@@ -258,7 +258,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                                 <label class='card'>
                                     <div class='card-body'>
                                         <input type="checkbox" name="servicios" id="epunta">
-                                        <label for="epunta">Eliminación de Punta</label>
+                                        <label for="epunta">Eliminación de puntos gatillo</label>
                                     </div>
                                 </label>
                             </div>
@@ -270,6 +270,30 @@ $id_cita = $_GET['consulta_fisio_id'];
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="modal fade" id="resumenModal" tabindex="-1" role="dialog" aria-labelledby="resumenModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resumenModalLabel" data-id="" data-proceso="">Resumen de Atencion al Cliente</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="modal-body-resume">
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
     <br>
@@ -341,6 +365,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                         template += `<div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
                                         Sesión No. ${cont}
                                         <input type="button" class="btn btn-primary" value="Editar" data-toggle='modal' data-target='#procedimientoModal' data-id='${element.consulta_fisio_detalle_id}' id='editar_procedimiento'>
+                                        <input type="button" class="btn btn-primary" value="Ver Sesión" data-toggle='modal' data-target='#resumenModal' data-id='${element.consulta_fisio_detalle_id}' data-sesion='${cont}' id="ver_sesion">
                                     </div><br>`;
                         cont++;
                     });
@@ -365,6 +390,15 @@ $id_cita = $_GET['consulta_fisio_id'];
                             $('#procedimientoModalLabel').attr("data-proceso", "editar");
                             limpiarCheckBoxs();
                             cargarServiciosProcedimiento(id_sesion);
+                        });
+                    });
+
+                    const verSesion = document.querySelectorAll("#ver_sesion");
+                    verSesion.forEach((card, i) => {
+                        card.addEventListener('click', () => {
+                            const id_sesion = card.getAttribute("data-id");
+                            const sesion = card.getAttribute("data-sesion");
+                            resumenSesion(id_sesion, sesion);
                         });
                     });
                 })
@@ -534,6 +568,238 @@ $id_cita = $_GET['consulta_fisio_id'];
                     console.log(decodificado);
                     alert(decodificado);
                     location.reload();
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
+
+        $('#ver_evaluacion').on('click', function() {
+            const consulta_fisio_id = $('#id_consulta_fisio').attr("data-id");
+            resumenEvaluacion(consulta_fisio_id);
+        });
+
+        function resumenEvaluacion(consulta_fisio_id) {
+            const FD = new FormData();
+            FD.append('action', "ver_evaluacion");
+            FD.append('consulta_fisio_id', consulta_fisio_id);
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    console.log(data);
+                    let sedestacion = "";
+                    let esfuerzo = "";
+                    let irradiacion = "";
+                    let limitacion = "";
+
+                    if (data[0].sedestacion_prolongada == "1") {
+                        sedestacion = "Si";
+                    }
+                    if (data[0].sedestacion_prolongada == "2") {
+                        sedestacion = "No";
+                    }
+
+                    if (data[0].esfuerzo_fisico == "1") {
+                        esfuerzo = "Bajo";
+                    }
+                    if (data[0].esfuerzo_fisico == "2") {
+                        esfuerzo = "Medio";
+                    }
+                    if (data[0].esfuerzo_fisico == "3") {
+                        esfuerzo = "Alto";
+                    }
+
+                    if (data[0].irradiacion == "1") {
+                        irradiacion = "Si";
+                    }
+                    if (data[0].irradiacion == "2") {
+                        irradiacion = "No";
+                    }
+
+                    if (data[0].limitacion_movilidad == "1") {
+                        limitacion = "Crujidos";
+                    }
+                    if (data[0].limitacion_movilidad == "2") {
+                        limitacion = "Topes Articulares";
+                    }
+                    if (data[0].limitacion_movilidad == "3") {
+                        limitacion = "Músculo Tendioso";
+                    }
+
+                    let template = `<div class="row m-1 d-flex justify-content-center">
+                                        <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;'><b>Factores Ocupacionales</b></div><br><br>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                                <b>Profesión</b>
+                                                <p>${data[0].profesion}</p>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Tipo Trabajo</b>
+                                                <p>${data[0].tipo_trabajo}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Sedestación Prolongada</b>
+                                                <p>${sedestacion}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Esfuerzo Fisico</b>
+                                                <p>${esfuerzo}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Hábitos</b>
+                                                <p>${data[0].habitos}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;' ><b>Diagnóstico</b></div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Antecedentes del Diagnóstico</b>
+                                                <p>${data[0].antecendentes_diagnostico}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Tratamientos Anteriores</b>
+                                                <p>${data[0].tratamientos_anteriores}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;' ><b>Palpación y Dolor</b></div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Contracturas</b>
+                                                <p>${data[0].contracturas}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Irradiación</b>
+                                                <p>${irradiacion}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Hacia Donde?</b>
+                                                <p>${data[0].hacia_donde}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Intensidad</b>
+                                                <p>${data[0].intensidad}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Sensaciones</b>
+                                                <p>${data[0].sensaciones}</p>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;' ><b>Limitación de la Movilidad</b></div>
+                                        <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
+                                            <div class='form-group'>
+                                                <b>Limitacion Movilidad</b>
+                                                <p>${limitacion}</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    $('#modal-body-resume').html(template);
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
+
+        function resumenSesion(consulta_fisio_detalle_id, sesion) {
+            const FD = new FormData();
+            FD.append('action', "ver_sesion");
+            FD.append('consulta_fisio_detalle_id', consulta_fisio_detalle_id);
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    console.log(data);
+                    let lista = "";
+                    if (data[0].electroestimulacion == "1") {
+                        lista += "<li>Electroestimulación</li>";
+                    }
+                    if (data[0].ultrasonido == "1") {
+                        lista += "<li>Ultrasonido</li>";
+                    }
+                    if (data[0].magnetoterapia == "1") {
+                        lista += "<li>Magnetoterapia</li>";
+                    }
+                    if (data[0].laserterapia == "1") {
+                        lista += "<li>Laserterapia</li>";
+                    }
+                    if (data[0].termoterapia == "1") {
+                        lista += "<li>Termoterapia</li>";
+                    }
+                    if (data[0].masoterapia == "1") {
+                        lista += "<li>Masoterapia</li>";
+                    }
+                    if (data[0].crioterapia == "1") {
+                        lista += "<li>Crioterapia</li>";
+                    }
+                    if (data[0].malibre == "1") {
+                        lista += "<li>Movilidad Activa Libre</li>";
+                    }
+                    if (data[0].maasistida == "1") {
+                        lista += "<li>Movilidad Activa Asistida</li>";
+                    }
+                    if (data[0].fmuscular == "1") {
+                        lista += "<li>Fortalecimiento Muscular</li>";
+                    }
+                    if (data[0].propiocepcion == "1") {
+                        lista += "<li>Propiocepción</li>";
+                    }
+                    if (data[0].epunta == "1") {
+                        lista += "<li>Eliminación de puntos gatillo</li>";
+                    }
+
+                    let template = `<div class="row m-1" style="border: 1px solid #c1c1c1; ">
+                                        <div class='col-md-4' style="background-color: #D8D8D8">
+                                            <label class='form-group'>
+                                                <b>Número de Sesión</b>
+                                                <p>${sesion}</p>
+                                            </label>
+                                        </div>
+                                        <div class='col-md-4' style="background-color: #D8D8D8">
+                                            <label class='form-group'>
+                                                <b>Atendido Por</b>
+                                                <p>${data[0].nombres}</p>
+                                            </label>
+                                        </div>
+                                        <div class='col-md-4' style="background-color: #D8D8D8">
+                                            <label class='form-group'>
+                                                <b>Fecha de Atención</b>
+                                                <p>${data[0].fecha}</p>
+                                            </label>
+                                        </div>
+                                        <div class='col-md-12'>
+                                            <b>Procedimientos realizados</b>
+                                        </div>
+                                        <div class='col-md-3'>
+                                            <div class='form-group'>
+                                                <ul>
+                                                    ${lista}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    $('#modal-body-resume').html(template);
                 })
                 .catch(function(error) {
                     console.log('Hubo un problema con la petición Fetch: ' + error.message);
