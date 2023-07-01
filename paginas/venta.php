@@ -96,7 +96,7 @@ if (isset($status)) {
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="id_pacient">Pacientes:</label>
-                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
+                    <select class="select2 form-control" data-rel="chosen" id='paciente' name='paciente'>
                         <option value="0">Seleccione el Paciente</option>
                         <?php
                         $sql = "SELECT * FROM `pacientes`";
@@ -111,8 +111,8 @@ if (isset($status)) {
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="doctor">Paquetes:</label>
-                    <select class="form-control" id="doctor" name="doctor">
+                    <label for="paquete">Paquetes:</label>
+                    <select class="form-control" id="paquete" name="paquete">
                         <option value="0">Seleccione Paquete</option>
                         <?php
                         $sql_traer_doctor = "SELECT * FROM paquete_cabecera";
@@ -149,6 +149,7 @@ if (isset($status)) {
 
                 </div>
 
+                <div class="col-md-12" id="tabla_productos"></div>
                 <div class="d-flex justify-content-center">
                     <input class="btn btn-primary" type="button" name="crear_venta" id="crear_venta" value="Aceptar" />
                 </div>
@@ -161,7 +162,7 @@ if (isset($status)) {
     include 'footer.php';
     ?>
     <script>
-        $("#doctor").on("change", function() {
+        $("#paquete").on("change", function() {
             var selectedValue = $(this).val();
             if (selectedValue != 0) {
                 var selectedOption = $(this).find("option:selected");
@@ -188,6 +189,8 @@ if (isset($status)) {
                 $('#tipo_paquete').html(tipo);
                 $('#numero_sesiones').html(numero_sesiones);
                 $('#total').html(total);
+
+                verificarStock();
             } else {
                 $('#tipo_paquete').html("");
                 $('#numero_sesiones').html("");
@@ -195,14 +198,68 @@ if (isset($status)) {
             }
         });
 
+        let productos = [];
+        let listaProdutos = [];
+
+        function verificarStock() {
+            limpiar();
+            const FD = new FormData();
+            FD.append('action', "ver_productos");
+            FD.append('paquete_id', $('#paquete').val());
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    // console.log(decodificado);
+                    const data = JSON.parse(decodificado);
+                    console.log(data);
+                    let template = `<table class="table table-bordered table-hover">
+                                            <thead class="tabla_cabecera">
+                                                <tr>
+                                                    <th>Nombre Producto</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Stock Disponible</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+                    data.forEach(datos => {
+                        if (Number(datos.stock) < Number(datos.cantidad)) {
+                            productos.push(datos);
+                            template += `<tr>
+                                            <td> ${datos.nombre} </td>
+                                            <td> ${datos.cantidad} </td>
+                                            <td> ${datos.stock} </td>
+                                        </tr>`;
+                        }
+                        listaProdutos.push(datos);
+                    });
+                    template += `</tbody>
+                                    </table>`;
+                    if (productos.length > 0) {
+                        $('#tabla_productos').html(template);
+                    }
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
+
+        function limpiar() {
+            productos = [];
+            listaProdutos = [];
+            $('#tabla_productos').html("");
+        }
+
         $('#crear_venta').on('click', function() {
             if (validar()) {
                 const FD = new FormData();
                 FD.append('action', "crear_venta");
-                FD.append('paciente_id', $('#id_paciente').val())
-                FD.append('paquete_id', $('#doctor').val());
+                FD.append('paciente_id', $('#paciente').val())
+                FD.append('paquete_id', $('#paquete').val());
                 FD.append('numero_historia', $('#numero_historia').text());
                 FD.append('total', $('#total').text());
+                FD.append('lista', JSON.stringify(listaProdutos))
                 fetch("ventas_ajax.php", {
                         method: 'POST',
                         body: FD
@@ -227,7 +284,7 @@ if (isset($status)) {
             let validator = true;
             var alertElement = document.getElementById('alert-danger');
             var duracion = 3000;
-            if ($('#id_paciente').val() == 0) {
+            if ($('#paciente').val() == 0) {
                 validator = false;
                 $('#alert-danger').html('Seleccione Paciente');
                 alertElement.classList.remove('d-none');
@@ -236,9 +293,18 @@ if (isset($status)) {
                 }, duracion);
             }
 
-            if ($('#doctor').val() < 1) {
+            if ($('#paquete').val() < 1) {
                 validator = false;
                 $('#alert-danger').html('Seleccione Paquete');
+                alertElement.classList.remove('d-none');
+                setTimeout(function() {
+                    alertElement.classList.add('d-none');
+                }, duracion);
+            }
+
+            if (productos.length > 0) {
+                validator = false;
+                $('#alert-danger').html('Productos sin stock');
                 alertElement.classList.remove('d-none');
                 setTimeout(function() {
                     alertElement.classList.add('d-none');

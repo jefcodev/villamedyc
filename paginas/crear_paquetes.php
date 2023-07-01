@@ -132,8 +132,6 @@ if (isset($status)) {
                 </div>
             </div>
             <div class="col-md-3">
-            </div>
-            <div class="col-md-3">
                 <div class="form-group">
                     <input type="button" class="btn btn-primary" value="Agregar" id="agregar_servicio">
                 </div>
@@ -150,7 +148,7 @@ if (isset($status)) {
                         $sql_traer_productos = "SELECT * FROM productos";
                         $consulta_traer_productos = $mysqli->query($sql_traer_productos);
                         while ($row = mysqli_fetch_array($consulta_traer_productos)) {
-                            echo "<option data-cost='" . $row['precio_v'] . "'data-count='" . $row['stock'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
+                            echo "<option data-cost='" . $row['precio_v'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
                         }
                         ?>
                     </select>
@@ -160,12 +158,6 @@ if (isset($status)) {
                 <div class="form-group">
                     <label for="cantidad_producto">Cantidad:</label>
                     <input type="number" class="form-control" name="cantidad_producto" id="cantidad_producto" min="1" value="1">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Stock disponible:</label>
-                    <div class="custom-div form-control" id="stock">Seleccione un producto</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -210,16 +202,6 @@ if (isset($status)) {
     </section>
     <script type="text/javascript">
         $('.select2').select2({});
-        $("#productos").on("change", function() {
-            var selectedValue = $(this).val();
-            if (selectedValue != 0) {
-                var selectedOption = $(this).find("option:selected");
-                var stock = selectedOption.attr("data-count");
-                $('#stock').html(stock);
-            } else {
-                $('#stock').html("Seleccione un producto");
-            }
-        });
     </script>
     <?php
     include 'footer.php';
@@ -242,7 +224,6 @@ if (isset($status)) {
                     'name': nombre,
                     'type': "Servicio",
                     'cost': precio,
-                    'stock': 0,
                     'amount': Number(numeroSesiones),
                     'total': precio * numeroSesiones
                 }
@@ -263,7 +244,6 @@ if (isset($status)) {
                                 'name': datos.nombre,
                                 'type': "Producto",
                                 'cost': Number(datos.precio),
-                                'stock': Number(datos.stock),
                                 'amount': Number(datos.cantidad),
                                 'total': Number(datos.subtotal)
                             }
@@ -281,26 +261,16 @@ if (isset($status)) {
             let cantidad = Number($('#cantidad_producto').val());
             var selectElement = document.querySelector('#productos');
             var selectedOption = selectElement.options[selectElement.selectedIndex];
-            var stock = selectedOption.getAttribute('data-count');
-            if (idA > 0 && cantidad > 0 && cantidad <= stock) {
+            if (idA > 0 && cantidad > 0) {
                 var element = {
                     'id': Number(idA),
                     'name': selectedOption.getAttribute('data-name'),
                     'type': "Producto",
                     'cost': selectedOption.getAttribute('data-cost'),
-                    'stock': Number(selectedOption.getAttribute('data-count')),
                     'amount': cantidad,
                     'total': selectedOption.getAttribute('data-cost') * cantidad
                 }
                 agregar(element);
-            } else {
-                var alertElement = document.getElementById('alert-danger');
-                var duracion = 3000;
-                $('#alert-danger').html('Cantidad no disponible en stock');
-                alertElement.classList.remove('d-none');
-                setTimeout(function() {
-                    alertElement.classList.add('d-none');
-                }, duracion);
             }
         });
 
@@ -421,11 +391,13 @@ if (isset($status)) {
                     }).then(respuesta => respuesta.text())
                     .then(decodificado => {
                         console.log(decodificado);
-                        var alertElement = document.getElementById('alert-success');
-                        alertElement.classList.remove('d-none');
-                        setTimeout(function() {
-                            alertElement.classList.add('d-none');
-                        }, 3000);
+                        alert(decodificado);
+                        location.reload();
+                        // var alertElement = document.getElementById('alert-success');
+                        // alertElement.classList.remove('d-none');
+                        // setTimeout(function() {
+                        //     alertElement.classList.add('d-none');
+                        // }, 3000);
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);

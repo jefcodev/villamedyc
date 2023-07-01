@@ -25,6 +25,9 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
             case 'ver_servicios':
                 verServicios($mysqli);
                 break;
+            case 'ver_productos':
+                verProductos($mysqli);
+                break;
             case 'crear_cita':
                 crearCita($mysqli);
                 break;
@@ -49,19 +52,19 @@ function crearVenta($mysqli)
     $PACIENTE_ID = $_POST['paciente_id'];
     $PAQUETE_ID = $_POST['paquete_id'];
     $NUMERO_HISTORIA = $_POST['numero_historia'];
+    $fechaActual = date("Y-m-d");
     $mysqli->begin_transaction();
     try {
         $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `usuario_id`, `paquete_id`, `numero_historia`, 
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
                     `habitos`, `antecendentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
                     `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Asignar Cita')";
+                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Asignar Cita')";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
         }
 
-        $fechaActual = date("Y-m-d");
         $CONSULTA_FISIO_ID = $mysqli->insert_id;
         $TOTAL = $_POST['total'];
 
@@ -70,6 +73,16 @@ function crearVenta($mysqli)
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
+        }
+
+        $LISTA = json_decode($_POST['lista']);
+        foreach ($LISTA as $indice => $element) {
+            $stock = $element->stock - $element->cantidad;
+            actualizarStock(
+                $mysqli,
+                $stock,
+                $element->pro_ser_id
+            );
         }
 
         $mysqli->commit();
@@ -215,6 +228,32 @@ function verServicios($mysqli)
     echo $jsonstring;
 }
 
+function verProductos($mysqli)
+{
+    $PAQUETE_ID = $_POST['paquete_id'];
+    $query = "SELECT pd.*, p.stock FROM paquete_detalle pd, productos p 
+                WHERE pd.pro_ser_id = p.id AND pd.tipo='Producto' AND pd.paquete_id=$PAQUETE_ID ";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'paquete_id' => $row['paquete_id'],
+            'pro_ser_id' => $row['pro_ser_id'],
+            'nombre' => $row['nombre'],
+            'tipo' => $row['tipo'],
+            'costo' => $row['costo'],
+            'cantidad' => $row['cantidad'],
+            'total' => $row['total'],
+            'stock' => $row['stock']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
 function crearCita($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_cita_id'];
@@ -260,6 +299,16 @@ function crearProcedimiento($mysqli)
     }
 
     echo "Procedimiento Registrado";
+}
+
+function actualizarStock($mysqli, $stock, $id)
+{
+    $query = "UPDATE `productos` SET `stock`=$stock
+                WHERE id=$id";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
 }
 
 function actualizarProcedimiento($mysqli)

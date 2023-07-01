@@ -51,21 +51,18 @@ function crearPaquete($mysqli)
     foreach ($LISTA as $indice => $element) {
         $query = "INSERT INTO `paquete_detalle`(`paquete_id`, `pro_ser_id`, `nombre`, `tipo`, `costo`, `cantidad`, `total`) 
                     VALUES ($PAQUETE_ID, $element->id, '$element->name', '$element->type', $element->cost, $element->amount, $element->total)";
-        if ($element->type == "Producto") {
-            $stock = $element->stock - $element->amount;
-            $id_producto = $element->id;
-            actualizarStock($mysqli, $stock, $id_producto);
-        }
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
         }
     }
+
+    echo "Paquete Creado";
 }
 
 function buscarProductosServicio($mysqli)
 {
-    $query = "SELECT dc.*, p.stock FROM deatelle_servicio dc, productos p WHERE dc.id_producto=p.id";
+    $query = "SELECT * FROM deatelle_servicio";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -76,7 +73,6 @@ function buscarProductosServicio($mysqli)
             'id_producto' => $row['id_producto'],
             'nombre' => $row['nombre'],
             'precio' => $row['precio'],
-            'stock' => $row['stock'],
             'cantidad' => $row['cantidad'],
             'subtotal' => $row['subtotal']
         );
@@ -134,18 +130,6 @@ function verPaquete($mysqli)
     }
     $jsonstring = json_encode($json);
     echo $jsonstring;
-}
-
-
-
-function actualizarStock($mysqli, $stock, $id)
-{
-    $query = "UPDATE `productos` SET `stock`=$stock
-                WHERE id=$id";
-    $result = $mysqli->query($query);
-    if (!$result) {
-        die('Query Failed.');
-    }
 }
 
 function actualizarPaquete($mysqli)

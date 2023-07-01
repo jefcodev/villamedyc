@@ -60,7 +60,7 @@ create table consultas_fisioterapeuta (
   usuario_id int,
   paquete_id int,
   numero_historia varchar(50),
-  fecha datetime,
+  fecha date,
   profesion varchar(500),
   tipo_trabajo varchar(500),
   sedestacion_prolongada int,
