@@ -125,11 +125,12 @@ function verServicio($mysqli)
 function actualizarServicio($mysqli)
 {
     $servicio_id = $_POST['servicio_id'];
+    $titulo_servicio = $_POST['titulo_servicio'];
     $productosSeleccionados = json_decode($_POST["productos"]);
     $totalPago = $_POST["total_pago"];
     $valorAdicional = $_POST["valor_adicional"];
 
-    $query = "UPDATE `servicios` SET `total`=$totalPago, `valor_adicional`=$valorAdicional 
+    $query = "UPDATE `servicios` SET `titulo_servicio`='$titulo_servicio', `total`=$totalPago, `valor_adicional`=$valorAdicional 
                 WHERE id_servicio=$servicio_id";
     $result = $mysqli->query($query);
     if (!$result) {

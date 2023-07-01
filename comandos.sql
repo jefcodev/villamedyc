@@ -86,12 +86,22 @@ create table consultas_fisioterapeuta (
 /*==============================================================*/
 create table consultas_fisioterapeuta_detalle
 (
+   consulta_fisio_detalle_id  int not null auto_increment,
    consulta_fisio_id          int,
-   id_servicio                int,
-   numero_sesion              int,
-   titulo_servicio            varchar(500),
-   FOREIGN KEY (consulta_fisio_id) REFERENCES consultas_fisioterapeuta (consulta_fisio_id),
-   FOREIGN KEY (id_servicio) REFERENCES servicios (id_servicio)
+   electroestimulacion        boolean,
+   ultrasonido                boolean,
+   magnetoterapia             boolean,
+   laserterapia               boolean,
+   termoterapia               boolean,
+   masoterapia                boolean,
+   crioterapia                boolean,
+   malibre                    boolean,
+   maasistida                 boolean,
+   fmuscular                  boolean,
+   propiocepcion              boolean,
+   epunta                     boolean,
+   primary key (consulta_fisio_detalle_id),
+   FOREIGN KEY (consulta_fisio_id) REFERENCES consultas_fisioterapeuta (consulta_fisio_id)
 );
 
 CREATE TABLE ventas (

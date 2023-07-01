@@ -132,32 +132,103 @@ $id_cita = $_GET['consulta_fisio_id'];
                     </div>
                     <div class="modal-body" id="modal-body">
                         <div class="row">
-                            <?php
-                            $sql = "SELECT * FROM servicios";
-                            $result = $mysqli->query($sql);
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $nombre = $row['titulo_servicio'];
-                                    $id_servicio = $row['id_servicio'];
-                                    echo "<div class='col-md-3'>
-                                    <div class='card'>
-                                        <div class='card-body'>
-                                            <input type='checkbox' name='servicios' id='$id_servicio' data-name='$nombre'>
-                                            <label>$nombre</label>
-                                        </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="electroestimulacion">
+                                        <label for="electroestimulacion">Electroestimulación</label>
                                     </div>
-                                </div>";
-                                }
-                            } else {
-                                echo "<div class='col-md-3'>
-                                    <div class='card'>
-                                        <div class='card-body'>
-                                            <label >No hay servicios disponibles.</label>
-                                        </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="ultrasonido">
+                                        <label for="ultrasonido">Ultrasonido</label>
                                     </div>
-                                </div>";
-                            }
-                            ?>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="magnetoterapia">
+                                        <label for="magnetoterapia">Magnetoterapia</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="laserterapia">
+                                        <label for="laserterapia">Laserterapia</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="termoterapia">
+                                        <label for="termoterapia">Termoterapia</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="masoterapia">
+                                        <label for="masoterapia">Masoterapia</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="crioterapia">
+                                        <label for="crioterapia">Crioterapia</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="malibre">
+                                        <label for="malibre">Movilidad Activa Libre</label>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="maasistida">
+                                        <label for="maasistida">Movilidad Activa Asistida</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="fmuscular">
+                                        <label for="fmuscular">Fortalecimiento Muscular</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="propiocepcion">
+                                        <label for="propiocepcion">Propiocepción</label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class='col-md-6'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <input type="checkbox" name="servicios" id="epunta">
+                                        <label for="epunta">Eliminación de Punta</label>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -227,20 +298,20 @@ $id_cita = $_GET['consulta_fisio_id'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                    // console.log(decodificado);
+                    console.log(decodificado);
                     const data = JSON.parse(decodificado);
-                    console.log(data);
+                    // console.log(data);
                     let template = "";
                     let cont = 1;
                     data.forEach(element => {
                         template += `<div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
-                                        Procedimiento ${element.numero_sesion}
-                                        <input type="button" class="btn btn-primary" value="Editar" data-toggle='modal' data-target='#procedimientoModal' data-id='${element.numero_sesion}' id='editar_procedimiento'>
+                                        Procedimiento ${cont}
+                                        <input type="button" class="btn btn-primary" value="Editar" data-toggle='modal' data-target='#procedimientoModal' data-id='${element.consulta_fisio_detalle_id}' id='editar_procedimiento'>
                                     </div><br>`;
                         cont++;
                     });
                     // console.log(cont);
-                    $('#nuevo_procedimiento').attr("data-id", cont);
+                    // $('#nuevo_procedimiento').attr("data-id", cont);
                     $('#procedimientos').html(template);
                     const editarProcedimientos = document.querySelectorAll("#editar_procedimiento");
                     editarProcedimientos.forEach((card, i) => {
@@ -266,11 +337,9 @@ $id_cita = $_GET['consulta_fisio_id'];
         }
 
         function cargarServiciosProcedimiento(id_sesion) {
-            const consulta_fisio_id = $('#id_consulta_fisio').attr("data-id");
             const FD = new FormData();
             FD.append('action', "ver_servicios");
-            FD.append('consulta_fisio_id', consulta_fisio_id);
-            FD.append('numero_sesion', id_sesion);
+            FD.append('consulta_fisio_detalle_id', id_sesion);
             fetch("ventas_ajax.php", {
                     method: 'POST',
                     body: FD
@@ -280,9 +349,30 @@ $id_cita = $_GET['consulta_fisio_id'];
                     const data = JSON.parse(decodificado);
                     // console.log(data);
                     data.forEach(element => {
-                        let template = "input[id='" + element.id_servicio + "']"
-                        var checkboxes = document.querySelector(template);
-                        checkboxes.checked = true;
+                        let checkboxes = document.querySelector("input[id='electroestimulacion']");
+                        checkboxes.checked = Number(element.electroestimulacion);
+                        checkboxes = document.querySelector("input[id='ultrasonido']");
+                        checkboxes.checked = Number(element.ultrasonido);
+                        checkboxes = document.querySelector("input[id='magnetoterapia']");
+                        checkboxes.checked = Number(element.magnetoterapia);
+                        checkboxes = document.querySelector("input[id='laserterapia']");
+                        checkboxes.checked = Number(element.laserterapia);
+                        checkboxes = document.querySelector("input[id='termoterapia']");
+                        checkboxes.checked = Number(element.termoterapia);
+                        checkboxes = document.querySelector("input[id='masoterapia']");
+                        checkboxes.checked = Number(element.masoterapia);
+                        checkboxes = document.querySelector("input[id='crioterapia']");
+                        checkboxes.checked = Number(element.crioterapia);
+                        checkboxes = document.querySelector("input[id='malibre']");
+                        checkboxes.checked = Number(element.malibre);
+                        checkboxes = document.querySelector("input[id='maasistida']");
+                        checkboxes.checked = Number(element.maasistida);
+                        checkboxes = document.querySelector("input[id='fmuscular']");
+                        checkboxes.checked = Number(element.fmuscular);
+                        checkboxes = document.querySelector("input[id='propiocepcion']");
+                        checkboxes.checked = Number(element.propiocepcion);
+                        checkboxes = document.querySelector("input[id='epunta']");
+                        checkboxes.checked = Number(element.epunta);
                     });
                 })
                 .catch(function(error) {
@@ -291,8 +381,8 @@ $id_cita = $_GET['consulta_fisio_id'];
         }
 
         $('#nuevo_procedimiento').on('click', function() {
-            const id_sesion = $('#nuevo_procedimiento').attr("data-id");
-            $('#procedimientoModalLabel').attr("data-id", id_sesion);
+            // const id_sesion = $('#nuevo_procedimiento').attr("data-id");
+            // $('#procedimientoModalLabel').attr("data-id", id_sesion);
             $('#procedimientoModalLabel').attr("data-proceso", "nuevo");
             limpiarCheckBoxs();
         });
@@ -303,7 +393,7 @@ $id_cita = $_GET['consulta_fisio_id'];
 
         function guardarProcedimiento() {
             const consulta_fisio_id = $('#id_consulta_fisio').attr("data-id");
-            const id_sesion = $('#procedimientoModalLabel').attr("data-id");
+            const consulta_fisio_detalle_id = $('#procedimientoModalLabel').attr("data-id");
             const proceso = $('#procedimientoModalLabel').attr("data-proceso");
             let action = "crear_procedimiento";
             if (proceso == "editar") {
@@ -311,22 +401,23 @@ $id_cita = $_GET['consulta_fisio_id'];
             }
 
             var checkboxes = document.querySelectorAll('input[name="servicios"]:checked');
-            var servicios = [];
-
-            checkboxes.forEach(function(checkbox) {
-                const servicio = {
-                    'id_servicio': checkbox.getAttribute("id"),
-                    'titulo_servicio': checkbox.getAttribute("data-name")
-                }
-                servicios.push(servicio);
-            });
-
-            if (servicios.length > 0) {
+            if (checkboxes.length > 0) {
                 const FD = new FormData();
                 FD.append('action', action);
                 FD.append('consulta_fisio_id', consulta_fisio_id);
-                FD.append('numero_sesion', id_sesion);
-                FD.append('servicios', JSON.stringify(servicios));
+                FD.append('consulta_fisio_detalle_id', consulta_fisio_detalle_id);
+                FD.append('electroestimulacion', $("#electroestimulacion").is(":checked"));
+                FD.append('ultrasonido', $("#ultrasonido").is(":checked"));
+                FD.append('magnetoterapia', $("#magnetoterapia").is(":checked"));
+                FD.append('laserterapia', $("#laserterapia").is(":checked"));
+                FD.append('termoterapia', $("#termoterapia").is(":checked"));
+                FD.append('masoterapia', $("#masoterapia").is(":checked"));
+                FD.append('crioterapia', $("#crioterapia").is(":checked"));
+                FD.append('malibre', $("#malibre").is(":checked"));
+                FD.append('maasistida', $("maasistida").is(":checked"));
+                FD.append('fmuscular', $("#fmuscular").is(":checked"));
+                FD.append('propiocepcion', $("#propiocepcion").is(":checked"));
+                FD.append('epunta', $("#epunta").is(":checked"));
 
                 fetch("ventas_ajax.php", {
                         method: 'POST',
@@ -335,6 +426,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     .then(decodificado => {
                         console.log(decodificado);
                         alert(decodificado);
+                        location.reload();
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
@@ -374,6 +466,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                 .then(decodificado => {
                     console.log(decodificado);
                     alert(decodificado);
+                    location.reload();
                 })
                 .catch(function(error) {
                     console.log('Hubo un problema con la petición Fetch: ' + error.message);

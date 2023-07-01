@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $valorAdicional = $_POST["valor_adicional"];
 
     // Insertar en la tabla servicios
-    $sqlServicio = "INSERT INTO servicios (total, valor_adicional) VALUES ($totalPago, $valorAdicional)";
+    $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional) VALUES ('$tituloServicio', $totalPago, $valorAdicional)";
     if ($conn->query($sqlServicio) === TRUE) {
         $idServicio = $conn->insert_id;
 
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
@@ -209,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Id</th>
                     <th>Nombre</th>
                     <th>Precio</th>
                     <th>Cantidad</th>

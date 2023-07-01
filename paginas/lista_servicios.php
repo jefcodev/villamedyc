@@ -10,6 +10,7 @@ $servicios = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $servicios[$row["id_servicio"]] = [
+            "titulo_servicio" => $row["titulo_servicio"],
             "total" => $row["total"],
             "valor_adicional" => $row["valor_adicional"],
         ];
@@ -51,7 +52,8 @@ if ($result->num_rows > 0) {
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Id</th>
+                    <th>Nombre Servicio</th>
                     <th>Total</th>
                     <th>Valor Adicional</th>
                     <th>Opciones</th>
@@ -61,6 +63,7 @@ if ($result->num_rows > 0) {
                 <?php foreach ($servicios as $id => $servicio) { ?>
                     <tr>
                         <td><?php echo $id; ?></td>
+                        <td><?php echo $servicio['titulo_servicio']; ?></td>
                         <td><?php echo $servicio['total']; ?></td>
                         <td><?php echo $servicio['valor_adicional']; ?></td>
                         <td>
@@ -83,6 +86,9 @@ if ($result->num_rows > 0) {
                 </div>
                 <div class="modal-body">
                     <div class="col-10">
+                        <div class="col-md-6">
+                            <input type="text" name="titulo_servicio" id="titulo_servicio" placeholder="Ingrese nombre del servicio" class="form-control">
+                        </div>
                         <div class="col-md-6">
                             <label for="producto">Producto:</label>
                             <select id="producto" name="producto" class="select2 form-control">
@@ -214,6 +220,7 @@ if ($result->num_rows > 0) {
         }
 
         function llenarFormularioEdicion(servicioId, servicio) {
+            $("#titulo_servicio").val(servicio.titulo_servicio);
             $("#editarServicioId").val(servicioId);
             $("#total_pago").text(servicio.total);
             $("#valor_adicional").val(servicio.valor_adicional);
@@ -225,16 +232,18 @@ if ($result->num_rows > 0) {
         function guardarCambiosServicio() {
             // Obtener los valores del formulario de edición
             var servicioId = $("#editarServicioId").val();
+            var tituloServicio = $("#titulo_servicio").val();
             var total = $("#total_pago").text();
             var valorAdicional = $("#valor_adicional").val();
 
-            if (productosSeleccionados.length > 0) {
+            if (tituloServicio && productosSeleccionados.length > 0) {
                 // console.log(servicioId)
                 // console.log(total)
                 // console.log(valorAdicional)
                 const FD = new FormData();
                 FD.append('action', "actualizar_servicio");
                 FD.append("servicio_id", servicioId);
+                FD.append("titulo_servicio", tituloServicio);
                 FD.append("productos", JSON.stringify(productosSeleccionados));
                 FD.append("total_pago", total);
                 FD.append("valor_adicional", valorAdicional);

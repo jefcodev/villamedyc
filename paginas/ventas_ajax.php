@@ -153,7 +153,7 @@ function verCita($mysqli)
 function verProcedimientos($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $query = "SELECT consulta_fisio_id, numero_sesion FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_id=$CONSULTA_FISIO_ID GROUP BY numero_sesion";
+    $query = "SELECT consulta_fisio_detalle_id, consulta_fisio_id FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -161,8 +161,8 @@ function verProcedimientos($mysqli)
     $json = array();
     while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
-            'consulta_fisio_id' => $row['consulta_fisio_id'],
-            'numero_sesion' => $row['numero_sesion']
+            'consulta_fisio_detalle_id' => $row['consulta_fisio_detalle_id'],
+            'consulta_fisio_id' => $row['consulta_fisio_id']
         );
     }
     $jsonstring = json_encode($json);
@@ -171,9 +171,8 @@ function verProcedimientos($mysqli)
 
 function verServicios($mysqli)
 {
-    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $NUMERO_SESION =  $_POST['numero_sesion'];
-    $query = "SELECT * FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_id=$CONSULTA_FISIO_ID AND numero_sesion = $NUMERO_SESION";
+    $CONSULTA_FISIO_DETALLE_ID = $_POST['consulta_fisio_detalle_id'];
+    $query = "SELECT * FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID ";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -181,7 +180,19 @@ function verServicios($mysqli)
     $json = array();
     while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
-            'id_servicio' => $row['id_servicio']
+            'consulta_fisio_detalle_id' => $row['consulta_fisio_detalle_id'],
+            'electroestimulacion' => $row['electroestimulacion'],
+            'ultrasonido' => $row['ultrasonido'],
+            'magnetoterapia' => $row['magnetoterapia'],
+            'laserterapia' => $row['laserterapia'],
+            'termoterapia' => $row['termoterapia'],
+            'masoterapia' => $row['masoterapia'],
+            'crioterapia' => $row['crioterapia'],
+            'malibre' => $row['malibre'],
+            'maasistida' => $row['maasistida'],
+            'fmuscular' => $row['fmuscular'],
+            'propiocepcion' => $row['propiocepcion'],
+            'epunta' => $row['epunta']
         );
     }
     $jsonstring = json_encode($json);
@@ -207,16 +218,29 @@ function crearCita($mysqli)
 function crearProcedimiento($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $NUMERO_SESION =  $_POST['numero_sesion'];
-    $SERVICIOS = json_decode($_POST["servicios"]);
+    $ELECTROESTIMULACION = $_POST['electroestimulacion'];
+    $ULTRASONIDO = $_POST['ultrasonido'];
+    $MAGNETOTERAPIA = $_POST['magnetoterapia'];
+    $LASERTERAPIA = $_POST['laserterapia'];
+    $TERMOTERAPIA = $_POST['termoterapia'];
+    $MASOTERAPIA = $_POST['masoterapia'];
+    $CRIOTERAPIA = $_POST['crioterapia'];
+    $MALIBRE = $_POST['malibre'];
+    $MAASISTIDA = $_POST['maasistida'];
+    $FMUSCULAR = $_POST['fmuscular'];
+    $PROPIOCEPCION = $_POST['propiocepcion'];
+    $EPUNTA = $_POST['epunta'];
 
-    foreach ($SERVICIOS as $indice => $element) {
-        $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `id_servicio`, `numero_sesion`, `titulo_servicio`) 
-        VALUES ($CONSULTA_FISIO_ID, $element->id_servicio, $NUMERO_SESION, '$element->titulo_servicio')";
-        $result = $mysqli->query($query);
-        if (!$result) {
-            die('Query Failed.');
-        }
+    $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, 
+                    `electroestimulacion`, `ultrasonido`, `magnetoterapia`, `laserterapia`, 
+                    `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
+                    `fmuscular`, `propiocepcion`, `epunta`) 
+                    VALUES ($CONSULTA_FISIO_ID, $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
+                    $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
+                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA)";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
     }
 
     echo "Procedimiento Registrado";
@@ -225,31 +249,29 @@ function crearProcedimiento($mysqli)
 function actualizarProcedimiento($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $NUMERO_SESION =  $_POST['numero_sesion'];
+    $CONSULTA_FISIO_DETALLE_ID = $_POST['consulta_fisio_detalle_id'];
+    $ELECTROESTIMULACION = $_POST['electroestimulacion'];
+    $ULTRASONIDO = $_POST['ultrasonido'];
+    $MAGNETOTERAPIA = $_POST['magnetoterapia'];
+    $LASERTERAPIA = $_POST['laserterapia'];
+    $TERMOTERAPIA = $_POST['termoterapia'];
+    $MASOTERAPIA = $_POST['masoterapia'];
+    $CRIOTERAPIA = $_POST['crioterapia'];
+    $MALIBRE = $_POST['malibre'];
+    $MAASISTIDA = $_POST['maasistida'];
+    $FMUSCULAR = $_POST['fmuscular'];
+    $PROPIOCEPCION = $_POST['propiocepcion'];
+    $EPUNTA = $_POST['epunta'];
 
-    $mysqli->begin_transaction();
-    try {
-        $query = "DELETE FROM `consultas_fisioterapeuta_detalle` WHERE consulta_fisio_id=$CONSULTA_FISIO_ID AND numero_sesion=$NUMERO_SESION";
-        $result = $mysqli->query($query);
-        if (!$result) {
-            die('Query Failed.');
-        }
-
-        $SERVICIOS = json_decode($_POST["servicios"]);
-
-        foreach ($SERVICIOS as $indice => $element) {
-            $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `id_servicio`, `numero_sesion`, `titulo_servicio`) 
-            VALUES ($CONSULTA_FISIO_ID, $element->id_servicio, $NUMERO_SESION, '$element->titulo_servicio')";
-            $result = $mysqli->query($query);
-            if (!$result) {
-                die('Query Failed.');
-            }
-        }
-        $mysqli->commit();
-        echo "Procedimiento Actualizado";
-    } catch (Exception $e) {
-        echo ("Error: " . $e->getMessage());
+    $query = "UPDATE consultas_fisioterapeuta_detalle SET `electroestimulacion`=$ELECTROESTIMULACION, `ultrasonido`=$ULTRASONIDO, 
+                `magnetoterapia`=$MAGNETOTERAPIA, `laserterapia`=$LASERTERAPIA, `termoterapia`=$TERMOTERAPIA, `masoterapia`=$MASOTERAPIA, 
+                `crioterapia`=$CRIOTERAPIA,`malibre`=$MALIBRE, `maasistida`=$MAASISTIDA, `fmuscular`=$FMUSCULAR,`propiocepcion`=$PROPIOCEPCION,
+                `epunta`=$EPUNTA WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
     }
+    echo "Procedimiento Actualizado";
 }
 
 function actualizarEvaluacion($mysqli)
