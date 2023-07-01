@@ -40,6 +40,9 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
             case 'actualizar_evaluacion':
                 actualizarEvaluacion($mysqli);
                 break;
+            case 'actualizar_estado':
+                actualizarEstado($mysqli);
+                break;
             default:
                 # code...
                 break;
@@ -59,7 +62,7 @@ function crearVenta($mysqli)
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
                     `habitos`, `antecendentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
                     `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Asignar Cita')";
+                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
@@ -285,12 +288,13 @@ function crearProcedimiento($mysqli)
     $FMUSCULAR = $_POST['fmuscular'];
     $PROPIOCEPCION = $_POST['propiocepcion'];
     $EPUNTA = $_POST['epunta'];
-
-    $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, 
-                    `electroestimulacion`, `ultrasonido`, `magnetoterapia`, `laserterapia`, 
+    $USUARIO_ID = $_SESSION['id'];
+    $fechaActual = date("Y-m-d");
+    $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `usuario_id`, 
+                    `fecha`, `electroestimulacion`, `ultrasonido`, `magnetoterapia`, `laserterapia`, 
                     `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
                     `fmuscular`, `propiocepcion`, `epunta`) 
-                    VALUES ($CONSULTA_FISIO_ID, $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
+                    VALUES ($CONSULTA_FISIO_ID, $USUARIO_ID, '$fechaActual', $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
                     $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
                     $FMUSCULAR, $PROPIOCEPCION, $EPUNTA)";
     $result = $mysqli->query($query);
@@ -327,8 +331,11 @@ function actualizarProcedimiento($mysqli)
     $FMUSCULAR = $_POST['fmuscular'];
     $PROPIOCEPCION = $_POST['propiocepcion'];
     $EPUNTA = $_POST['epunta'];
+    $USUARIO_ID = $_SESSION['id'];
 
-    $query = "UPDATE consultas_fisioterapeuta_detalle SET `electroestimulacion`=$ELECTROESTIMULACION, `ultrasonido`=$ULTRASONIDO, 
+    $fechaActual = date("Y-m-d");
+
+    $query = "UPDATE consultas_fisioterapeuta_detalle SET `usuario_id`=$USUARIO_ID, `fecha`='$fechaActual', `electroestimulacion`=$ELECTROESTIMULACION, `ultrasonido`=$ULTRASONIDO, 
                 `magnetoterapia`=$MAGNETOTERAPIA, `laserterapia`=$LASERTERAPIA, `termoterapia`=$TERMOTERAPIA, `masoterapia`=$MASOTERAPIA, 
                 `crioterapia`=$CRIOTERAPIA,`malibre`=$MALIBRE, `maasistida`=$MAASISTIDA, `fmuscular`=$FMUSCULAR,`propiocepcion`=$PROPIOCEPCION,
                 `epunta`=$EPUNTA WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID";
@@ -360,7 +367,7 @@ function actualizarEvaluacion($mysqli)
                     `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecendentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
                     `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
                     `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
-                    `limitacion_movilidad`=$LIMITACION_MOVILIDAD, `estado_atencion`='Atendido'
+                    `limitacion_movilidad`=$LIMITACION_MOVILIDAD
                     WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
     $result = $mysqli->query($query);
     if (!$result) {
@@ -368,4 +375,17 @@ function actualizarEvaluacion($mysqli)
     }
 
     echo "Evaluación Actualizada";
+}
+
+function actualizarEstado($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $query = "UPDATE `consultas_fisioterapeuta` SET `estado_atencion`='Atendido'
+                    WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+
+    echo "Atención Finalizada";
 }

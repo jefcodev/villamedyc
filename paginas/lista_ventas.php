@@ -67,7 +67,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             echo "<td>" . $row['total'] . "</td>";
                             echo "<td>
                                     <a class='btn btn-primary btn-sm ml-1' href='historia_clinica.php?idusuario=" . $row['id'] . "' data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
-                                    <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='crear_cita' ><i class='fas fa-edit table-icon'></i></a>
+                                    <!--<a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='crear_cita' ><i class='fas fa-edit table-icon'></i></a> -->
                                 </td>";
                             echo "</tr>";
                         }

@@ -57,7 +57,6 @@ create table paquete_detalle (
 create table consultas_fisioterapeuta (
   consulta_fisio_id int not null auto_increment,
   paciente_id int,
-  usuario_id int,
   paquete_id int,
   numero_historia varchar(50),
   fecha date,
@@ -77,7 +76,6 @@ create table consultas_fisioterapeuta (
   estado_atencion varchar(255),
   primary key (consulta_fisio_id),
   FOREIGN KEY (paciente_id) REFERENCES pacientes (id),
-  FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
   FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
 
@@ -88,6 +86,8 @@ create table consultas_fisioterapeuta_detalle
 (
    consulta_fisio_detalle_id  int not null auto_increment,
    consulta_fisio_id          int,
+   usuario_id                 int,
+   fecha                      date,
    electroestimulacion        boolean,
    ultrasonido                boolean,
    magnetoterapia             boolean,
@@ -101,6 +101,7 @@ create table consultas_fisioterapeuta_detalle
    propiocepcion              boolean,
    epunta                     boolean,
    primary key (consulta_fisio_detalle_id),
+   FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
    FOREIGN KEY (consulta_fisio_id) REFERENCES consultas_fisioterapeuta (consulta_fisio_id)
 );
 

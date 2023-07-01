@@ -9,21 +9,51 @@ $id_cita = $_GET['consulta_fisio_id'];
         <h1 id="id_consulta_fisio" data-id="">Atención al paciente</h1><br>
         <?php
         $sql_datos_cita = "SELECT cf.*, p.id, p.numero_identidad, CONCAT(p.nombres,' ',p.apellidos) as nombres_paciente, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc 
-        WHERE p.id=cf.paciente_id AND pc.paquete_id=cf.paquete_id AND consulta_fisio_id=$id_cita";
+                            WHERE p.id=cf.paciente_id AND pc.paquete_id=cf.paquete_id AND consulta_fisio_id=$id_cita";
         $result_datos_cita = $mysqli->query($sql_datos_cita);
         $rowscita = $result_datos_cita->fetch_assoc();
         ?>
-        <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
+        <div style="padding: 1% 2% 1% 2%; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 8px; box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.2)">
             <b style="font-size: 18px">Datos de consulta</b><br>
             <div class="row" id="edicion_paciente">
                 <div class="col-md-4">
-                    <div><?php echo $rowscita['numero_historia'] ?></div>
-                    <div><?php echo $rowscita['numero_identidad'] ?></div>
-                    <div><?php echo $rowscita['nombres_paciente'] ?></div>
-                    <div><?php echo $rowscita['titulo_paquete'] ?></div>
-                    <div><?php echo $rowscita['numero_sesiones'] ?></div>
+                    <div class="form-group">
+                        <b>Historia Clinica:</b>
+                        <p><?php echo $rowscita['numero_historia'] ?></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <b>Número Identidad:</b>
+                        <div><?php echo $rowscita['numero_identidad'] ?></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <b>Nombres:</b>
+                        <div><?php echo $rowscita['nombres_paciente'] ?></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <b>Paquete:</b>
+                        <div><?php echo $rowscita['titulo_paquete'] ?></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <b>Numero de Sesiones:</b>
+                        <div id="numero_sesiones"><?php echo $rowscita['numero_sesiones'] ?></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <b>Estado:</b>
+                        <div id="estado"><?php echo $rowscita['estado_atencion'] ?></div>
+                    </div>
                 </div>
             </div>
+            <input type="button" class="btn btn-primary" value="Ver Resumen" data-toggle='modal' data-target='#exampleModal'>
         </div><br>
         <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
             Evaluación
@@ -34,10 +64,13 @@ $id_cita = $_GET['consulta_fisio_id'];
 
         </div>
 
-        <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
-            Nuevo Procedimiento
+        <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="nueva_sesion">
+            Nueva Sesión
             <input type="button" class="btn btn-primary" value="Agregar" data-toggle='modal' data-target='#procedimientoModal' data-id="" id="nuevo_procedimiento">
         </div><br>
+        <div class="d-flex justify-content-center">
+            <input type="button" class="btn btn-primary" value="Finalizar" id="finalizar">
+        </div>
 
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -247,6 +280,7 @@ $id_cita = $_GET['consulta_fisio_id'];
     <script src="../js/bootstrap-select.js"></script>
     <script type="text/javascript">
         cargarDatos();
+        $("#finalizar").hide();
 
         function cargarDatos() {
             // Obtener la URL actual
@@ -305,13 +339,23 @@ $id_cita = $_GET['consulta_fisio_id'];
                     let cont = 1;
                     data.forEach(element => {
                         template += `<div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8" id="crear_consulta">
-                                        Procedimiento ${cont}
+                                        Sesión No. ${cont}
                                         <input type="button" class="btn btn-primary" value="Editar" data-toggle='modal' data-target='#procedimientoModal' data-id='${element.consulta_fisio_detalle_id}' id='editar_procedimiento'>
                                     </div><br>`;
                         cont++;
                     });
                     // console.log(cont);
                     // $('#nuevo_procedimiento').attr("data-id", cont);
+                    const numero_sesiones = Number($('#numero_sesiones').text());
+                    const estado = $('#estado').text();
+
+                    if (cont > numero_sesiones) {
+                        $("#nueva_sesion").hide();
+                        if (estado == "Por Atender") {
+                            $("#finalizar").show();
+                        }
+                    }
+
                     $('#procedimientos').html(template);
                     const editarProcedimientos = document.querySelectorAll("#editar_procedimiento");
                     editarProcedimientos.forEach((card, i) => {
@@ -437,8 +481,13 @@ $id_cita = $_GET['consulta_fisio_id'];
         }
 
         $('#guardar_evaluacion').on('click', function() {
-            const id = $('#id_consulta_fisio').attr("data-id");;
+            const id = $('#id_consulta_fisio').attr("data-id");
             actualizarEvaluacion(id);
+        });
+
+        $("#finalizar").on('click', function() {
+            const id = $('#id_consulta_fisio').attr("data-id");
+            actualizarEstado(id);
         });
 
         function actualizarEvaluacion(consulta_fisio_id) {
@@ -459,6 +508,24 @@ $id_cita = $_GET['consulta_fisio_id'];
             FD.append('sensaciones', $("#sensaciones").val());
             FD.append('limitacion_movilidad', $("#limitacion_movilidad").val());
 
+            fetch("ventas_ajax.php", {
+                    method: 'POST',
+                    body: FD
+                }).then(respuesta => respuesta.text())
+                .then(decodificado => {
+                    console.log(decodificado);
+                    alert(decodificado);
+                    location.reload();
+                })
+                .catch(function(error) {
+                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                });
+        }
+
+        function actualizarEstado(consulta_fisio_id) {
+            const FD = new FormData();
+            FD.append('action', "actualizar_estado");
+            FD.append('consulta_fisio_id', consulta_fisio_id);
             fetch("ventas_ajax.php", {
                     method: 'POST',
                     body: FD
