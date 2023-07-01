@@ -81,6 +81,19 @@ create table consultas_fisioterapeuta (
   FOREIGN KEY (paquete_id) REFERENCES paquete_cabecera (paquete_id)
 );
 
+/*==============================================================*/
+/* Table: consultas_fisioterapeuta_detalle                      */
+/*==============================================================*/
+create table consultas_fisioterapeuta_detalle
+(
+   consulta_fisio_id          int,
+   id_servicio                int,
+   numero_sesion              int,
+   titulo_servicio            varchar(500),
+   FOREIGN KEY (consulta_fisio_id) REFERENCES consultas_fisioterapeuta (consulta_fisio_id),
+   FOREIGN KEY (id_servicio) REFERENCES servicios (id_servicio)
+);
+
 CREATE TABLE ventas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   fecha_venta DATE,

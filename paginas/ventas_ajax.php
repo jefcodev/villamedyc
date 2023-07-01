@@ -16,8 +16,23 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
             case 'ver_fecha_cita':
                 verFechaCita($mysqli);
                 break;
+            case 'ver_cita':
+                verCita($mysqli);
+                break;
+            case 'ver_procedimientos':
+                verProcedimientos($mysqli);
+                break;
+            case 'ver_servicios':
+                verServicios($mysqli);
+                break;
             case 'crear_cita':
                 crearCita($mysqli);
+                break;
+            case 'crear_procedimiento':
+                crearProcedimiento($mysqli);
+                break;
+            case 'actualizar_procedimiento':
+                actualizarProcedimiento($mysqli);
                 break;
             case 'actualizar_evaluacion':
                 actualizarEvaluacion($mysqli);
@@ -104,6 +119,75 @@ function verFechaCita($mysqli)
     echo $jsonstring;
 }
 
+function verCita($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $query = "SELECT * FROM consultas_fisioterapeuta WHERE consulta_fisio_id = $CONSULTA_FISIO_ID";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'consulta_fisio_id' => $row['consulta_fisio_id'],
+            'profesion' => $row['profesion'],
+            'tipo_trabajo' => $row['tipo_trabajo'],
+            'sedestacion_prolongada' => $row['sedestacion_prolongada'],
+            'esfuerzo_fisico' => $row['esfuerzo_fisico'],
+            'habitos' => $row['habitos'],
+            'antecendentes_diagnostico' => $row['antecendentes_diagnostico'],
+            'tratamientos_anteriores' => $row['tratamientos_anteriores'],
+            'contracturas' => $row['contracturas'],
+            'irradiacion' => $row['irradiacion'],
+            'hacia_donde' => $row['hacia_donde'],
+            'intensidad' => $row['intensidad'],
+            'sensaciones' => $row['sensaciones'],
+            'limitacion_movilidad' => $row['limitacion_movilidad']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
+function verProcedimientos($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $query = "SELECT consulta_fisio_id, numero_sesion FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_id=$CONSULTA_FISIO_ID GROUP BY numero_sesion";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'consulta_fisio_id' => $row['consulta_fisio_id'],
+            'numero_sesion' => $row['numero_sesion']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
+function verServicios($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $NUMERO_SESION =  $_POST['numero_sesion'];
+    $query = "SELECT * FROM consultas_fisioterapeuta_detalle WHERE consulta_fisio_id=$CONSULTA_FISIO_ID AND numero_sesion = $NUMERO_SESION";
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
+    }
+    $json = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $json[] = array(
+            'id_servicio' => $row['id_servicio']
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
 function crearCita($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_cita_id'];
@@ -118,6 +202,54 @@ function crearCita($mysqli)
     }
 
     echo "Cita Creada";
+}
+
+function crearProcedimiento($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $NUMERO_SESION =  $_POST['numero_sesion'];
+    $SERVICIOS = json_decode($_POST["servicios"]);
+
+    foreach ($SERVICIOS as $indice => $element) {
+        $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `id_servicio`, `numero_sesion`, `titulo_servicio`) 
+        VALUES ($CONSULTA_FISIO_ID, $element->id_servicio, $NUMERO_SESION, '$element->titulo_servicio')";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
+    }
+
+    echo "Procedimiento Registrado";
+}
+
+function actualizarProcedimiento($mysqli)
+{
+    $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $NUMERO_SESION =  $_POST['numero_sesion'];
+
+    $mysqli->begin_transaction();
+    try {
+        $query = "DELETE FROM `consultas_fisioterapeuta_detalle` WHERE consulta_fisio_id=$CONSULTA_FISIO_ID AND numero_sesion=$NUMERO_SESION";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
+
+        $SERVICIOS = json_decode($_POST["servicios"]);
+
+        foreach ($SERVICIOS as $indice => $element) {
+            $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `id_servicio`, `numero_sesion`, `titulo_servicio`) 
+            VALUES ($CONSULTA_FISIO_ID, $element->id_servicio, $NUMERO_SESION, '$element->titulo_servicio')";
+            $result = $mysqli->query($query);
+            if (!$result) {
+                die('Query Failed.');
+            }
+        }
+        $mysqli->commit();
+        echo "Procedimiento Actualizado";
+    } catch (Exception $e) {
+        echo ("Error: " . $e->getMessage());
+    }
 }
 
 function actualizarEvaluacion($mysqli)
@@ -136,48 +268,17 @@ function actualizarEvaluacion($mysqli)
     $INTENSIDAD = $_POST['intensidad'];
     $SENSACIONES = $_POST['sensaciones'];
     $LIMITACION_MOVILIDAD = $_POST['limitacion_movilidad'];
-    $mysqli->begin_transaction();
-    try {
-        $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
+    $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
                     `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`=$SEDESTACION_PROLONGADA, 
                     `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecendentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
                     `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
                     `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
                     `limitacion_movilidad`=$LIMITACION_MOVILIDAD, `estado_atencion`='Atendido'
                     WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
-        $result = $mysqli->query($query);
-        if (!$result) {
-            die('Query Failed.');
-        }
-
-        $ELECTROESTIMULACION = $_POST['electroestimulacion'];
-        $ULTRASONIDO = $_POST['ultrasonido'];
-        $MAGNETOTERAPIA = $_POST['magnetoterapia'];
-        $LASERTERAPIA = $_POST['laserterapia'];
-        $TERMOTERAPIA = $_POST['termoterapia'];
-        $MASOTERAPIA = $_POST['masoterapia'];
-        $CRIOTERAPIA = $_POST['crioterapia'];
-        $MALIBRE = $_POST['malibre'];
-        $MAASISTIDA = $_POST['maasistida'];
-        $FMUSCULAR = $_POST['fmuscular'];
-        $PROPIOCEPCION = $_POST['propiocepcion'];
-        $EPUNTA = $_POST['epunta'];
-
-        $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, 
-                    `electroestimulacion`, `ultrasonido`, `magnoterapia`, `laserterapia`, 
-                    `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
-                    `fmuscular`, `propiocepcion`, `epunta`) 
-                    VALUES ($CONSULTA_FISIO_ID, $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
-                    $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
-                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA)";
-        $result = $mysqli->query($query);
-        if (!$result) {
-            die('Query Failed.');
-        }
-
-        $mysqli->commit();
-        echo "Evaluación Actualizada";
-    } catch (Exception $e) {
-        echo ("Error: " . $e->getMessage());
+    $result = $mysqli->query($query);
+    if (!$result) {
+        die('Query Failed.');
     }
+
+    echo "Evaluación Actualizada";
 }

@@ -42,7 +42,14 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                         <li class="nav-item"><a class="nav-link" href="lista_pacientes.php">PACIENTES</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
-                        <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
+                        <li class="nav-item">
+                            <?php if ($rol == 'fis') { ?>
+                                <a class="nav-link" href="lista_historias_fisioterapeuta.php">HISTORIAS</a>
+
+                            <?php } else { ?>
+                                <a class="nav-link" href="lista_historias.php">HISTORIAS</a>
+                            <?php } ?>
+                        </li>
 
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item dropdown">

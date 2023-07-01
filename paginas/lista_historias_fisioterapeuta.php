@@ -36,7 +36,7 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
                         $result_citas = $mysqli->query($sql_citas);
 
                         while ($row = mysqli_fetch_array($result_citas)) {
-                            echo "<tr id='" . $row['consulta_fisio_id'] . "' >";
+                            echo "<tr>";
                             echo "<td>" . $row['numero_historia'] . "</td>";
                             echo "<td>" . $row['numero_identidad'] . "</td>";
                             echo "<td>" . $row['nombres'] . "</td>";
@@ -44,8 +44,7 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
                             echo "<td>" . $row['titulo_paquete'] . "</td>";
                             echo "<td>" . $row['numero_sesiones'] . "</td>";
                             echo "<td>
-                                    <a class='btn btn-primary btn-sm ml-1' href='historia_clinica.php?idusuario=" . $row['id'] . "' data-toggle='modal' data-target='#exampleModal' id='ver_resumen'><i style='font-size:18px' class='fas fa-eye'></i></a>
-                                    <a class='btn btn-success btn-sm ml-1' data-toggle='modal' data-target='#editModal' id='crear_cita' ><i class='fas fa-edit table-icon'></i></a>
+                                    <a class='btn btn-success btn-sm ml-1' href='evaluacion_paciente.php?consulta_fisio_id=" . $row['consulta_fisio_id'] . "' ><i class='fas fa-edit table-icon'></i></a>
                                 </td>";
                             echo "</tr>";
                         }
