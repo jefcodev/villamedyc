@@ -129,14 +129,16 @@ if (isset($status)) {
                                     <th>Doctor</th>
                                     <th>Paciente</th>
                                     <th>Valor</th>
-                                    <th>Acciones </th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="indexconsultas">
                                 <?php
-
                                 $pagos = "SELECT * FROM consultas_datos WHERE estado = 'pendiente'";
                                 $resulPagos = $mysqli->query($pagos);
+                                if ($resulPagos->num_rows == 0) {
+                                    echo "<tr><td colspan='5' style='text-align: center'>No hay cobros generados</td></tr>";
+                                }
                                 while ($row = mysqli_fetch_array($resulPagos)) {
                                     $id = $row['id_consulta'];
                                     echo "<td>" . $row['fecha_hora'] . "</td>";
@@ -147,13 +149,12 @@ if (isset($status)) {
                                     if ($rol == 'adm') {
                                         echo "<a class='btn btn-success btn-sm' href='cobrar.php?id_cita=$id'>Cobrar</a>";
                                         echo "&nbsp;&nbsp;";
-                                        echo "<a class='btn btn-success btn-sm' href=''>Agregar</a>";
+                                        echo "<a class='btn btn-success btn-sm' href='agregar_paquete.php?id_cita=$id'>Paquete</a>";
                                     }
                                     echo "</td>";
                                     echo "</tr>";
+                                    
                                 }
-
-
                                 ?>
                             </tbody>
                         </table>
@@ -163,6 +164,9 @@ if (isset($status)) {
             </div>
         </div>
     </div>
+
+    
+
     <br>
     <?php
     include 'footer.php';
@@ -170,6 +174,9 @@ if (isset($status)) {
     <script src="../js/jquerysearch.js"></script>
     <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
     <script>
+        
+
+
         $(document).ready(function() {
             var table = $('#indexconsultas').DataTable();
 

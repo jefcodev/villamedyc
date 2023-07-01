@@ -19,14 +19,14 @@ if (isset($status)) {
 ?>
 
 <head>
-    <title>Lista de productos</title>
+    <title>Lista de Ventas</title>
     <link href="../css/search.min.css" rel="stylesheet">
 </head>
 
 <body>
     <section class="cuerpo">
-        <h1>Listado de Compras
-            <a href="reporte_compras.php?fecha_inicio=<?php echo $_GET['fecha_inicio']; ?>&fecha_fin=<?php echo $_GET['fecha_fin']; ?>" target="_blank" class="btn btn-primary float-right">
+        <h1>Listado de Ventas
+            <a href="reporte_ventas.php?fecha_inicio=<?php echo $_GET['fecha_inicio']; ?>&fecha_fin=<?php echo $_GET['fecha_fin']; ?>" target="_blank" class="btn btn-primary float-right">
                 <i class="fas fa-file-pdf"></i> Crear reporte
             </a>
 
@@ -59,8 +59,10 @@ if (isset($status)) {
                 <table class="table table-bordered table-hover" id="indexpacientes">
                     <thead class="tabla_cabecera">
                         <tr>
-                            <th>Fecha</th>
-                            <th>Proveedor</th>
+                            <th>Fecha Venta</th>
+                            <th>Cédula</th>
+                            <th>Paciente</th>
+                            <th>Doctor</th>
                             <th>Precio Total</th>
                         </tr>
                     </thead>
@@ -70,14 +72,16 @@ if (isset($status)) {
                             $fechaInicio = $_GET['fecha_inicio'];
                             $fechaFin = $_GET['fecha_fin'];
 
-                            $sql_citas = "SELECT * FROM ventas WHERE fecha_venta BETWEEN '$fechaInicio' AND '$fechaFin'";
+                            $sql_citas = "SELECT * FROM consulta_ventas WHERE fecha_hora BETWEEN '$fechaInicio' AND '$fechaFin'";
                             $result_citas = $mysqli->query($sql_citas);
 
                             while ($row = mysqli_fetch_array($result_citas)) {
                                 echo "<tr>";
-                                echo "<td>" . $row['fecha_venta'] . "</td>";
-                                echo "<td>" . $row['id_consulta'] . "</td>";
-                                echo "<td>" . $row['total'] . "</td>";
+                                echo "<td>" . $row['fecha_hora'] . "</td>";
+                                echo "<td>" . $row['cedula'] . "</td>";
+                                echo "<td>" . $row['apellidos_pacientes'].' '.$row['nombre_paciente'] .  "</td>";
+                                echo "<td>" . $row['nombre_doctor'].' ' .$row['apellido_doctor'] ."</td>";
+                                echo "<td>" . $row['valor_pagado'] . "</td>";
                                 echo "</tr>";
                             }
                         }

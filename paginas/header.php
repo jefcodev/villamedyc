@@ -21,6 +21,10 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
         <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Fin jQuery -->
     </head>
     <header class="encabezado">
         <div class="container">
@@ -38,7 +42,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                         <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
                         <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
-                        
+
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,6 +53,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                     <a class="dropdown-item" href="lista_productos.php">Listar Productos</a>
                                     <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
                                     <a class="dropdown-item" href="listar_compras.php">Listar Compras</a>
+                                    <a class="dropdown-item" href="listar_ventas.php">Listar Ventas</a>
                                 </div>
                             </li>
 
