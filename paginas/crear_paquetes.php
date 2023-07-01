@@ -47,6 +47,16 @@ if (isset($status)) {
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
+
+        .custom-div {
+            /* height: 200px;
+            background-color: #f2f2f2; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* border: 1px solid #ccc;
+            border-radius: 2px; */
+        }
     </style>
 </head>
 
@@ -70,56 +80,100 @@ if (isset($status)) {
             <div class="col-md-12">
                 <h4>Agregar Detalles del Paquete</h4>
             </div><br><br>
-            <div class="col-md-6">
-                <input type="text" name="titulo_paquete" id="titulo_paquete" placeholder="Ingrese titulo del paquete">
-                <input type="number" name="numero_sesiones" id="numero_sesiones" placeholder="Ingrese el número de sesiones para este paquete">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="titulo_paquete">Titulo del paquete:</label>
+                    <input type="text" class="form-control" name="titulo_paquete" id="titulo_paquete" placeholder="Ingrese titulo del paquete">
+                </div>
             </div>
-            <div class="col-md-6">
-                <select class="form-control" name="tipo_paquete" id="tipo_paquete">
-                    <option value="0">Seleccione Tipo de Paquete</option>
-                    <option value="1">Básico</option>
-                    <option value="2">Plus</option>
-                    <option value="3">Premium</option>
-                    <option value="4">Empresas</option>
-                    <option value="5">Convenios</option>
-                </select>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="numero_sesiones">Número de sesiones:</label>
+                    <input type="number" class="form-control" name="numero_sesiones" id="numero_sesiones" value="1" min="1">
+                </div>
             </div>
-        </div><br>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="tipo_paquete">Tipo de paquete:</label>
+                    <select class="form-control" name="tipo_paquete" id="tipo_paquete">
+                        <option value="0">Seleccione Tipo de Paquete</option>
+                        <option value="1">Básico</option>
+                        <option value="2">Plus</option>
+                        <option value="3">Premium</option>
+                        <option value="4">Empresas</option>
+                        <option value="5">Convenios</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <h4>Agregar Servicios</h4>
             </div><br><br>
-            <div class="col-md-12">
-                <select class="select2 form-control" data-rel="chosen" name="servicios" id="servicios">
-                    <option value="0">Seleccione Servicio</option>
-                    <?php
-                    $sql_traer_servicios = "SELECT * FROM servicios";
-                    $consulta_traer_servicios = $mysqli->query($sql_traer_servicios);
-                    while ($row = mysqli_fetch_array($consulta_traer_servicios)) {
-                        echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <input type="number" placeholder="Ingrese numero de sesiones" name="numero_sesion" id="numero_sesion">
-                <input type="button" value="Agregar" id="agregar_servicio">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="servicios">Servicios:</label>
+                    <select class="form-control select2" data-rel="chosen" name="servicios" id="servicios">
+                        <option value="0">Seleccione Servicio</option>
+                        <?php
+                        $sql_traer_servicios = "SELECT * FROM servicios";
+                        $consulta_traer_servicios = $mysqli->query($sql_traer_servicios);
+                        while ($row = mysqli_fetch_array($consulta_traer_servicios)) {
+                            echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="numero_sesion">Número de sesiones:</label>
+                    <input type="number" class="form-control" name="numero_sesion" id="numero_sesion" value="1" min="1">
+                </div>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" value="Agregar" id="agregar_servicio">
+                </div>
             </div>
             <div class="col-md-12">
                 <h4>Agregar Productos</h4>
             </div><br><br>
-            <div class="col-md-12">
-                <select class="select2 form-control" data-rel="chosen" id="productos" name="productos" required>
-                    <option value="" selected="" hidden="">Seleccione Producto</option>
-                    <?php
-                    $sql_traer_productos = "SELECT * FROM productos";
-                    $consulta_traer_productos = $mysqli->query($sql_traer_productos);
-                    while ($row = mysqli_fetch_array($consulta_traer_productos)) {
-                        echo "<option data-cost='" . $row['precio_v'] . "'data-count='" . $row['stock'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <input type="number" placeholder="Ingrese Cantidad" name="cantidad_producto" id="cantidad_producto" min="1">
-                <input type="button" value="Agregar" id="agregar_producto">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="productos">Productos:</label>
+                    <select class="select2 form-control" id="productos" name="productos">
+                        <option value="0">Seleccione Producto</option>
+                        <?php
+                        $sql_traer_productos = "SELECT * FROM productos";
+                        $consulta_traer_productos = $mysqli->query($sql_traer_productos);
+                        while ($row = mysqli_fetch_array($consulta_traer_productos)) {
+                            echo "<option data-cost='" . $row['precio_v'] . "'data-count='" . $row['stock'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
             </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cantidad_producto">Cantidad:</label>
+                    <input type="number" class="form-control" name="cantidad_producto" id="cantidad_producto" min="1" value="1">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Stock disponible:</label>
+                    <div class="custom-div form-control" id="stock">Seleccione un producto</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" value="Agregar" id="agregar_producto">
+                </div>
+            </div>
+
             <div class="col-md-12">
                 <table class="table table-bordered table-hover" id="table">
                     <thead class="tabla_cabecera">
@@ -156,6 +210,16 @@ if (isset($status)) {
     </section>
     <script type="text/javascript">
         $('.select2').select2({});
+        $("#productos").on("change", function() {
+            var selectedValue = $(this).val();
+            if (selectedValue != 0) {
+                var selectedOption = $(this).find("option:selected");
+                var stock = selectedOption.attr("data-count");
+                $('#stock').html(stock);
+            } else {
+                $('#stock').html("Seleccione un producto");
+            }
+        });
     </script>
     <?php
     include 'footer.php';
@@ -178,6 +242,7 @@ if (isset($status)) {
                     'name': nombre,
                     'type': "Servicio",
                     'cost': precio,
+                    'stock': 0,
                     'amount': Number(numeroSesiones),
                     'total': precio * numeroSesiones
                 }
@@ -198,6 +263,7 @@ if (isset($status)) {
                                 'name': datos.nombre,
                                 'type': "Producto",
                                 'cost': Number(datos.precio),
+                                'stock': Number(datos.stock),
                                 'amount': Number(datos.cantidad),
                                 'total': Number(datos.subtotal)
                             }
@@ -222,6 +288,7 @@ if (isset($status)) {
                     'name': selectedOption.getAttribute('data-name'),
                     'type': "Producto",
                     'cost': selectedOption.getAttribute('data-cost'),
+                    'stock': Number(selectedOption.getAttribute('data-count')),
                     'amount': cantidad,
                     'total': selectedOption.getAttribute('data-cost') * cantidad
                 }

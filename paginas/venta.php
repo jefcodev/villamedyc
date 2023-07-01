@@ -52,90 +52,108 @@ if (isset($status)) {
 </head>
 
 <body>
-    <div class="row mt-5">
-        <section class="cuerpo">
-            <div id="mensajes" <?php echo $class; ?>>
-                <?php echo isset($error) ? $error : ''; ?>
+    <section class="cuerpo">
+        <div id="mensajes" <?php echo $class; ?>>
+            <?php echo isset($error) ? $error : ''; ?>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
+                Este es un mensaje de información.
             </div>
 
-            <div class="d-flex justify-content-center">
-                <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
-                    Este es un mensaje de información.
-                </div>
+            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
+                Venta realizada correctamente.
+            </div>
 
-                <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
-                    Venta realizada correctamente.
-                </div>
+            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
+                Este es un mensaje de error.
+            </div>
+        </div>
 
-                <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
-                    Este es un mensaje de error.
+        <h1>Venta</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group d-flex">
+                    <div class="p-1">
+                        <b>Historia Clinica: </b>
+                    </div>
+                    <?php
+                    $sql = "SELECT MAX(consulta_fisio_id) as id FROM `consultas_fisioterapeuta`";
+                    $result = $mysqli->query($sql);
+                    if ($result) {
+                        $fila = mysqli_fetch_array($result);
+                        if (!isset($fila[0])) {
+                            echo "<div id='numero_historia' class='p-1'>VM-001-1</div>";
+                        } else {
+                            echo "<div id='numero_historia' class='p-1'>VM-001-" . $fila[0] + 1 . "</div>";
+                        }
+                    }
+                    ?>
                 </div>
             </div>
-            <h1>Venta</h1><br>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div>
-                            <div>
-                                Historia Clinica
-                            </div>
-                            <?php
-                            $sql = "SELECT MAX(consulta_fisio_id) as id FROM `consultas_fisioterapeuta`";
-                            $result = $mysqli->query($sql);
-                            if ($result) {
-                                $fila = mysqli_fetch_array($result);
-                                if (!isset($fila[0])) {
-                                    echo "<div id='numero_historia'>VM-001-1</div>";
-                                } else {
-                                    echo "<div id='numero_historia'>VM-001-" . $fila[0] + 1 . "</div>";
-                                }
-                            }
-                            ?>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_pacient">Pacientes:</label>
+                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
+                        <option value="0">Seleccione el Paciente</option>
+                        <?php
+                        $sql = "SELECT * FROM `pacientes`";
+                        $result = $mysqli->query($sql);
+                        while ($fila = mysqli_fetch_array($result)) {
+                            echo "<option value='" . $fila["id"] . "'>" . $fila['numero_identidad'] . " " .  $fila['nombres'] . "  " . $fila['apellidos'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="doctor">Paquetes:</label>
+                    <select class="form-control" id="doctor" name="doctor">
+                        <option value="0">Seleccione Paquete</option>
+                        <?php
+                        $sql_traer_doctor = "SELECT * FROM paquete_cabecera";
+                        $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
+                        while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
+                            echo "<option value='" . $row['paquete_id'] . "' data-total='" . $row['total'] . "'  data-tipo='" . $row['tipo_paquete'] . "' data-sesiones='" . $row['numero_sesiones'] . "'>" . $row['titulo_paquete'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="d-flex justify-content-center">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <b>
+                                <p class="p-1">Tipo paquete:</p>
+                            </b>
+                            <p id="tipo_paquete" class="p-1"></p>
                         </div>
-                        <div class="col-md-12">
-                            <?php
-                            $sql = "SELECT * FROM `pacientes`";
-                            $result = $mysqli->query($sql);
-                            ?>
-                            <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
-                                <option value="0">Seleccione el Paciente</option>
-                                <?php
-                                if ($result) {
-                                    while ($fila = mysqli_fetch_array($result)) {
-                                ?>
-                                        <option value="<?php echo $fila["id"] ?>"><?php echo    $fila["numero_identidad"] . "  " .  $fila["nombres"] . "  " . $fila["apellidos"] ?></option>
-                                <?php
-                                    }
-                                }
-
-                                ?>
-                            </select><br>
-                            <select class="form-control" id="doctor" name="doctor">
-                                <option value="0">Seleccione Paquete</option>
-                                <?php
-                                $sql_traer_doctor = "SELECT * FROM paquete_cabecera";
-                                $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
-                                while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
-                                    echo "<option value='" . $row['paquete_id'] . "'>" . $row['titulo_paquete'] . "</option>";
-                                }
-                                ?>
-                            </select>
+                        <div class="d-flex">
+                            <b>
+                                <p class="p-1">Numero de sesiones:</p>
+                            </b>
+                            <p id="numero_sesiones" class="p-1"></p>
+                        </div>
+                        <div class="d-flex">
+                            <b>
+                                <p class="p-1">Precio paquete:</p>
+                            </b>
+                            <p id="total" class="p-1"></p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input class="btn btn-primary" type="button" name="crear_venta" id="crear_venta" value="Aceptar" />
-                        </div>
-                    </div>
+
                 </div>
-            </div><br>
-            <div class="row">
-                <div class="col-md-8">
-                    <div id="miDiv" class="alert alert-danger" role="alert" style="display: none"></div>
+
+                <div class="d-flex justify-content-center">
+                    <input class="btn btn-primary" type="button" name="crear_venta" id="crear_venta" value="Aceptar" />
                 </div>
             </div>
-        </section>
-    </div>
+    </section>
     <script type="text/javascript">
         $('.select2').select2({});
     </script>
@@ -143,6 +161,40 @@ if (isset($status)) {
     include 'footer.php';
     ?>
     <script>
+        $("#doctor").on("change", function() {
+            var selectedValue = $(this).val();
+            if (selectedValue != 0) {
+                var selectedOption = $(this).find("option:selected");
+                var tipo_paquete = selectedOption.attr("data-tipo");
+                var numero_sesiones = selectedOption.attr("data-sesiones");
+                var total = selectedOption.attr("data-total");
+
+                let tipo = "";
+                if (tipo_paquete === '1') {
+                    tipo = "Básico";
+                }
+                if (tipo_paquete === '2') {
+                    tipo = "Plus";
+                }
+                if (tipo_paquete === '3') {
+                    tipo = "Premium";
+                }
+                if (tipo_paquete === '4') {
+                    tipo = "Empresas";
+                }
+                if (tipo_paquete === '5') {
+                    tipo = "Convenio";
+                }
+                $('#tipo_paquete').html(tipo);
+                $('#numero_sesiones').html(numero_sesiones);
+                $('#total').html(total);
+            } else {
+                $('#tipo_paquete').html("");
+                $('#numero_sesiones').html("");
+                $('#total').html("");
+            }
+        });
+
         $('#crear_venta').on('click', function() {
             if (validar()) {
                 const FD = new FormData();
@@ -150,17 +202,20 @@ if (isset($status)) {
                 FD.append('paciente_id', $('#id_paciente').val())
                 FD.append('paquete_id', $('#doctor').val());
                 FD.append('numero_historia', $('#numero_historia').text());
+                FD.append('total', $('#total').text());
                 fetch("ventas_ajax.php", {
                         method: 'POST',
                         body: FD
                     }).then(respuesta => respuesta.text())
                     .then(decodificado => {
                         console.log(decodificado);
-                        var alertElement = document.getElementById('alert-success');
-                        alertElement.classList.remove('d-none');
-                        setTimeout(function() {
-                            alertElement.classList.add('d-none');
-                        }, 3000);
+                        alert(decodificado);
+                        // var alertElement = document.getElementById('alert-success');
+                        // alertElement.classList.remove('d-none');
+                        // setTimeout(function() {
+                        //     alertElement.classList.add('d-none');
+                        // }, 3000);
+                        location.reload();
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);

@@ -49,18 +49,34 @@ function crearVenta($mysqli)
     $PACIENTE_ID = $_POST['paciente_id'];
     $PAQUETE_ID = $_POST['paquete_id'];
     $NUMERO_HISTORIA = $_POST['numero_historia'];
-    echo $PAQUETE_ID;
-    $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `usuario_id`, `paquete_id`, `numero_historia`, 
-                `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
-                `habitos`, `antecendentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
-                `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Asignar Cita')";
-    $result = $mysqli->query($query);
-    if (!$result) {
-        die('Query Failed.');
-    }
+    $mysqli->begin_transaction();
+    try {
+        $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `usuario_id`, `paquete_id`, `numero_historia`, 
+                    `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
+                    `habitos`, `antecendentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
+                    `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
+                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Asignar Cita')";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
 
-    echo "Venta exitosa";
+        $fechaActual = date("Y-m-d");
+        $CONSULTA_FISIO_ID = $mysqli->insert_id;
+        $TOTAL = $_POST['total'];
+
+        $query = "INSERT INTO `ventas`(`fecha_venta`, `id_consulta`, `id_paquete`, `total`) 
+                    VALUES ('$fechaActual', $CONSULTA_FISIO_ID, $PAQUETE_ID, $TOTAL)";
+        $result = $mysqli->query($query);
+        if (!$result) {
+            die('Query Failed.');
+        }
+
+        $mysqli->commit();
+        echo "Venta exitosa";
+    } catch (Exception $e) {
+        echo ("Error: " . $e->getMessage());
+    }
 }
 
 function verVenta($mysqli)
