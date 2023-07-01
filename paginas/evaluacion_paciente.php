@@ -109,7 +109,7 @@ $id_cita = $_GET['consulta_fisio_id'];
 
                         <div class="row">
                             <div class="col-md-6">
-                                <textarea class="form-control" title="Antecedentes del diagnóstico" placeholder="Antecedentes del diagnóstico" id="antecendentes_diagnostico" name="antecendentes_diagnostico"></textarea>
+                                <textarea class="form-control" title="Antecedentes del diagnóstico" placeholder="Antecedentes del diagnóstico" id="antecedentes_diagnostico" name="antecedentes_diagnostico"></textarea>
                             </div>
                             <div class="col-md-6">
                                 <textarea class="form-control" title="Tratamientos anteriores" placeholder="Tratamientos anteriores" id="tratamientos_anteriores" name="tratamientos_anteriores"></textarea>
@@ -330,7 +330,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     $("#sedestacion_prolongada").val(data[0].sedestacion_prolongada);
                     $("#esfuerzo_fisico").val(data[0].esfuerzo_fisico);
                     $("#habitos").val(data[0].habitos);
-                    $("#antecendentes_diagnostico").val(data[0].antecendentes_diagnostico);
+                    $("#antecedentes_diagnostico").val(data[0].antecendetes_diagnostico);
                     $("#tratamientos_anteriores").val(data[0].tratamientos_anteriores);
                     $("#contracturas").val(data[0].contracturas);
                     $("#irradiacion").val(data[0].irradiacion);
@@ -533,7 +533,7 @@ $id_cita = $_GET['consulta_fisio_id'];
             FD.append('sedestacion_prolongada', $("#sedestacion_prolongada").val());
             FD.append('esfuerzo_fisico', $("#esfuerzo_fisico").val());
             FD.append('habitos', $("#habitos").val());
-            FD.append('antecendentes_diagnostico', $("#antecendentes_diagnostico").val());
+            FD.append('antecedentes_diagnostico', $("#antecedentes_diagnostico").val());
             FD.append('tratamientos_anteriores', $("#tratamientos_anteriores").val());
             FD.append('contracturas', $("#contracturas").val());
             FD.append('irradiacion', $("#irradiacion").val());
@@ -664,7 +664,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                                         <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
                                             <div class='form-group'>
                                                 <b>Antecedentes del Diagnóstico</b>
-                                                <p>${data[0].antecendentes_diagnostico}</p>
+                                                <p>${data[0].antecedentes_diagnostico}</p>
                                             </div>
                                         </div>
                                         <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>

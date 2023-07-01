@@ -65,7 +65,7 @@ create table consultas_fisioterapeuta (
   sedestacion_prolongada int,
   esfuerzo_fisico int,
   habitos varchar(500),
-  antecendentes_diagnostico varchar(500),
+  antecedentes_diagnostico varchar(500),
   tratamientos_anteriores varchar(500),
   contracturas varchar(500),
   irradiacion int,

@@ -66,7 +66,7 @@ function crearVenta($mysqli)
     try {
         $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `usuario_id`, `paquete_id`, `numero_historia`, 
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
-                    `habitos`, `antecendentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
+                    `habitos`, `antecendetes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
                     `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
                     VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
         $result = $mysqli->query($query);
@@ -174,7 +174,7 @@ function verCita($mysqli)
             'sedestacion_prolongada' => $row['sedestacion_prolongada'],
             'esfuerzo_fisico' => $row['esfuerzo_fisico'],
             'habitos' => $row['habitos'],
-            'antecendentes_diagnostico' => $row['antecendentes_diagnostico'],
+            'antecendetes_diagnostico' => $row['antecedentes_diagnostico'],
             'tratamientos_anteriores' => $row['tratamientos_anteriores'],
             'contracturas' => $row['contracturas'],
             'irradiacion' => $row['irradiacion'],
@@ -279,7 +279,7 @@ function verEvaluacion($mysqli)
             'sedestacion_prolongada' => $row['sedestacion_prolongada'],
             'esfuerzo_fisico' => $row['esfuerzo_fisico'],
             'habitos' => $row['habitos'],
-            'antecendentes_diagnostico' => $row['antecendentes_diagnostico'],
+            'antecedentes_diagnostico' => $row['antecedentes_diagnostico'],
             'tratamientos_anteriores' => $row['tratamientos_anteriores'],
             'contracturas' => $row['contracturas'],
             'irradiacion' => $row['irradiacion'],
@@ -432,7 +432,7 @@ function actualizarEvaluacion($mysqli)
     $LIMITACION_MOVILIDAD = $_POST['limitacion_movilidad'];
     $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
                     `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`=$SEDESTACION_PROLONGADA, 
-                    `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecendentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
+                    `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecedentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
                     `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
                     `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
                     `limitacion_movilidad`=$LIMITACION_MOVILIDAD
