@@ -68,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->query($sql);
 
         echo '<div class="alert alert-success">Compra registrada correctamente</div>';
+        
     } else {
         echo "Error al registrar la compra: " . $conn->error;
     }
@@ -80,25 +81,35 @@ $conn->close();
 <body>
     <section class="cuerpo">
         <h1>Registrar Compra</h1>
+
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required><br><br>
 
-            <label for="proveedor">Proveedor:</label>
-            <input type="text" id="proveedor" name="proveedor" required><br><br>
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control" type="date" id="fecha" name="fecha" required />
+                    <select class="form-control" id="producto" name="producto">
+                        <option value="">Seleccionar producto</option>
+                        <?php foreach ($productos as $codigo => $producto) { ?>
+                            <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
+                        <?php } ?>
+                    </select>
 
-            <label for="producto">Producto:</label>
-            <select id="producto" name="producto">
-                <option value="">Seleccionar</option>
-                <?php foreach ($productos as $codigo => $producto) { ?>
-                    <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
-                <?php } ?>
-            </select><br><br>
 
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" id="cantidad" name="cantidad[]" min="0" value="0"><br><br>
 
-            <button type="button" onclick="agregarProducto()">Agregar Producto</button><br><br>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" title="Proveedor" placeholder="Proveedor" id="proveedor" name="proveedor" required />
+                    <input class="form-control" type="number" title="Cantidad" placeholder="Cantidad" id="cantidad" name="cantidad[]" min="0" value="0" required />
+
+                    <div class="float-right">
+                        <button class="btn btn-primary" type="button" onclick="agregarProducto()">Agregar Producto</button>
+                        <a class="btn btn-danger" href="lista_productos.php">Cancelar</a>
+                    </div>
+
+                </div>
+
+            </div>
+            <br><br>
 
             <h2>Detalle de la Compra</h2>
             <table class="table table-bordered" id="tablaDetalle">
@@ -183,4 +194,5 @@ $conn->close();
         }
     </script>
 </body>
+
 </html>

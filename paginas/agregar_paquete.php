@@ -161,9 +161,6 @@ $totalPaquete = 0;
                 var totalPaquete = parseFloat($('#total-paquete').text());
                 var paqueteId = parseInt($('#lista-paquetes').val()); // Obtener el valor del paquete seleccionado
 
-                console.log("idConsulta:", idConsulta);
-                console.log("totalPaquete:", totalPaquete);
-                console.log("paqueteId:", paqueteId);
 
                 // Realizar una petición AJAX para insertar los datos en la tabla de ventas
                 $.ajax({
@@ -181,6 +178,7 @@ $totalPaquete = 0;
                         // Aquí puedes manejar la respuesta de la inserción de la venta si es necesario
                     }
                 });
+                window.location.href = 'inicio.php';
             });
         });
     </script>
