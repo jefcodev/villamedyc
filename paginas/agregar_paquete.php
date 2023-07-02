@@ -49,9 +49,9 @@ $totalPaquete = 0;
                     </tbody>
                 </table>
 
-                
 
-                
+
+
             </div>
         </div>
         <div class="row">
@@ -64,13 +64,18 @@ $totalPaquete = 0;
                     $result_paquetes = $mysqli->query($sql_paquetes);
 
                     while ($row_paquete = mysqli_fetch_array($result_paquetes)) {
-                        echo "<option value='" . $row_paquete['paquete_id'] . "'>" . $row_paquete['titulo_paquete'] .'  $' . $row_paquete['total'] . "</option>";
+                        echo "<option value='" . $row_paquete['paquete_id'] . "'>" . $row_paquete['titulo_paquete'] . '  $' . $row_paquete['total'] . "</option>";
                     }
                     ?>
                 </select>
             </div>
+            <div class="col-md-6">
+                <h4>Acciones</h4>
+                <a class='btn btn-success btn-sm cobrar-btn' href='' data-id-consulta='<?php echo $id_consulta; ?>'>Cobrar Paquete</a>
+                <a class='btn btn-success btn-sm' href='inicio.php'>Cancelar</a>
+            </div>
         </div>
-       
+
 
 
         <div class="row">
@@ -87,10 +92,24 @@ $totalPaquete = 0;
                         <!-- Aquí se mostrarán los detalles del paquete seleccionado -->
                     </tbody>
                 </table>
+                <h5>Total del paquete más consultas: $<span id="total-paquete"></span></h5>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered table-hover" id="tabla-detalle">
+                    <thead class="tabla_cabecera">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalles-paquete-items">
+                        <!-- Aquí se mostrarán los detalles del paquete seleccionado -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <label>Total del paquete más consultas: <span id="total-paquete"></span></label>
     </section>
 
     <br>
@@ -120,9 +139,46 @@ $totalPaquete = 0;
                         // Actualizar el contenido de los detalles del paquete
                         $('#detalles-paquete').html(data.detalles_paquete);
 
+                        // Mostrar la tabla de detalles del paquete
+                        $('#tabla-detalle').show();
+
+                        // Actualizar el contenido de los detalles del paquete
+                        $('#detalles-paquete-items').empty().append(data.detalles_paquete_items);
+
                         // Actualizar el valor total del paquete más consultas
                         var total = sumaTotal + <?php echo $totalConsulta; ?>;
                         $('#total-paquete').text(total);
+                    }
+                });
+            });
+
+            $('.cobrar-btn').click(function(e) {
+                e.preventDefault();
+               
+
+                // Obtener el ID de la consulta y el valor total del paquete más consultas
+                var idConsulta = $(this).data('id-consulta');
+                var totalPaquete = parseFloat($('#total-paquete').text());
+                var paqueteId = parseInt($('#lista-paquetes').val()); // Obtener el valor del paquete seleccionado
+
+                console.log("idConsulta:", idConsulta);
+                console.log("totalPaquete:", totalPaquete);
+                console.log("paqueteId:", paqueteId);
+
+                // Realizar una petición AJAX para insertar los datos en la tabla de ventas
+                $.ajax({
+                    url: 'insertar_venta.php',
+                    type: 'POST',
+                    data: {
+                        idConsulta: idConsulta,
+                        totalPaquete: totalPaquete,
+                        paqueteId: paqueteId
+
+                    },
+                    success: function(response) {
+                
+
+                        // Aquí puedes manejar la respuesta de la inserción de la venta si es necesario
                     }
                 });
             });
