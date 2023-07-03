@@ -64,11 +64,11 @@ function crearVenta($mysqli)
     $fechaActual = date("Y-m-d");
     $mysqli->begin_transaction();
     try {
-        $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `usuario_id`, `paquete_id`, `numero_historia`, 
+        $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `paquete_id`, `numero_historia`, 
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
-                    `habitos`, `antecendetes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
+                    `habitos`, `antecedentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
                     `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                    VALUES ($PACIENTE_ID, 2, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
+                    VALUES ($PACIENTE_ID, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
@@ -78,7 +78,7 @@ function crearVenta($mysqli)
         $TOTAL = $_POST['total'];
 
         $query = "INSERT INTO `ventas`(`fecha_venta`, `id_consulta`, `id_paquete`, `total`) 
-                    VALUES ('$fechaActual', $CONSULTA_FISIO_ID, $PAQUETE_ID, $TOTAL)";
+                    VALUES ('$fechaActual', null, $PAQUETE_ID, $TOTAL)";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
