@@ -76,8 +76,8 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                     PAQUETES
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="crear_paquetes.php">Crear</a>
-                                    <a class="dropdown-item" href="lista_paquetes.php">Lista</a>
+                                    <a class="dropdown-item" href="crear_paquetes.php">Crear Paquete</a>
+                                    <a class="dropdown-item" href="lista_paquetes.php">Lista Paquetes</a>
                                     <a class="dropdown-item" href="venta.php">Venta</a>
                                     <a class="dropdown-item" href="lista_ventas.php">Lista Ventas</a>
                                     <a class="dropdown-item" href="crear_servicio.php">Servicios</a>

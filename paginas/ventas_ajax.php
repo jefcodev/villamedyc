@@ -60,15 +60,14 @@ function crearVenta($mysqli)
 {
     $PACIENTE_ID = $_POST['paciente_id'];
     $PAQUETE_ID = $_POST['paquete_id'];
-    $NUMERO_HISTORIA = $_POST['numero_historia'];
     $fechaActual = date("Y-m-d");
     $mysqli->begin_transaction();
     try {
-        $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `paquete_id`, `numero_historia`, 
+        $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `paquete_id`, 
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
                     `habitos`, `antecedentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
                     `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                    VALUES ($PACIENTE_ID, $PAQUETE_ID, '$NUMERO_HISTORIA', '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
+                    VALUES ($PACIENTE_ID, $PAQUETE_ID, '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
@@ -104,9 +103,9 @@ function crearVenta($mysqli)
 function verVenta($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $query = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.fecha, CONCAT(p.nombres,' ',p.apellidos) as nombres, u.id as usuario_id, CONCAT(u.nombre,' ',u.apellidos) as nombres_doc,pc.paquete_id, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total as total_paquete, pd.* 
-    FROM paquete_cabecera pc, paquete_detalle pd, consultas_fisioterapeuta cf, pacientes p, usuarios u
-    WHERE pc.paquete_id=pd.paquete_id AND cf.paquete_id=pc.paquete_id AND cf.paciente_id=p.id AND u.id=cf.usuario_id AND cf.consulta_fisio_id= $CONSULTA_FISIO_ID";
+    $query = "SELECT cf.consulta_fisio_id, p.id as paciente_id, cf.fecha, CONCAT(p.nombres,' ',p.apellidos) as nombres, pc.paquete_id, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total as total_paquete, pd.* 
+    FROM paquete_cabecera pc, paquete_detalle pd, consultas_fisioterapeuta cf, pacientes p
+    WHERE pc.paquete_id=pd.paquete_id AND cf.paquete_id=pc.paquete_id AND cf.paciente_id=p.id AND cf.consulta_fisio_id= $CONSULTA_FISIO_ID";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -115,11 +114,9 @@ function verVenta($mysqli)
     while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
             'consulta_fisio_id' => $row['consulta_fisio_id'],
-            'numero_historia' => $row['numero_historia'],
+            'numero_historia' => 'VM-001-'.$row['paciente_id'],
             'fecha' => $row['fecha'],
-            'usuario_id' => $row['usuario_id'],
             'nombres' => $row['nombres'],
-            'nombres_doc' => $row['nombres_doc'],
             'paquete_id' => $row['paquete_id'],
             'titulo_paquete' => $row['titulo_paquete'],
             'tipo_paquete' => $row['tipo_paquete'],
@@ -140,7 +137,7 @@ function verVenta($mysqli)
 function verFechaCita($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
-    $query = "SELECT usuario_id, fecha, estado_atencion FROM consultas_fisioterapeuta WHERE consulta_fisio_id = $CONSULTA_FISIO_ID";
+    $query = "SELECT fecha, estado_atencion FROM consultas_fisioterapeuta WHERE consulta_fisio_id = $CONSULTA_FISIO_ID";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -148,7 +145,6 @@ function verFechaCita($mysqli)
     $json = array();
     while ($row = mysqli_fetch_array($result)) {
         $json[] = array(
-            'usuario_id' => $row['usuario_id'],
             'fecha' => $row['fecha'],
             'estado_atencion' => $row['estado_atencion']
         );
@@ -331,7 +327,7 @@ function crearCita($mysqli)
     $USUARIO_ID = $_POST['doctor_id'];
     $FECHA = $_POST['fecha'];
 
-    $query = "UPDATE `consultas_fisioterapeuta` SET `usuario_id`=$USUARIO_ID, `fecha`='$FECHA', `estado_atencion`='Cita Asignada' 
+    $query = "UPDATE `consultas_fisioterapeuta` SET `fecha`='$FECHA', `estado_atencion`='Cita Asignada' 
                 WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
     $result = $mysqli->query($query);
     if (!$result) {

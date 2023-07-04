@@ -74,25 +74,6 @@ if (isset($status)) {
         <h1>Venta</h1>
 
         <div class="row">
-            <div class="col-md-12">
-                <div class="form-group d-flex">
-                    <div class="p-1">
-                        <b>Historia Clinica: </b>
-                    </div>
-                    <?php
-                    $sql = "SELECT MAX(consulta_fisio_id) as id FROM `consultas_fisioterapeuta`";
-                    $result = $mysqli->query($sql);
-                    if ($result) {
-                        $fila = mysqli_fetch_array($result);
-                        if (!isset($fila[0])) {
-                            echo "<div id='numero_historia' class='p-1'>VM-001-1</div>";
-                        } else {
-                            echo "<div id='numero_historia' class='p-1'>VM-001-" . $fila[0] + 1 . "</div>";
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="id_pacient">Pacientes:</label>
@@ -257,7 +238,6 @@ if (isset($status)) {
                 FD.append('action', "crear_venta");
                 FD.append('paciente_id', $('#paciente').val())
                 FD.append('paquete_id', $('#paquete').val());
-                FD.append('numero_historia', $('#numero_historia').text());
                 FD.append('total', $('#total').text());
                 FD.append('lista', JSON.stringify(listaProdutos))
                 fetch("ventas_ajax.php", {

@@ -83,7 +83,7 @@ if (isset($status)) {
                                 $mes_hoy = date("m");
                                 $anio_hoy = date("Y");
                                 if ($rol === 'adm' || $rol === 'fis') {
-                                    $sql_citas_hoy = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.fecha, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
+                                    $sql_citas_hoy = "SELECT cf.consulta_fisio_id, p.id as paciente_id, cf.fecha, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
                                                         FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
                                                         WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id AND cf.estado_atencion='Por Atender'";
                                 }
@@ -95,7 +95,7 @@ if (isset($status)) {
                                     $id = $row['consulta_fisio_id'];
                                     echo "<tr id='" . $row['consulta_fisio_id'] . "'>";
                                     echo "<td>" . $row['fecha'] . "</td>";
-                                    echo "<td>" . $row['numero_historia'] . "</td>";
+                                    echo "<td>VM-001-" . $row['paciente_id'] . "</td>";
                                     echo "<td>" . $row['numero_identidad'] . "</td>";
                                     echo "<td>" . $row['nombres'] . "</td>";
 

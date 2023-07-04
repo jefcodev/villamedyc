@@ -58,7 +58,6 @@ create table consultas_fisioterapeuta (
   consulta_fisio_id int not null auto_increment,
   paciente_id int,
   paquete_id int,
-  numero_historia varchar(50),
   fecha date,
   profesion varchar(500),
   tipo_trabajo varchar(500),

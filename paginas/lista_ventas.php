@@ -51,14 +51,14 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     </thead>
                     <tbody>
                         <?php
-                        $sql_ventas = "SELECT cf.consulta_fisio_id, cf.numero_historia, cf.estado_atencion, pc.titulo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
+                        $sql_ventas = "SELECT cf.consulta_fisio_id, p.id as paciente_id, cf.estado_atencion, pc.titulo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
                                             FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
                                             WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id";
                         $result = $mysqli->query($sql_ventas);
 
                         while ($row = mysqli_fetch_array($result)) {
                             echo "<tr id='" . $row['consulta_fisio_id'] . "' >";
-                            echo "<td>" . $row['numero_historia'] . "</td>";
+                            echo "<td>VM-001-" . $row['paciente_id'] . "</td>";
                             echo "<td>" . $row['numero_identidad'] . "</td>";
                             echo "<td>" . $row['nombres'] . "</td>";
                             echo "<td>" . $row['estado_atencion'] . "</td>";
@@ -357,7 +357,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                    // console.log(decodificado);
+                    console.log(decodificado);
                     const data = JSON.parse(decodificado);
                     console.log(data);
                     let tipo = "";
@@ -376,18 +376,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     if (data[0].tipo_paquete === '5') {
                         tipo = "Convenio";
                     }
-                    let doc = "No Asignado";
-                    let fec = "No Asignada";
-                    if (data[0].usuario_id !== "2") {
-                        doc = data[0].nombres_doc;
-                    }
-                    if (data[0].fecha !== "0000-00-00 00:00:00") {
-                        fec = data[0].fecha;
-                    }
                     let template = `<div>${data[0].numero_historia}</div>
                                     <div>Paciente: ${data[0].nombres}</div>
-                                    <div>Doctor: ${doc}</div>
-                                    <div>Fecha Cita: ${fec}</div>
                                     <div>Titulo Paquete: ${data[0].titulo_paquete}</div>
                                     <div>Tipo de Paquete: ${tipo}</div>
                                     <div>Nº de Sesiones: ${data[0].numero_sesiones}</div>
@@ -448,8 +438,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                     // console.log(decodificado);
                     const data = JSON.parse(decodificado);
                     // if (data[0].estado_atencion !== 'Por Asignar Cita') {
-                        $('#doctor').val(Number(data[0].usuario_id));
-                        $("#fecha_cita").val(data[0].fecha);
+                    $('#doctor').val(Number(data[0].usuario_id));
+                    $("#fecha_cita").val(data[0].fecha);
                     // }
                 })
                 .catch(function(error) {

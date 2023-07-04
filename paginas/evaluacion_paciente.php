@@ -19,7 +19,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                 <div class="col-md-4">
                     <div class="form-group">
                         <b>Historia Clinica:</b>
-                        <p><?php echo $rowscita['numero_historia'] ?></p>
+                        <p><?php echo "VM-001-".$rowscita['paciente_id'] ?></p>
                     </div>
                 </div>
                 <div class="col-md-4">
