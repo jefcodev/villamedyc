@@ -51,7 +51,7 @@ if ($result_insertar_venta) {
     } else {
         $response = array(
             "success" => false,
-            "message" => "Error al realizar la venta: " 
+            "message" => "Error al insertar a tabla fisioterapia: " . $mysqli->error
         );
     }
 
@@ -62,7 +62,7 @@ if ($result_insertar_venta) {
 } else {
     $response = array(
         "success" => false,
-        "message" => "Error al realizar la venta: "
+        "message" => "Error al realizar la venta: " . $mysqli->error
     );
 }
 
