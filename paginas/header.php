@@ -16,15 +16,31 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
         <title>Clínica</title>
+         
+        <!-- Bootstrap -->
         <link rel="stylesheet" href="../css/bootstrap.css">
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-        <link rel="stylesheet" href="../css/fontawesome-all.min.css">
         <link rel="stylesheet" href="../css/estilos.css">
+        
+        <!--  <link rel="stylesheet" href="../css/fontawesome-all.min.css"> -->
+        
         <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
+        <!-- Iconos font-awesome  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+       
+        
+        
+        
+      <!--  
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <script src="../js/poppers.js"></script>
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- Fin jQuery -->
+ -->
+       
+
     </head>
     <header class="encabezado">
         <div class="container">
@@ -43,48 +59,65 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                 <a class="nav-link" href="inicio.php">INICIO</a>
                             <?php } ?>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="lista_pacientes.php">PACIENTES</a></li>
-                        <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
-                        <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
-                        <li class="nav-item">
-                            <?php if ($rol == 'fis') { ?>
-                                <a class="nav-link" href="lista_historias_fisioterapeuta.php">HISTORIAS</a>
-
-                            <?php } else { ?>
-                                <a class="nav-link" href="lista_historias.php">HISTORIAS</a>
-                            <?php } ?>
-                        </li>
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    PACIENTES
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="crear_paciente.php">Nuevo Paciente</a>
+                                    <a class="dropdown-item" href="lista_pacientes.php">Listar Pacientes</a>
+                                </div>
+                            </li>
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    CITAS
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="crear_cita.php">Nueva Cita</a>
+                                    <a class="dropdown-item" href="lista_citas.php">Listar Citas</a>
+                                    <a class="dropdown-item" href="lista_consultas.php">Listar Consultas</a>
+                                </div>
+                            </li>
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    HISTORIAS
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="lista_historias.php">Traumatología</a>
+                                    <a class="dropdown-item" href="lista_historias_fisioterapeuta.php">Fisioterapia </a>
+                                </div>
+                            </li>
 
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     INVENTARIO
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu">
                                     <a class="dropdown-item" href="crear_producto.php">Crear Producto</a>
                                     <a class="dropdown-item" href="lista_productos.php">Listar Productos</a>
                                     <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
-                                    <a class="dropdown-item" href="listar_compras.php">Listar Compras</a>
-                                    <a class="dropdown-item" href="listar_ventas.php">Listar Ventas</a>
+                                    <a class="dropdown-item" href="listar_compras.php">Reporte Compras</a>
+                                    <a class="dropdown-item" href="crear_venta.php">Crear Venta</a>
+                                    <a class="dropdown-item" href="listar_ventas.php">Reporte Ventas</a>
                                 </div>
                             </li>
 
 
-                            <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
+                            
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    PAQUETES
+                                    SERVICIOS
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="crear_paquetes.php">Crear Paquete</a>
-                                    <a class="dropdown-item" href="lista_paquetes.php">Lista Paquetes</a>
-                                    <a class="dropdown-item" href="venta.php">Venta</a>
-                                    <a class="dropdown-item" href="lista_ventas.php">Lista Ventas</a>
-                                    <a class="dropdown-item" href="crear_servicio.php">Servicios</a>
-                                    <a class="dropdown-item" href="lista_servicios.php">Lista Servicios</a>
+                                    <a class="dropdown-item" href="crear_servicio.php">Nuevo Servicios</a>
+                                    <a class="dropdown-item" href="lista_servicios.php">Listar Servicios</a>
+                                    <a class="dropdown-item" href="crear_paquetes.php">Nuevo Paquete</a>
+                                    <a class="dropdown-item" href="lista_paquetes.php">Listar Paquetes</a>
 
                                 </div>
                             </li>
+                            <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
                         <?php } ?>
                     </ul>
                     <ul class="navbar-nav mt-md-0 margen-float-right">

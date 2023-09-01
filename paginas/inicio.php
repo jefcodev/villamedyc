@@ -28,26 +28,26 @@ if (isset($status)) {
             <?php echo $close; ?>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-6 logos_azul">
-                        <a href="lista_pacientes.php">
+                        <a href="crear_paciente.php">
                             <i class="fas fa-users fa-6x"></i><br>
-                            <label>Pacientes</label>
+                            <label>Nuevo Paciente</label>
                         </a>
                     </div>
                     <div class="col-md-6 logos_azul">
-                        <a href="lista_citas.php">
+                        <a href="crear_cita.php">
                             <i class="fas fa-calendar-alt fa-6x"></i><br>
-                            <label>Citas</label>
+                            <label>Nueva Cita</label>
                         </a>
                     </div>
                 </div><br><br><br><br>
                 <div class="row">
                     <div class="col-md-6 logos_azul">
-                        <a href="lista_historias.php">
-                            <i class="far fa-file-alt fa-6x"></i><br>
-                            <label>Historias</label>
+                        <a href="crear_venta.php">
+                        <i class="fas fa-basket-shopping fa-6x"></i><br>
+                            <label>Nueva Venta</label>
                         </a>
                     </div>
                     <div class="col-md-6 logos_azul">
@@ -58,10 +58,9 @@ if (isset($status)) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-11">
+                    <div class="col-md-12">
                         <select name="" id="test">
                             <option value="0">Filtrar por:</option>
                             <option value="1">Dia</option>
@@ -72,6 +71,7 @@ if (isset($status)) {
                             <thead class="tabla_cabecera">
                                 <tr>
                                     <th>Fecha cita</th>
+                                    <th>Usuario</th>
                                     <th>Doctor</th>
                                     <th>Paciente</th>
                                     <th>Cédula</th>
@@ -103,6 +103,7 @@ if (isset($status)) {
                                 while ($row = mysqli_fetch_array($result_citas_hoy)) {
                                     $id = $row['id'];
                                     echo "<td>" . $row['fecha_cita'] . "</td>";
+                                    echo "<td>" . $row['nombre_creador'] . "</td>";
                                     echo "<td>" . $row['nombre_doctor'] . "</td>";
                                     echo "<td>" . $row['nombres_paciente'] . " " . $row['apellidos_paciente'] . "</td>";
                                     echo "<td>" . $row['numero_identidad'] . "</td>";
@@ -128,7 +129,6 @@ if (isset($status)) {
                                     <th>Fecha cita</th>
                                     <th>Doctor</th>
                                     <th>Paciente</th>
-                                    <th>Valor</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -144,12 +144,10 @@ if (isset($status)) {
                                     echo "<td>" . $row['fecha_hora'] . "</td>";
                                     echo "<td>" . $row['nombre_doctor'] . " " . $row['apellidos_paciente'] . "</td>";
                                     echo "<td>" . $row['nombres'] . ' ' . $row['apellidos'] . "</td>";
-                                    echo "<td>" . $row['precio'] . "</td>";
                                     echo "<td>";
                                     if ($rol == 'adm') {
-                                        echo "<a class='btn btn-success btn-sm' href='cobrar.php?id_cita=$id'>Cobrar</a>";
-                                        echo "&nbsp;&nbsp;";
-                                        echo "<a class='btn btn-success btn-sm' href='agregar_paquete.php?id_cita=$id'>Paquete</a>";
+                                        
+                                        echo "<a class='btn btn-success btn-sm' href='agregar_paquete.php?id_cita=$id'>Cobrar</a>";
                                     }
                                     echo "</td>";
                                     echo "</tr>";

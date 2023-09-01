@@ -27,15 +27,15 @@ if (isset($status)) {
 
     <section class="cuerpo">
         <h1>Listado de Pacientes
-            <?php
-            $permisoCrear = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
-            if ($permisoCrear) {
-                echo ' <a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>';
-            } else {
 
-                echo ' <a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>';
-            }
-            ?>
+            
+                <a href="crear_paciente.php"  class="btn btn-success float-right">Crear nuevo paciente</a>
+
+
+                <a href="crear_empresa.php" style="margin-right: 10px;" class="btn btn-info float-right ">Crear nueva empresa</a>
+
+            
+
         </h1>
 
 
@@ -47,8 +47,6 @@ if (isset($status)) {
 
             <div class="col-md-12">
 
-                <!--<a href="crear_paciente.php" class="btn btn-success float-right"> Crear nuevo paciente</a><br><br>
-                -->
 
 
 

@@ -22,11 +22,23 @@ if (isset($_POST['btn_crear_paciente'])) {
     $correo_electronico = $_POST['correo_electronico'];
     $antecedentes_personales = $_POST['antecedentes_personales'];
     $antecedentes_familiares = $_POST['antecedentes_familiares'];
+    $fk_id_empresa = $_POST['empresa'];
 
-    $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+
+    if (!empty($fk_id_empresa)) {
+        // Si fk_id_empresa tiene un valor, inclúyelo en la consulta
+        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_empresa) "
+            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
+            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_empresa')";
+    } else {
+        // Si fk_id_empresa no tiene valor, inserta NULL en la columna
+        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
             . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora) "
             . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
             . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora')";
+    }
+
     $query_crear_paciente = $mysqli->query($sql_crear_paciente);
     if ($query_crear_paciente == TRUE) {
         header("location:lista_pacientes.php?status=OK");
@@ -51,14 +63,27 @@ if (isset($_POST['btn_crear_paciente_cita'])) {
     $correo_electronico = $_POST['correo_electronico'];
     $antecedentes_personales = $_POST['antecedentes_personales'];
     $antecedentes_familiares = $_POST['antecedentes_familiares'];
+    $fk_id_empresa = $_POST['empresa'];
 
-    $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+
+    if (!empty($fk_id_empresa)) {
+        // Si fk_id_empresa tiene un valor, inclúyelo en la consulta
+        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_empresa) "
+            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
+            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_empresa')";
+    } else {
+        // Si fk_id_empresa no tiene valor, inserta NULL en la columna
+        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
             . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora) "
             . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
             . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora')";
+    }
+    
     $query_crear_paciente = $mysqli->query($sql_crear_paciente);
     if ($query_crear_paciente == TRUE) {
-        header("location:crear_cita.php");
+        header("location:crear_cita.php?status=OK&id_paciente=" . $mysqli->insert_id);
+        exit();
     } else {
         header("location:crear_paciente.php?status=ER");
     }

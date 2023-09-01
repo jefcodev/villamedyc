@@ -4,7 +4,6 @@ CREATE TABLE productos (
   codigo VARCHAR(50) NOT NULL,
   nombre VARCHAR(100) NOT NULL,
   descripcion TEXT,
-  precio_c DECIMAL(10, 2) NOT NULL,
   precio_v DECIMAL(10, 2) NOT NULL,
   stock INT DEFAULT 0
 );
@@ -13,6 +12,7 @@ CREATE TABLE compra_cabecera (
   id INT AUTO_INCREMENT PRIMARY KEY,
   fecha DATE,
   proveedor VARCHAR(100),
+  num_factura VARCHAR(100),
   total DECIMAL (10, 2)
 );
 
@@ -20,6 +20,7 @@ CREATE TABLE compra_detalle (
   id INT AUTO_INCREMENT PRIMARY KEY,
   cabecera_id INT,
   producto_codigo INT,
+  precio_c DECIMAL(10, 2) NOT NULL,
   cantidad INT,
   FOREIGN KEY (cabecera_id) REFERENCES compra_cabecera(id),
   FOREIGN KEY (producto_codigo) REFERENCES productos(id)
@@ -104,15 +105,34 @@ create table consultas_fisioterapeuta_detalle
    FOREIGN KEY (consulta_fisio_id) REFERENCES consultas_fisioterapeuta (consulta_fisio_id)
 );
 
-CREATE TABLE ventas (
+CREATE TABLE ventas_cabecera (
   id INT AUTO_INCREMENT PRIMARY KEY,
   fecha_venta DATE,
   id_consulta int,
-  id_paquete int,
-  total double,
+  id_paciente int,
+  usuario VARCHAR(100),
+  estado boolean,
+  total DECIMAL(10, 2),
   FOREIGN KEY (id_consulta) REFERENCES consultas(id),
-  FOREIGN KEY (id_paquete) REFERENCES paquete_cabecera(paquete_id)
+  FOREIGN KEY (id_paciente) REFERENCES pacientes(id)
 );
+
+
+
+CREATE TABLE ventas_detalle (
+  detalle_id INT AUTO_INCREMENT PRIMARY KEY,
+  venta_id INT NOT NULL,
+  tipo_item ENUM('producto', 'servicio', 'paquete') NOT NULL,
+  item_id INT NOT NULL,
+  cantidad INT NOT NULL,
+  precio_unitario DECIMAL(10, 2) NOT NULL,
+  subtotal DECIMAL(10, 2) NOT NULL,
+  FOREIGN KEY (venta_id) REFERENCES ventas_cabecera(id),
+  CHECK (tipo_item IN ('producto', 'servicio', 'paquete'))
+);
+
+
+
 
 ALTER TABLE
   consultas
@@ -138,3 +158,20 @@ CREATE TABLE servicios (
     FOREIGN KEY (id_producto) REFERENCES productos(id)
   );
   ALTER TABLE consultas_fisioterapeuta ADD numero_sesiones INTEGER;
+
+
+/* Nuevas inserciones de SQL */
+
+alter table productos  add tipo boolean;
+  alter table compra_cabecera  add num_factura varchar(225);
+
+
+
+  create  table empresa (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR(100) NOT NULL
+)
+
+
+alter table pacientes add  estado boolean;
+alter table pacientes add  fk_id_empresa int;

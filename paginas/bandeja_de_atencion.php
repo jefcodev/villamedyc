@@ -58,52 +58,54 @@ $id_cita = $_GET['id_cita'];
                 </div>
             </div>
         </div><br>
-        <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
-            <b style="font-size: 18px">Datos de la consulta</b><br><br>
-            <div id="crear_consulta">
-                <div class="row">
-                    <div class="col-md-6">
-                        <textarea class="form-control" title="Motivo de la consulta" placeholder="Motivo de la consulta" id="motivo_consulta" name="motivo_consulta"></textarea>
-                        <textarea class="form-control" title="Examen físico" placeholder="Examen físico" id="examen_fisico" name="examen_fisico"></textarea>
-                        <textarea class="form-control" title="Tratamiento" placeholder="Tratamiento" id="tratamiento" name="tratamiento"></textarea>
+
+        <form action="" id="formulario_consulta">
+            <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
+                <b style="font-size: 18px">Datos de la consulta</b><br><br>
+                <div id="crear_consulta">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <textarea class="form-control" title="Motivo de la consulta" placeholder="Motivo de la consulta" id="motivo_consulta" name="motivo_consulta" required></textarea>
+                            <textarea class="form-control" title="Examen físico" placeholder="Examen físico" id="examen_fisico" name="examen_fisico" required></textarea>
+                            <textarea class="form-control" title="Tratamiento" placeholder="Tratamiento" id="tratamiento" name="tratamiento" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="selectpicker" data-live-search="true" id="cie_10" title="CIE DIEZ">
+                                <?php
+                                $result_cie_10 = $mysqli->query("SELECT * FROM cie_diez");
+                                while ($row_cie10 = mysqli_fetch_array($result_cie_10)) {
+                                    echo '<option data-tokens="' . $row_cie10['codigo'] . '">' . $row_cie10['codigo'] . '-' . $row_cie10['descripcion'] . '</option>';
+                                }
+                                ?>
+                            </select><br><br>
+                            <textarea class="form-control" title="Diagnóstico" placeholder="Diagnóstico" id="diagnostico" name="diagnostico" required></textarea>
+                            <textarea class="form-control" title="Observaciones" placeholder="Observaciones" id="observaciones" name="observaciones" required></textarea>
+                            <input class="form-control" type="number" title="Días de certificado: no puede exceder los 60 días" placeholder="Días de certificado" id="certificado" name="certificado" min="1" max="60" required />
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <select class="selectpicker" data-live-search="true" id="cie_10" title="Cie diez">
-                            <?php
-                            $result_cie_10 = $mysqli->query("SELECT * FROM cie_diez");
-                            while ($row_cie10 = mysqli_fetch_array($result_cie_10)) {
-                                echo '<option data-tokens="' . $row_cie10['codigo'] . '">' . $row_cie10['codigo'] . '-' . $row_cie10['descripcion'] . '</option>';
-                            }
-                            ?>
-                        </select><br><br>
-                        <textarea class="form-control" title="Diagnóstico" placeholder="Diagnóstico" id="diagnostico" name="diagnostico"></textarea>
-                        <textarea class="form-control" title="Observaciones" placeholder="Observaciones" id="observaciones" name="observaciones"></textarea>
-                        <input class="form-control" type="number" title="Días de certificado: no puede exceder los 60 días" placeholder="Días de certificado" id="certificado" name="certificado" min="1" max="60" />
-                    </div>
-                </div>
 
 
-                <b style="font-size: 18px">Costo de consulta</b><br><br>
+                    <b style="font-size: 18px">Detalles de la consulta</b><br><br>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <input class="form-control" type="number" title="Precio de consulta" placeholder="Precio de consulta" id="precio" name="precio" min="1" />
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <textarea class="form-control" title="Detalles precio" placeholder="Describa los procedimientos de la consulta" id="descripcion_precio" name="descripcion_precio" required></textarea>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <textarea class="form-control" title="Detalles precio" placeholder="Detalles precio" id="descripcion_precio" name="descripcion_precio"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
-                    </div>
-                    <div class="col-md-6">
-                        
-                        <input class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" value="Guardar datos de la consulta" onclick="crear_consulta()" /><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
+                        </div>
+                        <div class="col-md-6">
+
+                            <button class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" onclick="validarYCrearConsulta()">Guardar datos de la consulta</button><br>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
+
     </section>
     <br>
     <?php
@@ -119,6 +121,26 @@ $id_cita = $_GET['id_cita'];
                 tArea.value = select.options[select.selectedIndex].value;
             } else {
                 tArea.value = tArea.value + '\n' + select.options[select.selectedIndex].value;
+            }
+        }
+
+        function validarYCrearConsulta() {
+            var motivoConsulta = document.getElementById("motivo_consulta").value;
+            var examenFisico = document.getElementById("examen_fisico").value;
+            var tratamiento = document.getElementById("tratamiento").value;
+            var diagnostico = document.getElementById("diagnostico").value;
+            var observaciones = document.getElementById("observaciones").value;
+            var certificado = document.getElementById("certificado").value;
+            var descripcionPrecio = document.getElementById("descripcion_precio").value;
+
+            if (motivoConsulta === "" || examenFisico === "" || tratamiento === "" || diagnostico === "" || observaciones === "" || certificado === "" || descripcionPrecio === "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Campos incompletos',
+                    text: 'Por favor, complete todos los campos antes de guardar la consulta.',
+                });
+            } else {
+                crear_consulta();
             }
         }
 

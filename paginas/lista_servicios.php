@@ -20,19 +20,7 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-<head>
-    <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" /> -->
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-</head>
 
 <body>
     <section class="cuerpo">
@@ -154,6 +142,9 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </div>
+    <?php
+    include 'footer.php';
+    ?>
 
     <script type="text/javascript">
         $('.select2').select2({});

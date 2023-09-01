@@ -3,196 +3,153 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
-$conn = $mysqli;
+$class = '';
+$close = '';
 
-// Obtener la lista de productos para mostrar en el formulario
-$sql = "SELECT id, nombre, precio_c, stock FROM productos";
-$result = $conn->query($sql);
-$productos = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $productos[$row["id"]] = [
-            "nombre" => $row["nombre"],
-            "precio" => $row["precio_c"],
-            "stock" => $row["stock"]
-        ];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fecha = $_POST['fecha'];
+    $proveedor = $_POST['proveedor'];
+    $num_factura = $_POST['num_factura'];
+    $total = $_POST['total'];
+    $productos = $_POST['producto'];
+    $precios = $_POST['precio'];
+    $cantidades = $_POST['cantidad'];
+
+    $insertCabecera = "INSERT INTO compra_cabecera (fecha, proveedor, num_factura, total) VALUES ('$fecha', '$proveedor', '$num_factura', $total)";
+    $mysqli->query($insertCabecera);
+    $cabeceraId = $mysqli->insert_id;
+
+    for ($i = 0; $i < count($productos); $i++) {
+        $productoId = $productos[$i];
+        $precio = $precios[$i];
+        $cantidad = $cantidades[$i];
+        $insertDetalle = "INSERT INTO compra_detalle (cabecera_id, producto_codigo, precio_c, cantidad) VALUES ($cabeceraId, $productoId, $precio, $cantidad)";
+        $mysqli->query($insertDetalle);
+
+        // Actualizar el stock del producto
+        $updateStock = "UPDATE productos SET stock = stock + $cantidad WHERE id = $productoId";
+        $mysqli->query($updateStock);
     }
-} else {
-    echo "No hay productos disponibles.";
+
+    echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Compra Agregada',
+                text: 'La compra ha sido registrada exitosamente.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>";
 }
-
-// Procesar el formulario de compra
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener los datos del formulario
-    $fecha = $_POST["fecha"];
-    $proveedor = $_POST["proveedor"];
-    $detalle = $_POST["detalle"];
-
-    // Insertar la cabecera de la compra
-    $sql = "INSERT INTO compra_cabecera (fecha, proveedor) VALUES ('$fecha', '$proveedor')";
-    if ($conn->query($sql) === TRUE) {
-        $cabecera_id = $conn->insert_id;
-
-        // Insertar el detalle de la compra
-        $precioTotal = 0;
-
-        for ($i = 0; $i < count($detalle['producto']); $i++) {
-            $producto = $detalle['producto'][$i];
-            $cantidad = $detalle['cantidad'][$i];
-
-            // Verificar si el producto está eliminado
-            if (!isset($productos[$producto])) {
-                continue;
-            }
-
-            // Obtener el precio y stock del producto
-            $precio = $productos[$producto]['precio'];
-            $stock_actual = $productos[$producto]['stock'];
-
-            // Calcular el subtotal
-            $subtotal = $cantidad * $precio;
-            $precioTotal += $subtotal;
-
-            // Actualizar el stock del producto
-            $nuevo_stock = $stock_actual + $cantidad;
-            $sql = "UPDATE productos SET stock = $nuevo_stock WHERE id = '$producto'";
-            $conn->query($sql);
-
-            // Insertar el detalle de la compra
-            $sql = "INSERT INTO compra_detalle (cabecera_id, producto_codigo, cantidad, precio) VALUES ($cabecera_id, '$producto', $cantidad, $precio)";
-            $conn->query($sql);
-        }
-
-        // Actualizar el precio total de la compra
-        $sql = "UPDATE compra_cabecera SET total = $precioTotal WHERE id = $cabecera_id";
-        $conn->query($sql);
-
-        echo '<div class="alert alert-success">Compra registrada correctamente</div>';
-        
-    } else {
-        echo "Error al registrar la compra: " . $conn->error;
-    }
-}
-
-// Cerrar la conexión
-$conn->close();
 ?>
 
 <body>
     <section class="cuerpo">
-        <h1>Registrar Compra</h1>
-
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-
+        <h2>Nueva Compra</h2>
+        <form id="compraForm" method="POST">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <label for="fecha">Fecha:</label>
                     <input class="form-control" type="date" id="fecha" name="fecha" required />
-                    <select class="form-control" id="producto" name="producto">
-                        <option value="">Seleccionar producto</option>
-                        <?php foreach ($productos as $codigo => $producto) { ?>
-                            <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
-                        <?php } ?>
-                    </select>
-
-
-
                 </div>
-                <div class="col-md-6">
-                    <input class="form-control" title="Proveedor" placeholder="Proveedor" id="proveedor" name="proveedor" required />
-                    <input class="form-control" type="number" title="Cantidad" placeholder="Cantidad" id="cantidad" name="cantidad[]" min="0" value="0" required />
-
-                    <div class="float-right">
-                        <button class="btn btn-primary" type="button" onclick="agregarProducto()">Agregar Producto</button>
-                        <a class="btn btn-danger" href="lista_productos.php">Cancelar</a>
-                    </div>
-
+                <div class="col-md-4">
+                    <label for="proveedor">Proveedor:</label>
+                    <input class="form-control" placeholder="Proveedor" id="proveedor" name="proveedor" required />
                 </div>
-
+                <div class="col-md-4">
+                    <label for="num_factura">Número de comprobante:</label>
+                    <input class="form-control" placeholder="Número de comprobante" id="num_factura" name="num_factura" required />
+                </div>
             </div>
-            <br><br>
-
-            <h2>Detalle de la Compra</h2>
-            <table class="table table-bordered" id="tablaDetalle">
-                <tr class="tabla_cabecera">
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Subtotal</th>
-                    <th>Acción</th>
-                </tr>
-            </table><br>
-
-            <label for="precioTotal">Precio Total:</label>
-            <input type="text" id="precioTotal" name="precioTotal" readonly value="0.00"><br><br>
-
-            <input type="submit" value="Registrar Compra">
+           
+            <br>
+            <table class="table table-bordered table-hover" id="detalleTable">
+                <thead class="tabla_cabecera">
+                    <tr>
+                        <th style="width: 40%">Producto</th>
+                        <th style="width: 20%">Precio Compra</th>
+                        <th style="width: 20%">Cantidad</th>
+                        <th style="width: 10%">Subtotal</th>
+                        <th style="width: 10%">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filas de detalle se agregarán aquí -->
+                </tbody>
+            </table>
+            <button class="btn btn-primary" type="button" id="addDetalle"> <i class="fa-solid fa-plus"></i> Agregar Producto</button><br><br>
+            <br>
+            <label for="total">Total:</label>
+            <input class="form-control" style="width: 20%;" type="text" id="total" name="total" readonly><br>
+            <button class="btn btn-success" style="width: 20%;" type="submit"><i class="fa-regular fa-floppy-disk"></i> Guardar Compra</button>
         </form>
+
     </section>
+    
+    <?php
+    include 'footer.php';
+    ?>
+
+
     <script>
-        function agregarProducto() {
-            var productoSelect = document.getElementById("producto");
-            var cantidadInput = document.getElementById("cantidad");
+        document.addEventListener('DOMContentLoaded', () => {
+            const addDetalleButton = document.getElementById('addDetalle');
+            const detalleTableBody = document.querySelector('#detalleTable tbody');
+            const totalInput = document.getElementById('total');
+            let total = 0;
 
-            if (productoSelect.value && cantidadInput.value > 0) {
-                var tablaDetalle = document.getElementById("tablaDetalle");
-                var row = tablaDetalle.insertRow(-1);
-                var cellProducto = row.insertCell(0);
-                var cellCantidad = row.insertCell(1);
-                var cellPrecio = row.insertCell(2);
-                var cellSubtotal = row.insertCell(3);
+            addDetalleButton.addEventListener('click', () => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+            <td>
+                <select class=" form-control producto" name="producto[]">
+                    <!-- Opciones de productos se agregarán aquí -->
+                </select>
+            </td>
+            <td><input type="number" step="0.01" class="form-control precio" name="precio[]"></td>
+            <td><input type="number" step="0.01" class="form-control cantidad" name="cantidad[]"></td>
+            <td class="subtotal">0.00</td>
+            <td><button type="button" class="btn btn-danger deleteRow"><i class="fa-solid fa-trash-can"></i></button></td>
+        `;
+                detalleTableBody.appendChild(newRow);
 
-                var productoOption = productoSelect.options[productoSelect.selectedIndex];
-                var precio = parseFloat(productoOption.getAttribute("data-precio"));
-                var cantidad = parseInt(cantidadInput.value);
-                var subtotal = precio * cantidad;
+                // Cargar opciones de productos
+                const productosSelect = newRow.querySelector('.producto');
+                <?php
+                include '../conection/conection.php';
+                $query = "SELECT id, codigo, nombre, descripcion FROM productos";
+                $result = $mysqli->query($query);
+                while ($row = $result->fetch_assoc()) {
+                    echo "productosSelect.innerHTML += '<option value=\"{$row['id']}\">{$row['nombre']} - ({$row['codigo']}) - {$row['descripcion']} </option>';\n";
+                }
+                ?>
+            });
 
-                cellProducto.innerHTML = productoOption.text;
-                cellCantidad.innerHTML = cantidad;
-                cellPrecio.innerHTML = precio.toFixed(2);
-                cellSubtotal.innerHTML = subtotal.toFixed(2);
+            detalleTableBody.addEventListener('input', updateSubtotal);
+            detalleTableBody.addEventListener('click', handleDeleteRow);
 
-                var eliminarButton = document.createElement("button");
-                eliminarButton.type = "button";
-                eliminarButton.innerText = "Eliminar";
-                eliminarButton.onclick = function() {
-                    eliminarProducto(row);
-                };
-                row.insertCell(4).appendChild(eliminarButton);
-
-                var inputHiddenProducto = document.createElement("input");
-                inputHiddenProducto.type = "hidden";
-                inputHiddenProducto.name = "detalle[producto][]";
-                inputHiddenProducto.value = productoSelect.value;
-
-                var inputHiddenCantidad = document.createElement("input");
-                inputHiddenCantidad.type = "hidden";
-                inputHiddenCantidad.name = "detalle[cantidad][]";
-                inputHiddenCantidad.value = cantidad;
-
-                row.appendChild(inputHiddenProducto);
-                row.appendChild(inputHiddenCantidad);
-
-                actualizarPrecioTotal(subtotal);
-
-                productoSelect.value = "";
-                cantidadInput.value = "0";
+            function updateSubtotal() {
+                total = 0;
+                const detalleRows = detalleTableBody.querySelectorAll('tr');
+                detalleRows.forEach(row => {
+                    const precio = parseFloat(row.querySelector('.precio').value);
+                    const cantidad = parseInt(row.querySelector('.cantidad').value);
+                    const subtotal = precio * cantidad;
+                    row.querySelector('.subtotal').textContent = subtotal.toFixed(2);
+                    total += subtotal;
+                });
+                totalInput.value = total.toFixed(2);
             }
-        }
 
-        function eliminarProducto(row) {
-            var tablaDetalle = document.getElementById("tablaDetalle");
-            var subtotal = parseFloat(row.cells[3].innerHTML);
-            tablaDetalle.deleteRow(row.rowIndex);
-            actualizarPrecioTotal(-subtotal);
-        }
-
-        function actualizarPrecioTotal(subtotal) {
-            var precioTotalInput = document.getElementById("precioTotal");
-            var precioTotal = parseFloat(precioTotalInput.value);
-            precioTotal += subtotal;
-            precioTotalInput.value = precioTotal.toFixed(2);
-        }
+            function handleDeleteRow(event) {
+                if (event.target.classList.contains('deleteRow')) {
+                    const row = event.target.closest('tr');
+                    row.remove();
+                    updateSubtotal();
+                }
+            }
+        });
     </script>
-</body>
 
+</body>
 </html>

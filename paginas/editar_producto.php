@@ -8,12 +8,12 @@ if (isset($_POST['btn_actualizar_producto'])) {
 
     $codigo = $_POST['codigo'];
     $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
-    $precio_c = $_POST['precio_c'];
+    $descripcion = $_POST['descripcion'];/* 
+    $precio_c = $_POST['precio_c']; */
     $precio_v = $_POST['precio_v'];
     $stock = $_POST['stock'];
 
-    $sql = "UPDATE productos SET codigo = '$codigo', nombre = '$nombre', descripcion='$descripcion', precio_c='$precio_c', precio_v= '$precio_v' WHERE id='$id_producto'";
+    $sql = "UPDATE productos SET codigo = '$codigo', nombre = '$nombre', descripcion='$descripcion',/*  precio_c='$precio_c', */ precio_v= '$precio_v' WHERE id='$id_producto'";
             
     $result_update_consulta = $mysqli->query($sql);
 
@@ -54,7 +54,8 @@ if (isset($_POST['btn_actualizar_producto'])) {
                         <textarea class="form-control" title="Descripción" placeholder="Descripción" id="descripcion" name="descripcion"><?php echo $row_consulta['descripcion']; ?></textarea>
                     </div>
                     <div class = "col-md-6">
-                        <input class = "form-control" type="number" title = "Precio Compra" placeholder = "Precio Compra" value = "<?php echo $row_consulta['precio_c']; ?>" id = "precio_c" name = "precio_c" />
+                       <!--  <input class = "form-control" type="number" title = "Precio Compra" placeholder = "Precio Compra" value = "<?php echo $row_consulta['precio_c']; ?>" id = "precio_c" name = "precio_c" />
+                        -->
                         <input class = "form-control"  type="number" title = "Precio Venta" placeholder = "Precio Venta" value = "<?php echo $row_consulta['precio_v']; ?>" id = "precio_v" name = "precio_v" />
                         <div <?php echo $class; ?> >
                             <?php echo isset($error) ? $error : ''; ?>

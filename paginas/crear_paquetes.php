@@ -19,7 +19,7 @@ if (isset($status)) {
 }
 ?>
 
-<head>
+<!-- <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PHP MySQL Select2 Example</title>
@@ -29,7 +29,6 @@ if (isset($status)) {
     <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
     <title>Clínica</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="../css/fontawesome-all.min.css">
     <link rel="stylesheet" href="../css/estilos.css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
@@ -58,23 +57,11 @@ if (isset($status)) {
             border-radius: 2px; */
         }
     </style>
-</head>
+</head> -->
 
 <body>
     <section class="cuerpo">
-        <div class="d-flex justify-content-center">
-            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
-                Este es un mensaje de información.
-            </div>
-
-            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
-                Cita creada correctamente.
-            </div>
-
-            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
-                Este es un mensaje de error.
-            </div>
-        </div>
+       
         <h1 class="text-center">Crear Paquete</h1><br>
         <div class="row">
             <div class="col-md-12">

@@ -2,7 +2,7 @@
 include 'header.php';
 $id_cita = $_GET['consulta_fisio_id'];
 ?>
-<link rel="stylesheet" href="../css/bootstrap_select.min.css">
+
 
 <body>
     <section class="cuerpo">
@@ -301,7 +301,7 @@ $id_cita = $_GET['consulta_fisio_id'];
     include 'footer.php';
     ?>
 
-    <script src="../js/bootstrap-select.js"></script>
+    
     <script type="text/javascript">
         cargarDatos();
         $("#finalizar").hide();

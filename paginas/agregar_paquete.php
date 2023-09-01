@@ -26,7 +26,7 @@ $totalPaquete = 0;
                             <th>Cédula</th>
                             <th>Cliente</th>
                             <th>Doctor</th>
-                            <th>Precio Consulta</th>
+                            <th>Descripción Consulta</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,7 @@ $totalPaquete = 0;
                             echo "<td>" . $row['numero_identidad'] . "</td>";
                             echo "<td>" . $row['nombres'] . ' ' . $row['apellidos'] . "</td>";
                             echo "<td>" . $row['nombre_doctor'] . ' ' . $row['apellidos_doctor'] . "</td>";
-                            echo "<td>" . $row['precio'] . "</td>";
+                            echo "<td>" . $row['descripcion_precio'] . "</td>";
 
                             echo "</tr>";
                             $totalConsulta += $row['precio'];

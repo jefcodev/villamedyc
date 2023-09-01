@@ -58,7 +58,7 @@ if (isset($_POST['btn_editar_consulta'])) {
                         <textarea class="form-control" title="Tratamiento" placeholder="Tratamiento" id="tratamiento" name="tratamiento" required><?php echo $rowconsulta['tratamiento']; ?></textarea>
                     </div>
                     <div class="col-md-6">
-                        <select class="selectpicker" data-live-search="true" id="cie_10" title="Cie diez">
+                        <select class="selectpicker" data-live-search="true" id="cie_10" title="CIE DIEZ">
                             <?php
                             $result_cie_10 = $mysqli->query("SELECT * FROM cie_diez");
                             while ($row_cie10 = mysqli_fetch_array($result_cie_10)) {
@@ -87,18 +87,14 @@ if (isset($_POST['btn_editar_consulta'])) {
                 </div>
 
                             <div class="row">
-                            <b style="font-size: 18px">Costo de la consulta:</b><br><br>
+                            <b style="font-size: 18px">Detalles de consulta:</b><br><br>
                             </div>
                 <div class="row">
                     
 
-                    <div class="col-md-6">
-                        <p style="font-size: 17px">Precio consulta:</p>
-                        <input class="form-control" type="number"  value="<?php echo $rowconsulta['precio']; ?>" placeholder="Precio" id="precio" name="precio" min="1"  />
-
-                    </div>
-                    <div class="col-md-6">
-                        <p style="font-size: 17px">Detalles precio:</p>
+                    
+                    <div class="col-md-12">
+                        <p style="font-size: 17px">Detalles de consulta:</p>
                         <textarea class="form-control" title="descripcion_precio" placeholder="Descripción precio" id="descripcion_precio" name="descripcion_precio"><?php echo $rowconsulta['descripcion_precio']; ?></textarea>
 
                     </div>

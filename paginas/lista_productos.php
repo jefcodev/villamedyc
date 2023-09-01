@@ -69,8 +69,8 @@ if (isset($status)) {
                         <tr>
                             <th>Código</th>
                             <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Precio compra</th>
+                            <th>Descripción</th><!-- 
+                            <th>Precio compra</th> -->
                             <th>Precio venta</th>
                             <th>Stock</th>
                             <th style="width: 93px">Acciones</th>
@@ -91,8 +91,8 @@ if (isset($status)) {
                             echo "<tr>";
                             echo "<td>" . $row['codigo'] . "</td>";
                             echo "<td>" . $row['nombre'] . "</td>";
-                            echo "<td>" . $row['descripcion'] . "</td>";
-                            echo "<td>" . $row['precio_c'] . "</td>";
+                            echo "<td>" . $row['descripcion'] . "</td>";/* 
+                            echo "<td>" . $row['precio_c'] . "</td>"; */
                             echo "<td>" . $row['precio_v'] . "</td>";
                             echo "<td>" . $row['stock'] . "</td>";
                             echo "<td><a class='btn btn-success btn-sm' href='editar_producto.php?id_producto=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a></td>";

@@ -7,41 +7,6 @@
         }
         ?>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PHP MySQL Select2 Example</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
-    <title>Clínica</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
-    <link rel="stylesheet" href="../css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="../css/estilos.css">
-    <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-    <style>
-        .floating-alert {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
-    </style>
-
-</head>
 
 <body>
     <section class="cuerpo">
@@ -64,6 +29,7 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="crear_paquetes.php" class="btn btn-success float-right"> Crear nuevo paquete</a>
+                
                 <br><br>
                 <table class="table table-bordered table-hover" id="indexusuarios">
                     <thead class="tabla_cabecera">
@@ -212,9 +178,14 @@
             </div>
         </div>
     </section>
+    <?php
+    include 'footer.php';
+    ?>
+
     <script type="text/javascript">
         $('.select2').select2({});
     </script>
+    
     <script src="../js/jquerysearch.js"></script>
     <script>
         $(document).ready(function() {
