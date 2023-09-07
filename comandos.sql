@@ -175,3 +175,33 @@ nombre VARCHAR(100) NOT NULL
 
 alter table pacientes add  estado boolean;
 alter table pacientes add  fk_id_empresa int;
+
+
+  create  table empresa (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR(100) NOT NULL
+)
+
+ALTER TABLE pacientes  FOREIGN KEY (fk_id_empresa) REFERENCES empresa(id);
+
+  create  table empresa (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR(100) NOT NULL
+)
+
+  create  table fuente (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR(100) NOT NULL
+)
+
+alter table pacientes add  fk_id_fuente int;
+
+ALTER TABLE pacientes  FOREIGN KEY (fk_id_fuente) REFERENCES fuente(id);
+
+alter  table servicios add sesiones   int;
+
+
+ALTER TABLE consultas  ADD peso DECIMAL(8,2);
+ALTER TABLE consultas  ADD talla DECIMAL(8,2);
+ALTER TABLE consultas  ADD presion DECIMAL(8,2);
+ALTER TABLE consultas  ADD saturacion DECIMAL(8,2);

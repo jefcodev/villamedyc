@@ -16,30 +16,36 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
         <title>Clínica</title>
-         
+
         <!-- Bootstrap -->
         <link rel="stylesheet" href="../css/bootstrap.css">
         <link rel="stylesheet" href="../css/estilos.css">
-        
+
         <!--  <link rel="stylesheet" href="../css/fontawesome-all.min.css"> -->
-        
+
         <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-        
+
         <!-- Iconos font-awesome  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-       
-        
-        
-        
-      <!--  
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Select Start  -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <!-- Select End -->
+
+
+        <!--  
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
         <script src="../js/poppers.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
  -->
-       
+
 
     </head>
     <header class="encabezado">
@@ -60,33 +66,35 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                             <?php } ?>
                         </li>
                         <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    PACIENTES
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="crear_paciente.php">Nuevo Paciente</a>
-                                    <a class="dropdown-item" href="lista_pacientes.php">Listar Pacientes</a>
-                                </div>
-                            </li>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                PACIENTES
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="crear_paciente.php">Nuevo Paciente</a>
+                                <a class="dropdown-item" href="lista_pacientes.php">Listar Pacientes</a>
+                                <a class="dropdown-item" href="crear_empresa.php">Nueva Empresa</a>
+                                <a class="dropdown-item" href="crear_fuente.php">Nueva Fuente</a>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    CITAS
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="crear_cita.php">Nueva Cita</a>
-                                    <a class="dropdown-item" href="lista_citas.php">Listar Citas</a>
-                                    <a class="dropdown-item" href="lista_consultas.php">Listar Consultas</a>
-                                </div>
-                            </li>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                CITAS
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="crear_cita.php">Nueva Cita</a>
+                                <a class="dropdown-item" href="lista_citas.php">Listar Citas</a>
+                                <a class="dropdown-item" href="lista_consultas.php">Listar Consultas</a>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    HISTORIAS
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="lista_historias.php">Traumatología</a>
-                                    <a class="dropdown-item" href="lista_historias_fisioterapeuta.php">Fisioterapia </a>
-                                </div>
-                            </li>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                HISTORIAS
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="lista_historias.php">Traumatología</a>
+                                <a class="dropdown-item" href="lista_historias_fisioterapeuta.php">Fisioterapia </a>
+                            </div>
+                        </li>
 
                         <?php if ($rol == 'adm') { ?>
                             <li class="nav-item dropdown">
@@ -104,7 +112,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                             </li>
 
 
-                            
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     SERVICIOS

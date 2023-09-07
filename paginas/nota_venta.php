@@ -1,19 +1,37 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
+
+$pagina = PAGINAS::LISTA_USUARIOS;
+if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
+    header("location: ./inicio.php?status=AD");
+    exit();
+}
+
+$id_consulta = $_GET['id_cita'];
+$totalConsulta = 0;
+$totalPaquete = 0;
+
+
+$sql_paciente = "SELECT id_paciente, nombre_doctor, apellidos_doctor  from consultas_datos where id_consulta = $id_consulta";
+
+$resultado = ($mysqli->query($sql_paciente)) ->fetch_assoc();
+
+$id_paciente = $resultado['id_paciente'];
+$user_doctor = $resultado['nombre_doctor'] .' '.$resultado['apellidos_doctor'];
 $estado = false ;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     date_default_timezone_set('America/Guayaquil');
     $fecha_venta = date("Y-m-d H:i:s");
-    $id_paciente = $_POST['id_paciente'];
+    // $id_paciente = $_POST['id_paciente'];
     //$usuario = $_POST['usuario'];
     $total = $_POST['total'];
 
     $detalles = $_POST['detalles'];
 
     // Insertar la cabecera de la venta
-    $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta, id_paciente, usuario, total) VALUES ('$fecha_venta', '$id_paciente', '$usuario', $total)";
+    $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta,id_consulta ,id_paciente, usuario, total) VALUES ('$fecha_venta','$id_consulta', '$id_paciente', '$user_doctor', $total)";
     $mysqli->query($insert_cabecera_sql);
     $venta_id = $mysqli->insert_id;
 
@@ -71,67 +89,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     }
+
+    $actualizarEstado = "UPDATE consultas SET estado = 'pagado' WHERE id = $id_consulta";
+    $mysqli->query($actualizarEstado);
     if (!$error) {
         // Si no hubo errores, muestra la alerta de éxito
         echo "<script>
+            
             Swal.fire({
+                title: 'Compra agregada',
+                text: 'Compra agregada correctamente!',
                 icon: 'success',
-                title: 'Venta Agregada',
-                text: 'La venta ha sido registrada exitosamente.',
-                showConfirmButton: false,
-                timer: 1500
-            });
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Imprimir!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                 
+                 var pdfUrl = 'comprobante_venta.php?venta_id=' + $venta_id; 
+
+                var pdfWindow = window.open(pdfUrl, '_blank');
+
+                pdfWindow.onload = function() {
+                pdfWindow.print();
+                window.location.href = 'inicio.php';
+                };
+                
+               
+                }
+                else {
+                    window.location.href = 'inicio.php';
+                }
+                
+              }
+            );
+              
+            
         </script>";
 
-        header("Location: comprobante_venta.php?venta_id=$-");
+
+    
+        
     exit; // Asegúrate de que no haya más salida después de la redirección
 
     }
+
+     
 }
+
 ?>
-<html>
+
 <body>
     <section class="cuerpo">
-        <h2>Nueva Venta</h2>
-        <form id="compraForm" method="POST">
-            <div class="row">
-                <!-- <div class="col-md-4">
-                    <label for="fecha_venta">Fecha:</label>
-                    <input class="form-control" type="date" id="fecha_venta" name="fecha_venta" required />
-                </div> -->
-                <div class="col-md-8">
-                    <label for="id_paciente">Paciente:</label>
-
-                    <?php
-
-                    $sql = "SELECT * FROM `pacientes`";
-
-                    $result = $mysqli->query($sql);
-
-                    ?>
-                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
-                        <option value="" selected="" hidden="">Seleccione el Paciente</option>
+        <h2>Nota de venta</h2>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover" id="indexusuarios">
+                    <thead class="tabla_cabecera">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cédula</th>
+                            <th>Cliente</th>
+                            <th>Doctor</th>
+                            <th>Descripción Consulta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <?php
-                        if ($result) {
-                            while ($fila = mysqli_fetch_array($result)) {
-                                $selected = '';
-                                if (isset($_GET['id_paciente']) && $_GET['id_paciente'] == $fila["id"]) {
-                                    $selected = 'selected';
-                                }
-                                echo "<option value='{$fila["id"]}' {$selected}>{$fila["numero_identidad"]}  {$fila["nombres"]}  {$fila["apellidos"]}</option>";
-                            }
+                        $sql_ventas = "SELECT * FROM consultas_datos WHERE id_consulta = $id_consulta";
+                        $result = $mysqli->query($sql_ventas);
+
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo "<tr id='" . $row['id_consulta'] . "' >";
+                            echo "<td>" . $row['fecha_hora'] . "</td>";
+                            echo "<td>" . $row['numero_identidad'] . "</td>";
+                            echo "<td>" . $row['nombres'] . ' ' . $row['apellidos'] . "</td>";
+                            echo "<td>" . $row['nombre_doctor'] . ' ' . $row['apellidos_doctor'] . "</td>";
+                            echo "<td>" . $row['descripcion_precio'] . "</td>";
+
+                            echo "</tr>";
+                            $totalConsulta += $row['precio'];
                         }
                         ?>
-                    </select>
-                </div>
-                <!-- <div class="col-md-4">
-                    <label for="proveedor">Usuario:</label>
-                    <input type="text" name="usuario" id="usuario" required>
-                </div> -->
-
-
+                    </tbody>
+                </table>
             </div>
-
+        </div>
+        
+        <h2>Nueva Venta</h2>
+        <form id="compraForm" method="POST">
+            
 
             <br>
             <table class="table table-bordered table-hover" id="detalleTable">
@@ -161,9 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include 'footer.php';
     ?>
   
-    <script type="text/javascript">
-        $('.select2').select2({});
-    </script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const addDetalleButton = document.getElementById("addDetalle");
@@ -205,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
             }
 
-            function buscar_paciente() {
+           /*  function buscar_paciente() {
                 var numero_id = $("#numero_identidad").val();
                 $.ajax({
                     url: 'buscar_paciente.php',
@@ -218,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $('input[name="id_paciente"]').val($("#id_paciente_resultado").val());
                     }
                 });
-            }
+            } */
 
             addDetalleButton.addEventListener("click", () => {
                 const newRow = document.createElement("tr");

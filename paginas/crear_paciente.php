@@ -46,6 +46,28 @@ include 'header.php';
                     <textarea class="form-control" title="Antecedentes familiares" placeholder="Antecedentes familiares" id="antecedentes_familiares" name="antecedentes_familiares"></textarea>
                 </div>
                 <div class="col-md-4">
+                    <!-- Agrega el checkbox para habilitar la selección de fuente -->
+                    <label>
+                        
+                        Asociar Fuente
+                    </label>
+
+                    <!-- Campo para seleccionar la fuente (inicialmente deshabilitado) -->
+                    <select class="form-control" title="Fuente" id="fuente" name="fuente" >
+                        <option value="" selected hidden>Seleccione Fuente</option>
+                        <?php
+                        // Conectarse a la base de datos y obtener las fuente
+                        include '../conection/conection.php';
+
+                        $query_fuentes = "SELECT id, nombre FROM fuente";
+                        $result_fuentes = $mysqli->query($query_fuentes);
+
+                        while ($row_fuentes = $result_fuentes->fetch_assoc()) {
+                            echo '<option value="' . $row_fuentes['id'] . '">' . $row_fuentes['nombre'] . '</option>';
+                        }
+                        ?>
+                    </select>
+
                     <!-- Agrega el checkbox para habilitar la selección de empresa -->
                     <label>
                         <input type="checkbox" id="asociar_empresa" name="asociar_empresa">
@@ -99,5 +121,7 @@ include 'header.php';
                 $('#empresa').prop('disabled', true);
             }
         });
+
+       
     </script>
 </body>

@@ -116,3 +116,4 @@ while ($row_citas = $resultado_citas->fetch_assoc()) {
 }
 
 $pdf->Output();
+

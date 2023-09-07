@@ -11,6 +11,12 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $precio = $_POST['precio'];
     $estado = 'pendiente';
     $descripcion_precio = $_POST['descripcion_precio'];
+
+    $peso = $_POST['peso'];
+    $talla = $_POST['talla'];
+    $presion = $_POST['presion'];
+    $saturacion = $_POST['saturacion'];
+
     $motivo_consulta = $_POST['motivo_consulta'];
     $examen_fisico = $_POST['examen_fisico'];
     $diagnostico = $_POST['diagnostico'];
@@ -18,7 +24,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $observaciones = $_POST['observaciones'];
     $id_cita = $_POST['id_cita'];
     $certificado = $_POST['certificado'];
-    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio, estado) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio','$estado')";
+    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio, estado, peso, talla, presion, saturacion) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion')";
     $result = $mysqli->query($sql);
     $resultado = "";
     if ($result === true) {

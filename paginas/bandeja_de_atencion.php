@@ -85,6 +85,33 @@ $id_cita = $_GET['id_cita'];
                     </div>
 
 
+
+                    <b style="font-size: 18px">Datos</b><br><br>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" placeholder="Peso" id="peso" name="peso" required oninput="calcularIMC();">
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" placeholder="Talla" id="talla" name="talla" required oninput="calcularIMC();">
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" placeholder="IMC" id="imc" name="imc" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" placeholder="Presión" id="presion" name="presion" required></input>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" placeholder="Saturación" id="saturacion" name="saturacion" required></input>
+                        </div>
+                    </div>
+
+
                     <b style="font-size: 18px">Detalles de la consulta</b><br><br>
 
                     <div class="row">
@@ -92,6 +119,7 @@ $id_cita = $_GET['id_cita'];
                         <div class="col-md-12">
                             <textarea class="form-control" title="Detalles precio" placeholder="Describa los procedimientos de la consulta" id="descripcion_precio" name="descripcion_precio" required></textarea>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -141,6 +169,18 @@ $id_cita = $_GET['id_cita'];
                 });
             } else {
                 crear_consulta();
+            }
+        }
+
+        function calcularIMC() {
+            var peso = parseFloat(document.getElementById("peso").value);
+            var talla = parseFloat(document.getElementById("talla").value);
+
+            if (!isNaN(peso) && !isNaN(talla) && talla > 0) {
+                var imc = peso / (talla * talla);
+                document.getElementById("imc").value = imc.toFixed(2); // Redondear a 2 decimales
+            } else {
+                document.getElementById("imc").value = ""; // Limpiar el campo si los valores son inválidos
             }
         }
 
@@ -197,6 +237,12 @@ $id_cita = $_GET['id_cita'];
             var tratamiento = $("#tratamiento").val();
             var certificado = $("#certificado").val();
             var id_cita = $("#id_cita").val();
+
+            var peso = $("#peso").val();
+            var talla = $("#talla").val();
+            var presion = $("#presion").val();
+            var saturacion = $("#saturacion").val();
+
             $.ajax({
                 url: 'crear_consulta.php',
                 type: 'post',
@@ -210,7 +256,11 @@ $id_cita = $_GET['id_cita'];
                     certificado: certificado,
                     observaciones: observaciones,
                     precio: precio,
-                    descripcion_precio: descripcion_precio
+                    descripcion_precio: descripcion_precio,
+                    peso: peso,
+                    talla: talla,
+                    presion: presion,
+                    saturacion: saturacion
                 },
                 success: function(response) {
                     $("#crear_consulta").html(response);

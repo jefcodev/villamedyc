@@ -147,7 +147,7 @@ if (isset($status)) {
                                     echo "<td>";
                                     if ($rol == 'adm') {
                                         
-                                        echo "<a class='btn btn-success btn-sm' href='agregar_paquete.php?id_cita=$id'>Cobrar</a>";
+                                        echo "<a class='btn btn-success btn-sm' href='nota_venta.php?id_cita=$id'>Cobrar</a>";
                                     }
                                     echo "</td>";
                                     echo "</tr>";
