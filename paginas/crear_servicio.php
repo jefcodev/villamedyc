@@ -6,14 +6,15 @@ include 'header.php';
 include '../conection/conection.php';
 $conn = $mysqli;
 // Obtener la lista de productos para mostrar en el formulario
-$sql = "SELECT id, nombre, precio_c, stock FROM productos";
+$sql = "SELECT id, codigo, nombre, precio_c, precio_v, stock FROM productos";
 $result = $conn->query($sql);
 $productos = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $productos[$row["id"]] = [
+            "codigo_1" => $row["codigo"],
             "nombre" => $row["nombre"],
-            "precio" => $row["precio_c"],
+            "precio" => $row["precio_v"],
             "stock" => $row["stock"]
         ];
     }
@@ -27,12 +28,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productosSeleccionados = $_POST["productos_seleccionados"];
     $totalPago = $_POST["total_pago"];
     $valorAdicional = $_POST["valor_adicional"];
+    $valorSesiones = $_POST["valor_sesiones"];
+    if(!empty($valorSesiones)){
+        $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional, sesiones) VALUES ('$tituloServicio', $totalPago, $valorAdicional, $valorSesiones)";
+    } else {
+        $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional) VALUES ('$tituloServicio', $totalPago, $valorAdicional)";
+    }
 
     // Insertar en la tabla servicios
-    $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional) VALUES ('$tituloServicio', $totalPago, $valorAdicional)";
     if ($conn->query($sqlServicio) === TRUE) {
         $idServicio = $conn->insert_id;
-
         // Insertar en la tabla detalle_servicio
         foreach ($productosSeleccionados as $producto) {
             $idProducto = $producto["id"];
@@ -52,15 +57,110 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<head>
-    <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
+<body>
+    <section class="cuerpo">
+        <h1 class="text-center">Crear Servicio</h1><br>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Agregar Detalles del servicio</h4>
+                <input type="text" name="titulo_servicio" id="titulo_servicio" placeholder="Ingrese nombre del servicio" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <input type="checkbox" id="asociar_sesiones" name="asociar_sesiones">
+                </label>
+                <label for="sesiones">Asociar Sesiones:</label>
+                <input type="number" id="valor_sesiones" name="valor_sesiones" min="1" class="form-control" disabled>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>
+                    <input type="checkbox" id="asociar_producto" name="asociar_producto">
+                    Asociar productos:
+                </label>
+                <select id="producto" name="producto" class="select2 form-control" disabled>
+                    <option value="">Seleccionar</option>
+                    <?php foreach ($productos as $codigo => $producto) { ?>
+                        <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo "(" . $producto['codigo_1'] . ") " . $producto['nombre'] . " - $" . $producto['precio']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="cl-md-4">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" min="1" class="form-control" disabled>
+            </div>
+           
+            <div class="cl-md-4"  >
+                <br>
+                
+                
+                <button id="agregar_producto" class="btn btn-primary">Agregar</button>
+            </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        </div>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla_productos_body"></tbody>
+        </table>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Detalle del Pago</h4>
+            </div><br><br>
+            <div class="col-md-6">
+                <label for="total_pago">Total:</label>
+                <span id="total_pago">0.00</span>
+            </div>
+            <div class="col-md-6">
+                <label for="valor_adicional">Precio Total:</label>
+                <input type="number" id="valor_adicional" name="valor_adicional" step="0.01" min="1" class="form-control" require>
+            </div>
+            <div class="col-md-12">
+                <button id="crear_paquete" class="btn btn-primary">Crear Servicio</button>
+            </div>
+        </div>
+    </section>
+    <?php
+    include 'footer.php';
+    ?>
 
-    <script>
+    <script type="text/javascript">
+        $('.select2').select2({});
+
+        $('#asociar_producto').on('change', function() {
+            if ($(this).prop('checked')) {
+                $('#producto').prop('disabled', false);
+                $('#cantidad').prop('disabled', false);
+            } else {
+                $('#producto').prop('disabled', true);
+                $('#cantidad').prop('disabled', true);
+            }
+        });
+
+        $('#asociar_sesiones').on('change', function() {
+            if ($(this).prop('checked')) {
+                $('#valor_sesiones').prop('disabled', false);
+            } else {
+                $('#valor_sesiones').prop('disabled', true);
+            }
+        });
+    </script>
+
+<script>
         $(document).ready(function() {
             var productosSeleccionados = [];
             var totalPago = 0;
@@ -100,7 +200,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     });
 
                     if (productoExistente) {
-                        alert('El producto ya se encuentra en la lista.');
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Oops...',
+                            text: 'El producto ya se encuentra en la lista!'
+                        })
+
                     } else {
                         var producto = {
                             id: id,
@@ -132,8 +237,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $('#crear_paquete').click(function() {
                 var tituloServicio = $('#titulo_servicio').val();
                 var valorAdicional = parseFloat($('#valor_adicional').val());
+                var valorSesiones = parseFloat($('#valor_sesiones').val());
 
-                if (tituloServicio && productosSeleccionados.length > 0) {
+                if ($.trim(tituloServicio) !== '' && !isNaN(valorAdicional)) {
                     $.ajax({
                         url: 'crear_servicio.php',
                         method: 'POST',
@@ -141,110 +247,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             titulo_servicio: tituloServicio,
                             productos_seleccionados: productosSeleccionados,
                             total_pago: totalPago,
-                            valor_adicional: valorAdicional
+                            valor_adicional: valorAdicional,
+                            valor_sesiones : valorSesiones
+
                         },
                         success: function(response) {
-                            alert('El servicio se ha creado correctamente');
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Servicio creado',
+                                text: 'El servicio se creo correctamente!'
+                            })
+
 
                             // Limpiar la tabla y los campos
                             productosSeleccionados = [];
                             totalPago = 0;
                             actualizarTablaProductos();
                             actualizarTotalPago();
+
                             $('#titulo_servicio').val('');
-                            $('#valor_adicional').val(0);
+                            $('#cantidad').val('');
+                            $('#valor_adicional').val('');
                         },
                         error: function() {
                             alert('Ha ocurrido un error al crear el servicio');
                         }
                     });
+
                 } else {
-                    alert('Debe ingresar un título de servicio y seleccionar al menos un producto');
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops..',
+                        text: 'Ingrese el nombre o el valor total!'
+                    })
                 }
+
+
+
             });
 
         });
     </script>
-</head>
 
-<body>
-    <section class="cuerpo">
-        <div class="d-flex justify-content-center">
-            <div class="alert alert-primary d-none floating-alert" id="alert-primary" role="alert">
-                Este es un mensaje de información.
-            </div>
-            <div class="alert alert-success d-none floating-alert" id="alert-success" role="alert">
-                Cita creada correctamente.
-            </div>
-            <div class="alert alert-danger d-none floating-alert" id="alert-danger" role="alert">
-                Este es un mensaje de error.
-            </div>
-        </div>
-        <h1 class="text-center">Crear Servicio</h1><br>
-        <div class="col-10">
-            <div class="col-md-12">
-                <h4>Agregar Detalles del servicio</h4>
-            </div><br><br>
-            <div class="col-md-6">
-                <input type="text" name="titulo_servicio" id="titulo_servicio" placeholder="Ingrese nombre del servicio" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label for="producto">Producto:</label>
-                <select id="producto" name="producto" class="select2 form-control">
-                    <option value="">Seleccionar</option>
-                    <?php foreach ($productos as $codigo => $producto) { ?>
-                        <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto['nombre']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="cantidad">Cantidad:</label>
-                <input type="number" id="cantidad" name="cantidad" value="1" min="1" class="form-control">
-            </div>
-            <div class="col-md-12">
-                <button id="agregar_producto" class="btn btn-primary">Agregar</button>
-            </div>
-        </div>
-        <br>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tabla_productos_body"></tbody>
-        </table>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Detalle del Pago</h4>
-            </div><br><br>
-            <div class="col-md-6">
-                <label for="total_pago">Total a pagar:</label>
-                <span id="total_pago">0.00</span>
-            </div>
-            <div class="col-md-6">
-                <label for="valor_adicional">Valor Adicional:</label>
-                <input type="number" id="valor_adicional" name="valor_adicional" step="0.01" min="0" value="0" class="form-control">
-            </div>
-            <div class="col-md-12">
-                <button id="crear_paquete" class="btn btn-primary">Crear Servicio</button>
-            </div>
-        </div>
-    </section>
-    <?php
-    include 'footer.php';
-    ?>
-
-    <script type="text/javascript">
-        $('.select2').select2({});
-    </script>
-    
 </body>
 
 </html>

@@ -27,8 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mysqli->query($insertDetalle);
 
         // Actualizar el stock del producto
-        $updateStock = "UPDATE productos SET stock = stock + $cantidad WHERE id = $productoId";
+        $consulta_precio = "SELECT precio_v from productos where id = $productoId";
+
+        $resp_con = ($mysqli->query($consulta_precio))->fetch_assoc();
+
+        if($resp_con['precio_v']==0){
+            $updateStock = "UPDATE productos SET stock = stock + $cantidad, precio_c = $precio , precio_v = $precio WHERE id = $productoId";
         $mysqli->query($updateStock);
+
+        } else {
+
+            $updateStock = "UPDATE productos SET stock = stock + $cantidad, precio_c = $precio WHERE id = $productoId";
+        $mysqli->query($updateStock);
+        }
+
+
+
+        
     }
 
     echo "<script>
