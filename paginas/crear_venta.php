@@ -40,7 +40,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "Error en la actualización de stock: " . $mysqli->error;
                 }
             } elseif ($tipo_item === 'paquete') {
-                // Obtener los productos asociados a la cabecera del paquete
+                
+                 // Obtener los productos asociados a la cabecera del paquete
+                 $num_sesiones = "SELECT numero_sesiones FROM paquete_cabecera WHERE paquete_id = $item_id";
+                 $num_result = $mysqli->query($num_sesiones);
+ 
+                 if ($num_result) {
+                     // Verificar si se encontraron filas
+                     if ($num_result->num_rows > 0) {
+                         // Obtener la primera fila como un array asociativo
+                         $row = $num_result->fetch_assoc();
+                         
+                         // Extraer el valor de 'numero_sesiones' en una variable
+                         $numero_sesiones = $row['numero_sesiones'];
+                         
+                         // Ahora $numero_sesiones contiene el valor de 'numero_sesiones'
+                         // y puedes usarlo en tu código
+                         echo "Número de Sesiones: " . $numero_sesiones;
+                     } else {
+                         echo "No se encontraron resultados.";
+                     }
+                 }
+                 
+                 $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones)";
+                 $mysqli->query($insert_sesiones);
                 $paquete_detalle_sql = "SELECT pro_ser_id, cantidad FROM paquete_detalle WHERE paquete_id = $item_id and  tipo = 'Producto' ";
                 $paquete_detalle_result = $mysqli->query($paquete_detalle_sql);
 

@@ -2,12 +2,10 @@
 include 'header.php';
 $pagina = PAGINAS::LISTA_HISTORIAS;
 ?>
-
 <head>
     <title>Lista de historias</title>
     <link href="../css/search.min.css" rel="stylesheet">
 </head>
-
 <body>
     <section class="cuerpo">
         <h1>Listado de Historias Clínicas</h1>
@@ -18,34 +16,43 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
                 ?>
                 <table class="table table-bordered table-hover" id="indexhistoriah">
                     <thead class="tabla_cabecera">
-                        <tr>
-                            <th>Nº Historia</th>
-                            <th>Identificación</th>
+                        <tr>                            
                             <th>Nombres</th>
-                            <th>Estado</th>
-                            <th>Paquete</th>
-                            <th>Nº Sesiones</th>
-                            <th>Acciones</th>
+                            <th>Apellidos</th>
+                            <th>Identificación</th>
+                            <th>Fecha de nacimiento</th> 
+                            <th>Genero</th>
+                            <th>Teléfono movil</th>
+                            <th>Dirección</th>
+                            <th>Correo electrónico</th>
+                            <th>Fecha hora</th>
+                            <?php
+                            if ($permisoVer) {
+                                echo '<th>Ver</th>';
+                            }
+                            ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql_citas = "SELECT cf.consulta_fisio_id, p.id as paciente_id, cf.estado_atencion, pc.titulo_paquete, pc.numero_sesiones, pc.total, p.numero_identidad, CONCAT(p.nombres, ' ', p.apellidos) as nombres 
-                                        FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc
-                                        WHERE cf.paciente_id = p.id AND pc.paquete_id = cf.paquete_id";
+                        $sql_citas = "SELECT * FROM pacientes";
                         $result_citas = $mysqli->query($sql_citas);
 
                         while ($row = mysqli_fetch_array($result_citas)) {
                             echo "<tr>";
-                            echo "<td>VM-001-" . $row['paciente_id'] . "</td>";
-                            echo "<td>" . $row['numero_identidad'] . "</td>";
                             echo "<td>" . $row['nombres'] . "</td>";
-                            echo "<td>" . $row['estado_atencion'] . "</td>";
-                            echo "<td>" . $row['titulo_paquete'] . "</td>";
-                            echo "<td>" . $row['numero_sesiones'] . "</td>";
-                            echo "<td>
-                                    <a class='btn btn-success btn-sm ml-1' href='evaluacion_paciente.php?consulta_fisio_id=" . $row['consulta_fisio_id'] . "' ><i class='fas fa-edit table-icon'></i></a>
-                                </td>";
+                            echo "<td>" . $row['apellidos'] . "</td>";
+                            echo "<td>" . $row['numero_identidad'] . "</td>";
+                            echo "<td>" . $row['fecha_nacimiento'] . "</td>";
+                            echo "<td>" . $row['genero'] . "</td>";
+                            echo "<td>" . $row['telefono_movil'] . "</td>";
+                            echo "<td>" . $row['direccion'] . "</td>";
+                            echo "<td>" . $row['correo_electronico'] . "</td>";
+                            echo "<td>" . $row['fecha_hora'] . "</td>";
+
+                            if ($permisoVer) {
+                                echo "<td><a class='btn btn-primary btn-sm' href='historia_clinica_fisio.php?id_paciente=" . $row['id'] . "'><i style='font-size:18px' class='fas fa-eye'></i></a></td>";
+                            }
                             echo "</tr>";
                         }
                         ?>
@@ -60,7 +67,7 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
     ?>
     <script src="../js/jquerysearch.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#indexhistoriah').DataTable({
                 language: {
                     sProcessing: "Procesando...",

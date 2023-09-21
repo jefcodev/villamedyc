@@ -38,9 +38,9 @@ function crearPaquete($mysqli)
     $TIPO_PAQUETE = $_POST['tipo_paquete'];
     $NUMERO_SESIONES = $_POST['numero_sesiones'];
     $TOTAL = $_POST['total'];
-
-    $query = "INSERT INTO `paquete_cabecera`(`titulo_paquete`, `tipo_paquete`, `numero_sesiones`, `total`) 
-        VALUES ('$TITULO_PAQUETE', $TIPO_PAQUETE, $NUMERO_SESIONES, $TOTAL)";
+    $DESCUENTO = $_POST['descuento'];
+    $query = "INSERT INTO `paquete_cabecera`(`titulo_paquete`, `tipo_paquete`, `numero_sesiones`, `total`, `ahorra`) 
+        VALUES ('$TITULO_PAQUETE', $TIPO_PAQUETE, $NUMERO_SESIONES, $TOTAL, $DESCUENTO)";
     $result = $mysqli->query($query);
     if (!$result) {
         die('Query Failed.');
@@ -57,7 +57,7 @@ function crearPaquete($mysqli)
         }
     }
 
-    echo "Paquete Creado";
+    
 }
 
 function buscarProductosServicio($mysqli)

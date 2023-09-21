@@ -34,23 +34,7 @@ $class = '';
 			</div>
 		</form>
 
-		<!-- 
-	<h2>Create Product</h2>
-	<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-		<label for="codigo">Code:</label>
-		<input type="text" id="codigo" name="codigo"><br><br>
-        <label for="descripcion">Nombre:</label>
-		<input type="text" id="nombre" name="nombre"><br><br>
- 		<label for="descripcion">Description:</label>
-		<input type="text" id="descripcion" name="descripcion"><br><br>
- 		<label for="precio_compra">Purchase Price:</label>
-		<input type="number" id="precio_c" name="precio_c"><br><br>
- 		<label for="precio_venta">Sale Price:</label>
-		<input type="number" id="precio_v" name="precio_v"><br><br>
- 		<label for="stock">Stock:</label>
-		<input type="number" id="stock" name="stock" value="0"><br><br>
- 		<input type="submit" value="Create Product">
-	</form> -->
+	
 
 	<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

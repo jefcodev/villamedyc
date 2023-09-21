@@ -61,7 +61,7 @@ if (isset($status)) {
 
 <body>
     <section class="cuerpo">
-       
+
         <h1 class="text-center">Crear Paquete</h1><br>
         <div class="row">
             <div class="col-md-12">
@@ -176,8 +176,15 @@ if (isset($status)) {
                 <div class="text-center">
                     <div class="d-flex justify-content-center">
                         <div class="box mx-5">
-                            <div>Total</div>
-                            <div id="total_pago">00</div>
+                            <div>Sub Total</div>
+                            <div id="total_pago" >00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center">
+                        <div class="box mx-5">
+                            <div>Total con descuento</div>
+                            <input class="form-control" type="text" id="descuento" name="descuento">
                         </div>
                     </div>
                 </div><br>
@@ -194,6 +201,19 @@ if (isset($status)) {
     include 'footer.php';
     ?>
     <script>
+        function calcularDescuento() {
+            var total_v = parseFloat(document.getElementById("total_v").value);
+            
+
+            if (!isNaN(total_v) ) {
+                var descuento =  total_pago - total_v;
+                document.getElementById("descuento").value = descuento.toFixed(2); // Redondear a 2 decimales
+            } else {
+                document.getElementById("descuento").value = ""; // Limpiar el campo si los valores son inválidos
+            }
+        }
+
+
         $('#agregar_servicio').on('click', function() {
             let idA = $('#servicios').val();
             let numeroSesiones = $('#numero_sesion').val();
@@ -208,12 +228,12 @@ if (isset($status)) {
                 var valorAdicional = parseFloat(selectedOption.data('adicional'));
 
                 var element = {
-                    'id': idA,
+                    'id': idA,     
                     'name': nombre,
                     'type': "Servicio",
-                    'cost': precio,
+                    'cost': valorAdicional,
                     'amount': Number(numeroSesiones),
-                    'total': precio * numeroSesiones + valorAdicional
+                    'total': valorAdicional * numeroSesiones,
                 }
                 agregar(element);
                 const FD = new FormData();
@@ -372,25 +392,38 @@ if (isset($status)) {
                 FD.append('tipo_paquete', Number($("#tipo_paquete").val()));
                 FD.append('numero_sesiones', Number($('#numero_sesiones').val()));
                 FD.append('total', Number($('#total_pago').text()));
+                FD.append('descuento', Number($('#descuento').val()));
                 FD.append('lista', JSON.stringify(listaPaquete));
                 fetch("paquete_ajax.php", {
                         method: 'POST',
                         body: FD
                     }).then(respuesta => respuesta.text())
                     .then(decodificado => {
-                        console.log(decodificado);
-                        alert(decodificado);
-                        location.reload();
+                        
+                        
+                        Swal.fire({
+                                icon: 'success',
+                                title: 'Paquete creado',
+                                text: 'El paquete se creo correctamente!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            location.reload();
+                            
+
                         // var alertElement = document.getElementById('alert-success');
                         // alertElement.classList.remove('d-none');
                         // setTimeout(function() {
                         //     alertElement.classList.add('d-none');
                         // }, 3000);
                     })
+                    
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
                     });
-            }
+            
+                    
+                }
         }
 
         $('#crear_paquete').on('click', function() {

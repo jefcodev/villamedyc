@@ -3,6 +3,7 @@
 include '../conection/conection.php';
 session_start();
 $ACTION = $_POST['action'];
+$id_consulta = $_GET['id_consulta'];
 
 if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     if (isset($ACTION) && !empty($ACTION)) {
@@ -170,7 +171,7 @@ function verCita($mysqli)
             'sedestacion_prolongada' => $row['sedestacion_prolongada'],
             'esfuerzo_fisico' => $row['esfuerzo_fisico'],
             'habitos' => $row['habitos'],
-            'antecendetes_diagnostico' => $row['antecedentes_diagnostico'],
+            'antecedentes_diagnostico' => $row['antecedentes_diagnostico'],
             'tratamientos_anteriores' => $row['tratamientos_anteriores'],
             'contracturas' => $row['contracturas'],
             'irradiacion' => $row['irradiacion'],
@@ -340,6 +341,7 @@ function crearCita($mysqli)
 function crearProcedimiento($mysqli)
 {
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
+    $ID_CITA = $_POST['id_cita'];
     $ELECTROESTIMULACION = $_POST['electroestimulacion'];
     $ULTRASONIDO = $_POST['ultrasonido'];
     $MAGNETOTERAPIA = $_POST['magnetoterapia'];
@@ -354,17 +356,33 @@ function crearProcedimiento($mysqli)
     $EPUNTA = $_POST['epunta'];
     $USUARIO_ID = $_SESSION['id'];
     $fechaActual = date("Y-m-d");
+    echo "Maasistida". $MAASISTIDA;
     $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `usuario_id`, 
                     `fecha`, `electroestimulacion`, `ultrasonido`, `magnetoterapia`, `laserterapia`, 
                     `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
-                    `fmuscular`, `propiocepcion`, `epunta`) 
+                    `fmuscular`, `propiocepcion`, `epunta`,`fk_id_cita`) 
                     VALUES ($CONSULTA_FISIO_ID, $USUARIO_ID, '$fechaActual', $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
                     $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
-                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA)";
+                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA, $ID_CITA)";
     $result = $mysqli->query($query);
+
     if (!$result) {
         die('Query Failed.');
     }
+
+    // Actualizar el campo numero_sesiones en la tabla consultas_fisioterapeuta
+    $queryUpdate = "UPDATE `consultas_fisioterapeuta` 
+                    SET `numero_sesiones` = `numero_sesiones` - 1 
+                    WHERE `consulta_fisio_id` = $CONSULTA_FISIO_ID";
+
+    $resultUpdate = $mysqli->query($queryUpdate);
+
+    if (!$resultUpdate) {
+        die('Query Update Failed.');
+    }
+
+    $mysqli->query("update citas set consultado='si' where id='$ID_CITA'");
+    
 
     echo "Procedimiento Registrado";
 }
@@ -404,6 +422,8 @@ function actualizarProcedimiento($mysqli)
                 `crioterapia`=$CRIOTERAPIA,`malibre`=$MALIBRE, `maasistida`=$MAASISTIDA, `fmuscular`=$FMUSCULAR,`propiocepcion`=$PROPIOCEPCION,
                 `epunta`=$EPUNTA WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID";
     $result = $mysqli->query($query);
+
+
     if (!$result) {
         die('Query Failed.');
     }
@@ -427,15 +447,15 @@ function actualizarEvaluacion($mysqli)
     $SENSACIONES = $_POST['sensaciones'];
     $LIMITACION_MOVILIDAD = $_POST['limitacion_movilidad'];
     $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
-                    `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`=$SEDESTACION_PROLONGADA, 
-                    `esfuerzo_fisico`=$ESFUERZO_FISICO, `habitos`='$HABITOS', `antecedentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO', 
-                    `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`=$IRRADIACION, 
-                    `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
-                    `limitacion_movilidad`=$LIMITACION_MOVILIDAD
-                    WHERE consulta_fisio_id=$CONSULTA_FISIO_ID";
+                `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`='$SEDESTACION_PROLONGADA', 
+                `esfuerzo_fisico`='$ESFUERZO_FISICO', `habitos`='$HABITOS', `antecedentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO',
+                `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`='$IRRADIACION', 
+                `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
+                `limitacion_movilidad`='$LIMITACION_MOVILIDAD'
+                WHERE `consulta_fisio_id`='$CONSULTA_FISIO_ID'";
     $result = $mysqli->query($query);
     if (!$result) {
-        die('Query Failed.');
+        die('Query Failed.'.$mysqli->error);
     }
 
     echo "Evaluación Actualizada";

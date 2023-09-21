@@ -61,7 +61,15 @@ $id_cita = $_GET['id_cita'];
 
         <form action="" id="formulario_consulta">
             <div style="padding: 1% 2% 1% 2%; background-color: #D8D8D8">
-                <b style="font-size: 18px">Datos de la consulta</b><br><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <b style="font-size: 18px">Datos de la consulta</b>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-primary btn-sm float-rigth" href="historia_clinica.php?id_paciente=<?php echo $id_paciente ?>" target="_blank"><i style="font-size:18px" class="fas fa-eye"></i> Historia Clínica</a>
+                    </div>
+                </div>
+                <br>
                 <div id="crear_consulta">
                     <div class="row">
                         <div class="col-md-6">
@@ -121,12 +129,26 @@ $id_cita = $_GET['id_cita'];
                         </div>
 
                     </div>
+                    <b style="font-size: 18px">Receta</b><br>
+                    <label for=""> Crear receta</label>
+                    <input type="checkbox" id="hacerReceta" name="hacerReceta">
+                    <div id="formularioReceta" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Receta</label>
+                                <textarea class="form-control" id="receta" name="receta" placeholder="Receta"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Indicaciones</label>
+                                <textarea class="form-control" id="indicaciones" name="indicaciones" placeholder="Indicaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <input type="hidden" id="id_cita" name="id_cita" value="<?php echo $id_cita; ?>" />
                         </div>
                         <div class="col-md-6">
-
                             <button class="btn btn-primary float-right" type="button" name="btn_crear_consulta" id="btn_crear_consulta" onclick="validarYCrearConsulta()">Guardar datos de la consulta</button><br>
                         </div>
                     </div>
@@ -142,6 +164,12 @@ $id_cita = $_GET['id_cita'];
 
     <script src="../js/bootstrap-select.js"></script>
     <script type="text/javascript">
+        document.getElementById("hacerReceta").addEventListener("change", function() {
+            var formularioReceta = document.getElementById("formularioReceta");
+            formularioReceta.style.display = this.checked ? "block" : "none";
+        });
+
+
         var select = document.getElementById("cie_10");
         var tArea = document.getElementById("diagnostico");
         select.onchange = function() {
@@ -242,6 +270,8 @@ $id_cita = $_GET['id_cita'];
             var talla = $("#talla").val();
             var presion = $("#presion").val();
             var saturacion = $("#saturacion").val();
+            var receta = $("#receta").val();
+            var indicaciones = $("#indicaciones").val();
 
             $.ajax({
                 url: 'crear_consulta.php',
@@ -260,7 +290,9 @@ $id_cita = $_GET['id_cita'];
                     peso: peso,
                     talla: talla,
                     presion: presion,
-                    saturacion: saturacion
+                    saturacion: saturacion,
+                    receta: receta,
+                    indicaciones: indicaciones
                 },
                 success: function(response) {
                     $("#crear_consulta").html(response);

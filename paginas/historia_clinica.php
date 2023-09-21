@@ -84,7 +84,7 @@ while ($row = $resultado->fetch_assoc()) {
 
 $pdf->SetFont('Times', 'B', 15);
 $pdf->Cell(190, 15, utf8_decode('Consultas '), 0,0,'C', 0);
-$pdf->Ln(20);
+$pdf->Ln(15);
 $pdf->SetFont('Times', '', 11);
 
 // Consulta de # de consultas por id de paciente 
@@ -93,6 +93,7 @@ $cosulta_citas = "select * from consultas_datos where id_paciente ='$id_paciente
 $resultado_citas = $mysqli->query($cosulta_citas);
 
 while ($row_citas = $resultado_citas->fetch_assoc()) {
+    $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('DOCTOR'), 1, 0, 'C', 1);
     $pdf->Cell(45, 10, $row_citas['nombre_doctor'] . ' ' . $row_citas['apellidos_doctor'], 1, 0, 'C', 0);
     $pdf->Cell(50, 10, utf8_decode('FECHA'), 1, 0, 'C', 1);
@@ -101,7 +102,7 @@ while ($row_citas = $resultado_citas->fetch_assoc()) {
     $pdf->Cell(50, 10, utf8_decode('MOTIVO CONSULTA'), 1, 0, 'C', 1);
     $pdf->Cell(140, 10, $row_citas['motivo_consulta'], 1, 0, 'L', 0);
     $pdf->Ln(10);
-    $pdf->Cell(50, 10, utf8_decode('EXAMEN FÍSICO'), 1, 0, 'C', 1);
+    $pdf->Cell(50, 6, utf8_decode('EXAMEN FÍSICO'), 1, 0, 'C', 1);
     $pdf->MultiCell(140,6,$row_citas['examen_fisico'], 'LRT', 'L', false);
     $pdf->Cell(50, 10, utf8_decode('DIAGNÓSTICO'), 1, 0, 'C', 1);
     $pdf->Cell(140, 10, $row_citas['diagnostico'], 1, 0, 'L', 0);
@@ -112,8 +113,17 @@ while ($row_citas = $resultado_citas->fetch_assoc()) {
     $pdf->Cell(50, 10, utf8_decode('OBSERVACIONES'), 1, 0, 'C', 1);
     $pdf->Cell(140, 10, $row_citas['observaciones'], 1, 0, 'L', 0);
     $pdf->Ln(10);
-
+    $pdf->Cell(50, 10, utf8_decode('PESO'), 1, 0, 'C', 1);
+    $pdf->Cell(45, 10, $row_citas['peso'], 1, 0, 'L', 0);
+    $pdf->Cell(50, 10, utf8_decode('TALLA'), 1, 0, 'C', 1);
+    $pdf->Cell(45, 10, $row_citas['talla'], 1, 0, 'L', 0);
+    $pdf->Ln(10);
+    $pdf->Cell(50, 10, utf8_decode('PRESIÓN'), 1, 0, 'C', 1);
+    $pdf->Cell(140, 10, $row_citas['presion'], 1, 0, 'L', 0);
+    $pdf->Ln(10);
+    $pdf->Cell(50, 10, utf8_decode('SATURACIÓN'), 1, 0, 'C', 1);
+    $pdf->Cell(140, 10, $row_citas['saturacion'], 1, 0, 'L', 0);
+    $pdf->Ln(10);
 }
-
 $pdf->Output();
 

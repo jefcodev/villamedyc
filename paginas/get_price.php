@@ -10,7 +10,7 @@ switch ($tipoItem) {
         break;
     case 'servicio':
         
-        $sql = "SELECT total FROM servicios WHERE id_servicio = ?";
+        $sql = "SELECT valor_adicional FROM servicios WHERE id_servicio = ?";
         break;
     case 'paquete':
         
@@ -22,7 +22,7 @@ switch ($tipoItem) {
 }
 
 $stmt = $mysqli->prepare($sql);
-$stmt->bind_param('s', $item_id);
+$stmt->bind_param('s', $item_id);   
 $stmt->execute();
 $stmt->bind_result($precio);
 if ($stmt->fetch()) {

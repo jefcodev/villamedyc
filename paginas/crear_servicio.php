@@ -28,12 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productosSeleccionados = $_POST["productos_seleccionados"];
     $totalPago = $_POST["total_pago"];
     $valorAdicional = $_POST["valor_adicional"];
-    $valorSesiones = $_POST["valor_sesiones"];
-    if(!empty($valorSesiones)){
-        $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional, sesiones) VALUES ('$tituloServicio', $totalPago, $valorAdicional, $valorSesiones)";
-    } else {
+    
         $sqlServicio = "INSERT INTO servicios (titulo_servicio, total, valor_adicional) VALUES ('$tituloServicio', $totalPago, $valorAdicional)";
-    }
+    
 
     // Insertar en la tabla servicios
     if ($conn->query($sqlServicio) === TRUE) {
@@ -65,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h4>Agregar Detalles del servicio</h4>
                 <input type="text" name="titulo_servicio" id="titulo_servicio" placeholder="Ingrese nombre del servicio" class="form-control">
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <label>
                     <input type="checkbox" id="asociar_sesiones" name="asociar_sesiones">
                 </label>
@@ -73,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="number" id="valor_sesiones" name="valor_sesiones" min="1" class="form-control" disabled>
             </div>
             <div class="col-md-4">
-            </div>
+            </div> -->
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -151,13 +148,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
-        $('#asociar_sesiones').on('change', function() {
+       /*  $('#asociar_sesiones').on('change', function() {
             if ($(this).prop('checked')) {
                 $('#valor_sesiones').prop('disabled', false);
             } else {
                 $('#valor_sesiones').prop('disabled', true);
             }
-        });
+        }); */
     </script>
 
 <script>
@@ -237,7 +234,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $('#crear_paquete').click(function() {
                 var tituloServicio = $('#titulo_servicio').val();
                 var valorAdicional = parseFloat($('#valor_adicional').val());
-                var valorSesiones = parseFloat($('#valor_sesiones').val());
 
                 if ($.trim(tituloServicio) !== '' && !isNaN(valorAdicional)) {
                     $.ajax({
@@ -247,8 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             titulo_servicio: tituloServicio,
                             productos_seleccionados: productosSeleccionados,
                             total_pago: totalPago,
-                            valor_adicional: valorAdicional,
-                            valor_sesiones : valorSesiones
+                            valor_adicional: valorAdicional
 
                         },
                         success: function(response) {

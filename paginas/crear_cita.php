@@ -3,7 +3,7 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
-$status = $_GET['status'];
+$status = $_GET['status']; 
 $class = '';
 if (isset($status)) {
     if ($status === 'OK') {
@@ -16,69 +16,9 @@ if (isset($status)) {
 }
 ?>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PHP MySQL Select2 Example</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
-    <title>Clínica</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="../css/estilos.css">
-    <link rel="stylesheet" href="../css/jquery.datetimepicker.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-</head>
-<header class="encabezado">
-    <div class="container">
-        <nav class="navbar navbar-expand-md navbar-light fixed-top">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="inicio.php"><img src="../img/logo.png" width="150"></a>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <ul class="navbar-nav mr-auto mt-2 mt-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="inicio.php">INICIO</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="lista_pacientes.php">PACIENTES</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lista_citas.php">CITAS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lista_consultas.php">CONSULTAS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="lista_historias.php">HISTORIAS</a></li>
-                    <?php if ($rol == 'adm') { ?>
-                        <li class="nav-item"><a class="nav-link" href="lista_usuarios.php">USUARIOS</a></li>
-                    <?php } ?>
-                </ul>
-                <ul class="navbar-nav mt-md-0 margen-float-right">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php echo $usuario; ?>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="editar_cuenta_usuario.php">Editar mis datos</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="logout.php">Salir</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-</header>
 
 <body>
     <div class="row mt-5">
-
-
-
-
 
 
         <section class="cuerpo">
@@ -126,7 +66,7 @@ if (isset($status)) {
                                 <select class="form-control" id="doctor" name="doctor" required>
                                     <option value="" selected="" hidden="">Seleccione el Doctor</option>
                                     <?php
-                                    $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'doc'";
+                                    $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'fis' or  rol = 'doc'";
                                     $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
                                     while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
                                         echo "<option value='" . $row['id'] . "'>" . $row['nombre'] . ' ' . $row['apellidos'] . "</option>";
@@ -157,7 +97,9 @@ if (isset($status)) {
     </div>
 
 
-
+    <?php
+    include 'footer.php';
+    ?>
 
 
     <script type="text/javascript">

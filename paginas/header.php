@@ -107,7 +107,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                     <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
                                     <a class="dropdown-item" href="listar_compras.php">Reporte Compras</a>
                                     <a class="dropdown-item" href="crear_venta.php">Crear Venta</a>
-                                    <a class="dropdown-item" href="listar_ventas.php">Reporte Ventas</a>
+                                    <!-- <a class="dropdown-item" href="listar_ventas.php">Reporte Ventas</a> -->
                                 </div>
                             </li>
 

@@ -11,12 +11,6 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $precio = $_POST['precio'];
     $estado = 'pendiente';
     $descripcion_precio = $_POST['descripcion_precio'];
-
-    $peso = $_POST['peso'];
-    $talla = $_POST['talla'];
-    $presion = $_POST['presion'];
-    $saturacion = $_POST['saturacion'];
-
     $motivo_consulta = $_POST['motivo_consulta'];
     $examen_fisico = $_POST['examen_fisico'];
     $diagnostico = $_POST['diagnostico'];
@@ -24,6 +18,67 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $observaciones = $_POST['observaciones'];
     $id_cita = $_POST['id_cita'];
     $certificado = $_POST['certificado'];
+
+    /* Datos de IMC */
+    $peso = $_POST['peso'];
+    $talla = $_POST['talla'];
+    $presion = $_POST['presion'];
+    $saturacion = $_POST['saturacion'];
+
+    /*Datos de receta */
+    $receta = $_POST ['receta'];
+    $indicaciones = $_POST['indicaciones'];
+
+    if (!empty($receta) && !empty($indicaciones)) {
+
+        $sql_receta = "INSERT INTO receta (receta, indicaciones, id_cita) VALUES ('$receta', '$indicaciones', $id_cita)";
+        if ($mysqli->query($sql_receta)) {
+            // La inserción fue exitosa, ahora obtén el ID de la receta
+            $id_receta = $mysqli->insert_id;
+            echo "<script>
+            
+        Swal.fire({
+            title: 'Imprimir' ,
+            text: 'Imprimir Receta!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Imprimir!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+             
+             var pdfUrl = 'receta.php?id_receta=' + $id_receta; 
+
+            var pdfWindow = window.open(pdfUrl, '_blank');
+
+            pdfWindow.onload = function() {
+            pdfWindow.print();
+            window.location.href = 'inicio.php';
+            };
+            
+           
+            }
+            
+          }
+        );
+          
+        
+    </script>";
+
+
+
+        } else {
+            // Manejo de errores si la inserción falla
+            echo "Error al insertar la receta: " . $mysqli->error;
+        }
+
+
+        
+        
+
+
+    }
     $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio, estado, peso, talla, presion, saturacion) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion')";
     $result = $mysqli->query($sql);
     $resultado = "";
@@ -57,3 +112,5 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     }
     echo $resultado;
 }
+
+?>

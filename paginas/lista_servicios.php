@@ -43,7 +43,6 @@ if ($result->num_rows > 0) {
                     <th>Id</th>
                     <th>Nombre Servicio</th>
                     <th>Total</th>
-                    <th>Valor Adicional</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -52,10 +51,9 @@ if ($result->num_rows > 0) {
                     <tr>
                         <td><?php echo $id; ?></td>
                         <td><?php echo $servicio['titulo_servicio']; ?></td>
-                        <td><?php echo $servicio['total']; ?></td>
                         <td><?php echo $servicio['valor_adicional']; ?></td>
                         <td>
-                            <button class="btn btn-primary btn-sm editarServicioBtn" data-id="<?php echo $id; ?>">Editar</button>
+                            <button class="btn btn-primary btn-sm editarServicioBtn" data-id="<?php echo $id; ?>">Ver</button>
                         </td>
                     </tr>
                 <?php } ?>
@@ -103,7 +101,7 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="col-md-6">
                             <label for="cantidad">Cantidad:</label>
-                            <input type="number" id="cantidad" name="cantidad" value="1" min="1" class="form-control">
+                            <input type="number" id="cantidad" name="cantidad" value="1" min="1" class="form-control" disabled>
                         </div>
                         <div class="col-md-12">
                             <button id="agregar_producto" class="btn btn-primary">Agregar</button>
@@ -127,17 +125,17 @@ if ($result->num_rows > 0) {
                         <tbody id="tabla_body"></tbody>
                     </table>
                     <div class="col-md-6">
-                        <label for="total_pago">Total</label>
+                        <label for="total_pago">Sub Total</label>
                         <span id="total_pago">0.00</span>
                     </div>
                     <div class="col-md-6">
-                        <label for="valor_adicional">Valor Adicional:</label>
+                        <label for="valor_adicional">Total:</label>
                         <input type="number" id="valor_adicional" name="valor_adicional" step="0.01" min="0" value="0" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-modal-close>Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button>
+                    <!-- <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button> -->
                 </div>
             </div>
         </div>

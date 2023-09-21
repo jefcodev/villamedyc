@@ -1,6 +1,9 @@
 <?php
 include 'header.php';
-$id_cita = $_GET['consulta_fisio_id'];
+$id_consulta = $_GET['id_consulta'];
+$id_consulta_fisio = $id_consulta;
+
+$id_cita = $_GET['id_cita'];
 ?>
 
 
@@ -8,48 +11,49 @@ $id_cita = $_GET['consulta_fisio_id'];
     <section class="cuerpo">
         <h1 id="id_consulta_fisio" data-id="">Atención al paciente</h1><br>
         <?php
-        $sql_datos_cita = "SELECT cf.*, p.id, p.numero_identidad, CONCAT(p.nombres,' ',p.apellidos) as nombres_paciente, pc.titulo_paquete, pc.tipo_paquete, pc.numero_sesiones FROM consultas_fisioterapeuta cf, pacientes p, paquete_cabecera pc 
-                            WHERE p.id=cf.paciente_id AND pc.paquete_id=cf.paquete_id AND consulta_fisio_id=$id_cita";
-        $result_datos_cita = $mysqli->query($sql_datos_cita);
-        $rowscita = $result_datos_cita->fetch_assoc();
+        $sql_fisio = "SELECT * FROM consulta_fisio WHERE id_fisi = $id_consulta";
+        $respuesta_fisio = $mysqli->query($sql_fisio);
+        $row_fisio = $respuesta_fisio->fetch_assoc();
+
         ?>
         <div style="padding: 1% 2% 1% 2%; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 8px; box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.2)">
             <b style="font-size: 18px">Datos de consulta</b><br>
             <div class="row" id="edicion_paciente">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <b>Historia Clinica:</b>
-                        <p><?php echo "VM-001-".$rowscita['paciente_id'] ?></p>
+                        <b>Nombres:</b>
+                        <div><?php echo $row_fisio['nombre_paciente'] . ' ' . $row_fisio['apellidos_paciente'] ?></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <b>Número Identidad:</b>
-                        <div><?php echo $rowscita['numero_identidad'] ?></div>
+                        <div><?php echo $row_fisio['cedula'] ?></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <b>Nombres:</b>
-                        <div><?php echo $rowscita['nombres_paciente'] ?></div>
+                        <b>Historia Clinica:</b>
+                        <p><?php echo "VM-002-" . $id_consulta ?></p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <b>Paquete:</b>
-                        <div><?php echo $rowscita['titulo_paquete'] ?></div>
+                        <div><?php echo $row_fisio['nombre_paquete'] ?></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <b>Numero de Sesiones:</b>
-                        <div id="numero_sesiones"><?php echo $rowscita['numero_sesiones'] ?></div>
+                        <b>Sesiones Pendientes:</b>
+                        <div ><?php echo $row_fisio['sesiones'] ?></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <b>Estado:</b>
-                        <div id="estado"><?php echo $rowscita['estado_atencion'] ?></div>
+                        <b>Total Sesiones:</b>
+                        
+                        <div id="numero_sesiones"><?php echo $row_fisio['total_sesiones'] ?></div>
                     </div>
                 </div>
             </div>
@@ -301,7 +305,7 @@ $id_cita = $_GET['consulta_fisio_id'];
     include 'footer.php';
     ?>
 
-    
+
     <script type="text/javascript">
         cargarDatos();
         $("#finalizar").hide();
@@ -312,7 +316,7 @@ $id_cita = $_GET['consulta_fisio_id'];
             // Obtener los parámetros de la URL
             var params = new URLSearchParams(url.search);
             // Obtener el valor de un parámetro específico
-            var id = params.get('consulta_fisio_id');
+            var id = <?php echo json_encode($id_consulta); ?>;
 
             const FD = new FormData();
             FD.append('action', "ver_cita");
@@ -330,7 +334,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     $("#sedestacion_prolongada").val(data[0].sedestacion_prolongada);
                     $("#esfuerzo_fisico").val(data[0].esfuerzo_fisico);
                     $("#habitos").val(data[0].habitos);
-                    $("#antecedentes_diagnostico").val(data[0].antecendetes_diagnostico);
+                    $("#antecedentes_diagnostico").val(data[0].antecedentes_diagnostico);
                     $("#tratamientos_anteriores").val(data[0].tratamientos_anteriores);
                     $("#contracturas").val(data[0].contracturas);
                     $("#irradiacion").val(data[0].irradiacion);
@@ -356,7 +360,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                    console.log(decodificado);
+                    //console.log(decodificado);
                     const data = JSON.parse(decodificado);
                     // console.log(data);
                     let template = "";
@@ -369,16 +373,15 @@ $id_cita = $_GET['consulta_fisio_id'];
                                     </div><br>`;
                         cont++;
                     });
-                    // console.log(cont);
+                     
                     // $('#nuevo_procedimiento').attr("data-id", cont);
                     const numero_sesiones = Number($('#numero_sesiones').text());
                     const estado = $('#estado').text();
-
                     if (cont > numero_sesiones) {
                         $("#nueva_sesion").hide();
-                        if (estado == "Por Atender") {
+                        /* if (numero_sesiones == "Por Atender") {
                             $("#finalizar").show();
-                        }
+                        } */
                     }
 
                     $('#procedimientos').html(template);
@@ -470,7 +473,8 @@ $id_cita = $_GET['consulta_fisio_id'];
         });
 
         function guardarProcedimiento() {
-            const consulta_fisio_id = $('#id_consulta_fisio').attr("data-id");
+            const consulta_fisio_id = <?php echo json_encode($id_consulta); ?>;
+            const id_cita = <?php echo json_encode($id_cita); ?>;
             const consulta_fisio_detalle_id = $('#procedimientoModalLabel').attr("data-id");
             const proceso = $('#procedimientoModalLabel').attr("data-proceso");
             let action = "crear_procedimiento";
@@ -483,6 +487,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                 const FD = new FormData();
                 FD.append('action', action);
                 FD.append('consulta_fisio_id', consulta_fisio_id);
+                FD.append('id_cita', id_cita);
                 FD.append('consulta_fisio_detalle_id', consulta_fisio_detalle_id);
                 FD.append('electroestimulacion', $("#electroestimulacion").is(":checked"));
                 FD.append('ultrasonido', $("#ultrasonido").is(":checked"));
@@ -492,7 +497,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                 FD.append('masoterapia', $("#masoterapia").is(":checked"));
                 FD.append('crioterapia', $("#crioterapia").is(":checked"));
                 FD.append('malibre', $("#malibre").is(":checked"));
-                FD.append('maasistida', $("maasistida").is(":checked"));
+                FD.append('maasistida', $("#maasistida").is(":checked"));
                 FD.append('fmuscular', $("#fmuscular").is(":checked"));
                 FD.append('propiocepcion', $("#propiocepcion").is(":checked"));
                 FD.append('epunta', $("#epunta").is(":checked"));
@@ -502,7 +507,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                         body: FD
                     }).then(respuesta => respuesta.text())
                     .then(decodificado => {
-                        console.log(decodificado);
+                       // console.log(decodificado);
                         alert(decodificado);
                         location.reload();
                     })
@@ -515,12 +520,12 @@ $id_cita = $_GET['consulta_fisio_id'];
         }
 
         $('#guardar_evaluacion').on('click', function() {
-            const id = $('#id_consulta_fisio').attr("data-id");
+            const id = <?php echo json_encode($id_consulta); ?>;
             actualizarEvaluacion(id);
         });
 
         $("#finalizar").on('click', function() {
-            const id = $('#id_consulta_fisio').attr("data-id");
+            const id = <?php echo json_encode($id_consulta); ?>;;
             actualizarEstado(id);
         });
 
@@ -547,7 +552,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                    console.log(decodificado);
+                   // console.log(decodificado);
                     alert(decodificado);
                     location.reload();
                 })
@@ -565,7 +570,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                    console.log(decodificado);
+                   // console.log(decodificado);
                     alert(decodificado);
                     location.reload();
                 })
@@ -575,7 +580,7 @@ $id_cita = $_GET['consulta_fisio_id'];
         }
 
         $('#ver_evaluacion').on('click', function() {
-            const consulta_fisio_id = $('#id_consulta_fisio').attr("data-id");
+            const consulta_fisio_id = <?php echo json_encode($id_consulta); ?>;
             resumenEvaluacion(consulta_fisio_id);
         });
 
@@ -586,7 +591,12 @@ $id_cita = $_GET['consulta_fisio_id'];
             fetch("ventas_ajax.php", {
                     method: 'POST',
                     body: FD
-                }).then(respuesta => respuesta.text())
+                }).then(respuesta => {
+                    if (!respuesta.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return respuesta.text();
+                })
                 .then(decodificado => {
                     // console.log(decodificado);
                     const data = JSON.parse(decodificado);
@@ -715,7 +725,8 @@ $id_cita = $_GET['consulta_fisio_id'];
                     $('#modal-body-resume').html(template);
                 })
                 .catch(function(error) {
-                    console.log('Hubo un problema con la petición Fetch: ' + error.message);
+                    console.error('Hubo un problema con la petición Fetch:', error);
+
                 });
         }
 
@@ -730,7 +741,7 @@ $id_cita = $_GET['consulta_fisio_id'];
                 .then(decodificado => {
                     // console.log(decodificado);
                     const data = JSON.parse(decodificado);
-                    console.log(data);
+                    //console.log(data);
                     let lista = "";
                     if (data[0].electroestimulacion == "1") {
                         lista += "<li>Electroestimulación</li>";

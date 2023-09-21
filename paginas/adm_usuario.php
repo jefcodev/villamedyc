@@ -21,6 +21,7 @@ if (isset($_POST['btn_crear_usuario'])) {
     var_dump($query_crear_usuario);
     if ($query_crear_usuario == TRUE) {
         header("location:crear_usuario.php?status=OK");
+        
     } else {
         header("location:crear_usuario.php?status=ER");
     }
