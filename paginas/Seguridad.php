@@ -25,6 +25,7 @@ class Seguridad
                 PAGINAS::LISTA_PACIENTES => [ACCIONES::EDITAR],
                 PAGINAS::EDITAR_PACIENTE => [ACCIONES::LEER, ACCIONES::EDITAR],
                 PAGINAS::LISTA_HISTORIAS => [ACCIONES::VER],
+                PAGINAS::INICIO => [ACCIONES::ATENDER_CITA],
                 // Otros permisos para doctores
             ],
             'fis' => [
@@ -39,6 +40,7 @@ class Seguridad
             'adm' => [
                 PAGINAS::CREAR_EMPRESA => [ACCIONES::CREAR],
                 PAGINAS::CREAR_FUENTE => [ACCIONES::CREAR],
+                PAGINAS::CREAR_COMPRA => [ACCIONES::CREAR],
                 // Permisos de administrador
             ],
         ];

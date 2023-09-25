@@ -23,9 +23,7 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             <th>Nombre</th>
                             <th>Rol</th>
                             <th>Teléfono</th>
-                            <th>Fecha creado</th>
                             <th>Activo</th>
-                            <th>Fecha desactivado</th>
                             <th style="width: 93px">Acciones</th>
                         </tr>
                     </thead>
@@ -39,10 +37,8 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
                             echo "<td>" . $row['nombre'] . " " . $row['apellidos'] . "</td>";
                             echo "<td>" . $row['rol'] . "</td>";
                             echo "<td>" . $row['telefono'] . "</td>";
-                            echo "<td>" . $row['fecha_creado'] . "</td>";
                             echo "<td>" . $row['activo'] . "</td>";
-                            echo "<td>" . $row['fecha_desactivado'] . "</td>";
-                            echo "<td><a class='btn btn-success btn-sm' href='editar_usuario.php?idusuario=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a><a class='btn btn-danger btn-sm ml-1'><i class='fas fa-trash-alt table-icon'></i></a></td>";
+                            echo "<td><a class='btn btn-success btn-sm' href='editar_usuario.php?idusuario=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a></td>";
                             echo "</tr>";
                         }
                         ?>

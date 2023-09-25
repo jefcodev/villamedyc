@@ -15,7 +15,7 @@ include 'header.php';
                     <input class="form-control" title="Cédula o Pasaporte" placeholder="Cédula o Pasaporte" id="numero_identidad" name="numero_identidad" required />
                     <input class="form-control" title="Nombres" placeholder="Nombres" id="nombres" name="nombres" required />
                     <input class="form-control" title="Apellidos" placeholder="Apellidos" id="apellidos" name="apellidos" required />
-                    <input class="form-control" type="text" autocomplete="off" placeholder="Fecha nacimiento" id="fecha_nacimiento" name="fecha_nacimiento" />
+                    <input class="form-control" type="date" autocomplete="off" placeholder="Fecha nacimiento" id="fecha_nacimiento" name="fecha_nacimiento" required/>
                     <select class="form-control" title="Género" id="genero" name="genero">
                         <option value="" selected="" hidden="">Seleccione el Género</option>
                         <option value="Masculino">Maculino</option>
@@ -53,7 +53,7 @@ include 'header.php';
                     </label>
 
                     <!-- Campo para seleccionar la fuente (inicialmente deshabilitado) -->
-                    <select class="form-control" title="Fuente" id="fuente" name="fuente" >
+                    <select class="form-control" title="Fuente" id="fuente" name="fuente" required>
                         <option value="" selected hidden>Seleccione Fuente</option>
                         <?php
                         // Conectarse a la base de datos y obtener las fuente
@@ -108,10 +108,7 @@ include 'header.php';
     ?>
     <script language="javascript" src="../js/jquery.datetimepicker.full.min.js"></script>
     <script>
-        $('#fecha_nacimiento').datetimepicker({
-            timepicker: false,
-            format: 'Y-m-d'
-        });
+        
         $.datetimepicker.setLocale('es');
         // Habilitar/deshabilitar selección de empresa según el estado del checkbox
         $('#asociar_empresa').on('change', function() {

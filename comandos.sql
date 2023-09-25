@@ -228,7 +228,7 @@ ALTER TABLE consultas_fisioterapeuta_detalle
 ADD FOREIGN KEY (fk_id_cita) REFERENCES citas(id);
 
 
-/* Agregar campos a las vistas  */
+/* Agregar campos a las vistas consultas_datos  */
  `c`.`peso` as `peso`,
     `c`.`talla` as `talla`,
     `c`.`saturacion` as `saturacion`,
@@ -248,8 +248,7 @@ FOREIGN KEY (id_cita) REFERENCES citas(id)
 
 -- villame5_bb01.consulta_receta source
 
-create or replace
-algorithm = UNDEFINED view `consulta_receta` as
+create  view `consulta_receta` as
 select
     `r`.`id` as `id_receta`,
     `r`.`receta` as `receta`,
@@ -285,3 +284,26 @@ alter table consultas_fisioterapeuta_detalle add  fecha DATETIME;
 alter table ventas_cabecera add id_user integer;
 ALTER TABLE ventas_cabecera
 ADD FOREIGN KEY (id_user) REFERENCES usuarios(id);
+
+
+
+
+/**/
+
+create or replace
+algorithm = UNDEFINED view `consulta_fisio` as
+select
+    `p`.`nombres` as `nombre_paciente`,
+    `p`.`apellidos` as `apellidos_paciente`,
+    `p`.`numero_identidad` as `cedula`,
+    `pa`.`titulo_paquete` as `nombre_paquete`,
+    `pa`.`numero_sesiones` as `sesiones_t`,
+    `cf`.`numero_sesiones` as `sesiones`,
+    `cf`.`consulta_fisio_id` as `id_fisi`,
+    `cf`.`total_sesiones` as `total_sesiones`
+from
+    ((`consultas_fisioterapeuta` `cf`
+join `pacientes` `p` on
+    (`cf`.`paciente_id` = `p`.`id`))
+join `paquete_cabecera` `pa` on
+    (`cf`.`paquete_id` = `pa`.`paquete_id`));

@@ -1,6 +1,7 @@
 <?php
 include '../conection/conection.php'; // Incluir la conexión a la base de datos
 
+
 $tipo_item = $_GET['tipo_item'];
 
 // Realizar la consulta según el tipo de ítem

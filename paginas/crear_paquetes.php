@@ -106,7 +106,7 @@ if (isset($status)) {
                         $sql_traer_servicios = "SELECT * FROM servicios";
                         $consulta_traer_servicios = $mysqli->query($sql_traer_servicios);
                         while ($row = mysqli_fetch_array($consulta_traer_servicios)) {
-                            echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' data-adicional='" . $row['valor_adicional'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . "</option>";
+                            echo "<option data-cost='" . $row['total'] . "' data-name='" . $row['titulo_servicio'] . "' data-adicional='" . $row['valor_adicional'] . "' value='" . $row['id_servicio'] . "'>" . $row['titulo_servicio'] . ' - $'.$row['valor_adicional']. "</option>";
                         }
                         ?>
                     </select>
@@ -135,7 +135,7 @@ if (isset($status)) {
                         $sql_traer_productos = "SELECT * FROM productos";
                         $consulta_traer_productos = $mysqli->query($sql_traer_productos);
                         while ($row = mysqli_fetch_array($consulta_traer_productos)) {
-                            echo "<option data-cost='" . $row['precio_v'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] . "</option>";
+                            echo "<option data-cost='" . $row['precio_v'] . "' data-name='" . $row['nombre'] . "' value='" . $row['id'] . "'>" . $row['nombre'] .' - '. $row['descripcion'].' - $'.$row['precio_v']. "</option>";
                         }
                         ?>
                     </select>

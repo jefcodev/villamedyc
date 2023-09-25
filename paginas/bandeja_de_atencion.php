@@ -188,8 +188,12 @@ $id_cita = $_GET['id_cita'];
             var observaciones = document.getElementById("observaciones").value;
             var certificado = document.getElementById("certificado").value;
             var descripcionPrecio = document.getElementById("descripcion_precio").value;
+			var peso = document.getElementById("peso").value;
+			var talla = document.getElementById("talla").value;
+			var presion = document.getElementById("presion").value;
+			var saturacion = document.getElementById("saturacion").value;
 
-            if (motivoConsulta === "" || examenFisico === "" || tratamiento === "" || diagnostico === "" || observaciones === "" || certificado === "" || descripcionPrecio === "") {
+            if (motivoConsulta === "" || examenFisico === "" || tratamiento === "" || diagnostico === "" || observaciones === "" || certificado === "" || descripcionPrecio === ""|| peso === ""|| talla === "" || presion === "" || saturacion === "") {
                 Swal.fire({
                     icon: 'info',
                     title: 'Campos incompletos',

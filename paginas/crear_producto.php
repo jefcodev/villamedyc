@@ -37,6 +37,8 @@ $class = '';
 	
 
 	<?php
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values submitted by the form
     $codigo = $_POST['codigo'];

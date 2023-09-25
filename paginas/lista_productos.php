@@ -84,6 +84,7 @@ if (isset($status)) {
                     </thead>
                     <tbody>
                         <?php
+                       
                         $sql_citas = "SELECT * from productos";
                         $result_citas = $mysqli->query($sql_citas);
 

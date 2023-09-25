@@ -4,9 +4,11 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
+
+
 $conn = $mysqli;
 // Obtener la lista de productos para mostrar en el formulario
-$sql = "SELECT id, codigo, nombre, precio_c, precio_v, stock FROM productos";
+$sql = "SELECT id, codigo, nombre, descripcion, precio_c, precio_v, stock FROM productos";
 $result = $conn->query($sql);
 $productos = [];
 if ($result->num_rows > 0) {
@@ -15,7 +17,8 @@ if ($result->num_rows > 0) {
             "codigo_1" => $row["codigo"],
             "nombre" => $row["nombre"],
             "precio" => $row["precio_v"],
-            "stock" => $row["stock"]
+            "stock" => $row["stock"],
+			"descripcion" => $row["descripcion"]
         ];
     }
 } else {
@@ -73,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div> -->
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label>
                     <input type="checkbox" id="asociar_producto" name="asociar_producto">
                     Asociar productos:
@@ -81,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <select id="producto" name="producto" class="select2 form-control" disabled>
                     <option value="">Seleccionar</option>
                     <?php foreach ($productos as $codigo => $producto) { ?>
-                        <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo "(" . $producto['codigo_1'] . ") " . $producto['nombre'] . " - $" . $producto['precio']; ?></option>
+                        <option value="<?php echo $codigo; ?>" data-precio="<?php echo $producto['precio']; ?>"><?php echo "(" . $producto['codigo_1'] . ") " . $producto['nombre'] .  ' - '.$producto['descripcion']. " - $" . $producto['precio']; ?></option>
                     <?php } ?>
                 </select>
             </div>

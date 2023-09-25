@@ -1,32 +1,17 @@
+
+<!DOCTYPE html>
+<html>
 <?php
-
-use GuzzleHttp\Psr7\Query;
-
 include 'header.php';
 $status = $_GET['status'];
 $pagina = PAGINAS::INICIO;
 $class = '';
 $close = '';
-if (isset($status)) {
-    $close = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>';
-    if ($status === 'AD') {
-        $error = 'Usted no tiene accesos para ejecutar la acción solicitada';
-        $class = 'class="alert alert-danger alert-dismissible fade show" role="alert"';
-    } else {
-        $error = 'Exitoso';
-        $class = 'class="alert alert-success alert-dismissible fade show" role="alert"';
-    }
-}
+
 ?>
 
 <body>
     <div class="cuerpo">
-        <div <?php echo $class; ?>>
-            <?php echo isset($error) ? $error : ''; ?>
-            <?php echo $close; ?>
-        </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="row">
@@ -285,3 +270,5 @@ if (isset($status)) {
         );
     </script>
 </body>
+
+</html>

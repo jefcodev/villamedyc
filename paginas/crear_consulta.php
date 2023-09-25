@@ -74,12 +74,8 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         }
 
 
-        
-        
-
-
     }
-    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones,precio, descripcion_precio, estado, peso, talla, presion, saturacion) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$precio','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion')";
+    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones, descripcion_precio, estado, peso, talla, presion, saturacion) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion')";
     $result = $mysqli->query($sql);
     $resultado = "";
     if ($result === true) {
@@ -109,6 +105,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         $resultado = $resultado . '</button></div>';
         var_dump($observaciones);
         var_dump($sql);
+        echo 'Error' . $mysqli->error;
     }
     echo $resultado;
 }

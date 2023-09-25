@@ -6,8 +6,6 @@ $usuario = $_SESSION['usuario'];
 $rol = $_SESSION['rol'];
 
 if (isset($_POST['btn_crear_usuario'])) {
-    date_default_timezone_set('America/Bogota');
-    $fecha_hora = date("Y-m-d H:i:s");
     $usuario = $_POST['usuario'];
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
@@ -15,7 +13,7 @@ if (isset($_POST['btn_crear_usuario'])) {
     $contrasenna = sha1($_POST['usuario']);
     $rol = $_POST['rol'];
 
-    $sql_crear_usuario = "INSERT INTO usuarios (usuario, nombre, apellidos, telefono, contrasena, rol, fecha_creado) VALUES ('$usuario', '$nombre', '$apellidos', '$telefono', '$contrasenna', '$rol', '$fecha_hora')";
+    $sql_crear_usuario = "INSERT INTO usuarios (usuario, nombre, apellidos, telefono, contrasena, rol) VALUES ('$usuario', '$nombre', '$apellidos', '$telefono', '$contrasenna', '$rol')";
     $query_crear_usuario = $mysqli->query($sql_crear_usuario);
     var_dump($sql_crear_usuario);
     var_dump($query_crear_usuario);

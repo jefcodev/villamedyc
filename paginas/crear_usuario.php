@@ -5,22 +5,24 @@ if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
     header("location:./inicio.php?status=AD");
 }
 $status = $_GET['status'];
+
 if (isset($status)) {
+	
     if ($status === 'OK') {
-        $error = 'Usuario creado correctamente';
+        $error = '<div class="alert alert-success">Usuario creado correctamente</div>';
+        //$class = 'class="alert alert-success alert-dismissible fade show" role="alert"';
     } else {
-        $error = 'Ocurrió un error al crear el usuario';
+        $error = '<div class="alert alert-danger">Ocurrió un error al crear el usuario</div>';
+        //$class = 'class="alert alert-danger alert-dismissible fade show" role="alert"';
     }
 }
 ?>
 
 <body>
-    <section class="cuerpo">
-        <div style="color: red; font-weight: bold">
-            <?php echo isset($error) ? $error : ''; ?>
-        </div>
+    <section class="cuerpo">       
         <div class="row">
             <div class="col-md-4">
+				<?php echo isset($error) ? $error : ''; ?>
                 <h1>Crear usuario</h1><br>
                 <form action="adm_usuario.php" method="post" onsubmit="return validar()">
                     <input class="form-control" placeholder="Usuario" id="usuario" name="usuario" required />

@@ -54,7 +54,7 @@ $pdf->SetFont('Arial', '', 12);
 
 // Escribir los datos de los productos en la tabla
 while ($row = mysqli_fetch_array($result_productos)) {
-    $pdf->Cell(95, 10, $row['nombre'], 1, 0, 'C');
+    $pdf->Cell(95, 10, utf8_decode($row['nombre']), 1, 0, 'C');
     $pdf->Cell(95, 10, $row['stock'], 1, 1, 'C');
 }
 
