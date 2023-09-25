@@ -58,12 +58,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav mr-auto mt-2 mt-md-0">
                         <li class="nav-item">
-                            <?php if ($rol == 'fis') { ?>
-                                <a class="nav-link" href="historias_clinicas.php">INICIO</a>
-
-                            <?php } else { ?>
                                 <a class="nav-link" href="inicio.php">INICIO</a>
-                            <?php } ?>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -107,7 +102,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
                                     <a class="dropdown-item" href="crear_compra.php">Crear Compra</a>
                                     <a class="dropdown-item" href="listar_compras.php">Reporte Compras</a>
                                     <a class="dropdown-item" href="crear_venta.php">Crear Venta</a>
-                                    <!-- <a class="dropdown-item" href="listar_ventas.php">Reporte Ventas</a> -->
+                                    <a class="dropdown-item" href="listar_ventas.php">Reporte Ventas</a>
                                 </div>
                             </li>
 

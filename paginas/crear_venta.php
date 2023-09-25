@@ -1,78 +1,71 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
-$estado = false ;
+$estado = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     date_default_timezone_set('America/Guayaquil');
     $fecha_venta = date("Y-m-d H:i:s");
     $id_paciente = $_POST['id_paciente'];
-    //$usuario = $_POST['usuario'];
     $total = $_POST['total'];
-
+    $descuento = $_POST['descuento'];
     $detalles = $_POST['detalles'];
 
-    // Insertar la cabecera de la venta
-    $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta, id_paciente, usuario, total) VALUES ('$fecha_venta', '$id_paciente', '$usuario', $total)";
-    $mysqli->query($insert_cabecera_sql);
-    $venta_id = $mysqli->insert_id;
+    // Iniciar una transacción
+    $mysqli->begin_transaction();
 
     $error = false; // Variable para rastrear errores
 
     foreach ($detalles['tipo_item'] as $i => $tipo_item) {
         $item_id = $detalles['item_id'][$i];
         $cantidad = $detalles['cantidad'][$i];
-        $precio_unitario = $detalles['precio'][$i];
-        $subtotal = $cantidad * $precio_unitario;
 
-        $insert_detalle_sql = "INSERT INTO ventas_detalle (venta_id, tipo_item, item_id, cantidad, precio_unitario, subtotal)
-        VALUES ($venta_id, '$tipo_item', $item_id, $cantidad, $precio_unitario, $subtotal)";
+        if ($tipo_item === 'producto') {
+            // Consultar el stock actual
+            $consulta_stock = "SELECT stock FROM productos WHERE id = ?";
+            $stmt = $mysqli->prepare($consulta_stock);
+            $stmt->bind_param("i", $item_id);
+            $stmt->execute();
+            $stmt->bind_result($stock_actual);
+            $stmt->fetch();
+            $stmt->close();
 
-        if ($mysqli->query($insert_detalle_sql)) {
+            if ($cantidad > $stock_actual) {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Stock no disponible.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                </script>";
+                $error = true;
+                break; // Salir del bucle si el stock no es suficiente
+            }
+        }
+    }
+    $id_user = $_SESSION['id'];
+    if (!$error) {
+        // Insertar la cabecera de la venta
+        $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta, id_paciente, total, usuario, descuento, id_user) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $mysqli->prepare($insert_cabecera_sql);
+        $stmt->bind_param("ssisii", $fecha_venta, $id_paciente, $total, $usuario, $descuento,$id_user);
+        if ($stmt->execute()) {
+            $venta_id = $mysqli->insert_id;
 
-            if ($tipo_item === 'productos') {
-                $update_stock_sql = "UPDATE productos SET stock = stock - $cantidad WHERE id = $item_id";
+            foreach ($detalles['tipo_item'] as $i => $tipo_item) {
+                $item_id = $detalles['item_id'][$i];
+                $cantidad = $detalles['cantidad'][$i];
+                $precio_unitario = $detalles['precio'][$i];
+                $subtotal = $cantidad * $precio_unitario;
 
-                if ($mysqli->query($update_stock_sql)) {
-                    // Actualización de stock exitosa
-                } else {
-                    $error = true;
-                    echo "Error en la actualización de stock: " . $mysqli->error;
-                }
-            } elseif ($tipo_item === 'paquete') {
-                
-                 // Obtener los productos asociados a la cabecera del paquete
-                 $num_sesiones = "SELECT numero_sesiones FROM paquete_cabecera WHERE paquete_id = $item_id";
-                 $num_result = $mysqli->query($num_sesiones);
- 
-                 if ($num_result) {
-                     // Verificar si se encontraron filas
-                     if ($num_result->num_rows > 0) {
-                         // Obtener la primera fila como un array asociativo
-                         $row = $num_result->fetch_assoc();
-                         
-                         // Extraer el valor de 'numero_sesiones' en una variable
-                         $numero_sesiones = $row['numero_sesiones'];
-                         
-                         // Ahora $numero_sesiones contiene el valor de 'numero_sesiones'
-                         // y puedes usarlo en tu código
-                         echo "Número de Sesiones: " . $numero_sesiones;
-                     } else {
-                         echo "No se encontraron resultados.";
-                     }
-                 }
-                 
-                 $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones)";
-                 $mysqli->query($insert_sesiones);
-                $paquete_detalle_sql = "SELECT pro_ser_id, cantidad FROM paquete_detalle WHERE paquete_id = $item_id and  tipo = 'Producto' ";
-                $paquete_detalle_result = $mysqli->query($paquete_detalle_sql);
-
-                if ($paquete_detalle_result) {
-                    while ($row = $paquete_detalle_result->fetch_assoc()) {
-                        $producto_id = $row['pro_ser_id'];
-                        $cantidad_paquete = $row['cantidad'];
-
-                        $update_stock_sql = "UPDATE productos SET stock = stock - ($cantidad * $cantidad_paquete) WHERE id = $producto_id";
+                $insert_detalle_sql = "INSERT INTO ventas_detalle (venta_id, tipo_item, item_id, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = $mysqli->prepare($insert_detalle_sql);
+                $stmt->bind_param("issidd", $venta_id, $tipo_item, $item_id, $cantidad, $precio_unitario, $subtotal);
+                if ($stmt->execute()) {
+                    if ($tipo_item === 'producto') {
+                        $update_stock_sql = "UPDATE productos SET stock = stock - $cantidad WHERE id = $item_id";
 
                         if ($mysqli->query($update_stock_sql)) {
                             // Actualización de stock exitosa
@@ -80,39 +73,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $error = true;
                             echo "Error en la actualización de stock: " . $mysqli->error;
                         }
+                    } elseif ($tipo_item === 'paquete') {
+                        // Obtener los productos asociados a la cabecera del paquete
+                        $num_sesiones = "SELECT numero_sesiones FROM paquete_cabecera WHERE paquete_id = $item_id";
+                        $num_result = $mysqli->query($num_sesiones);
+
+                        if ($num_result) {
+                            // Verificar si se encontraron filas
+                            if ($num_result->num_rows > 0) {
+                                // Obtener la primera fila como un array asociativo
+                                $row = $num_result->fetch_assoc();
+
+                                // Extraer el valor de 'numero_sesiones' en una variable
+                                $numero_sesiones = $row['numero_sesiones'];
+
+                                // Ahora $numero_sesiones contiene el valor de 'numero_sesiones'
+                                // y puedes usarlo en tu código
+                                echo "Número de Sesiones: " . $numero_sesiones;
+                            } else {
+                                echo "No se encontraron resultados.";
+                            }
+                        }
+
+                        $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones)";
+                        $mysqli->query($insert_sesiones);
+
+                        $paquete_detalle_sql = "SELECT pro_ser_id, cantidad FROM paquete_detalle WHERE paquete_id = $item_id and  tipo = 'Producto' ";
+                        $paquete_detalle_result = $mysqli->query($paquete_detalle_sql);
+
+                        if ($paquete_detalle_result) {
+                            while ($row = $paquete_detalle_result->fetch_assoc()) {
+                                $producto_id = $row['pro_ser_id'];
+                                $cantidad_paquete = $row['cantidad'];
+
+                                $update_stock_sql = "UPDATE productos SET stock = stock - ($cantidad * $cantidad_paquete) WHERE id = $producto_id";
+
+                                if ($mysqli->query($update_stock_sql)) {
+                                    // Actualización de stock exitosa
+                                } else {
+                                    $error = true;
+                                    echo "Error en la actualización de stock: " . $mysqli->error;
+                                }
+                            }
+                        } else {
+                            $error = true;
+                            echo "Error al obtener los detalles del paquete: " . $mysqli->error;
+                        }
                     }
                 } else {
                     $error = true;
-                    echo "Error al obtener los detalles del paquete: " . $mysqli->error;
+                    echo "Error en la inserción de detalle: " . $mysqli->error;
+                    break; // Salir del bucle si hay un error
                 }
             }
 
-            // Inserción exitosa
+            if (!$error) {
+                // Todas las operaciones fueron exitosas, confirmar la transacción
+                $mysqli->commit();
+
+
+                // Si no hubo errores, muestra la alerta de éxito
+                echo "<script>
+                        
+                        Swal.fire({
+                            title: 'Compra agregada',
+                            text: 'Compra agregada correctamente!',
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Imprimir!'
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                             
+                             var pdfUrl = 'comprobante_venta.php?venta_id=' + $venta_id; 
+            
+                            var pdfWindow = window.open(pdfUrl, '_blank');
+            
+                            pdfWindow.onload = function() {
+                            pdfWindow.print();
+                            window.location.href = 'inicio.php';
+                            };
+                            
+                           
+                            }
+                            else {
+                                window.location.href = 'inicio.php';
+                            }
+                            
+                          }
+                        );
+                          
+                        
+                    </script>";
+
+
+
+
+                exit; // Asegúrate de que no haya más salida después de la redirección
+
+
+            }
         } else {
             $error = true;
-            echo "Error en la inserción: " . $mysqli->error;
+            echo "Error en la inserción de cabecera: " . $mysqli->error;
         }
-
     }
-    if (!$error) {
-        // Si no hubo errores, muestra la alerta de éxito
-        echo "<script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Venta Agregada',
-                text: 'La venta ha sido registrada exitosamente.',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        </script>";
 
-        header("Location: comprobante_venta.php?venta_id=$-");
-    exit; // Asegúrate de que no haya más salida después de la redirección
-
+    if ($error) {
+        // Revertir la transacción en caso de error
+        $mysqli->rollback();
     }
 }
+
+
 ?>
 <html>
+
 <body>
     <section class="cuerpo">
         <h2>Nueva Venta</h2>
@@ -132,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $result = $mysqli->query($sql);
 
                     ?>
-                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente'>
+                    <select class="select2 form-control" data-rel="chosen" id='id_paciente' name='id_paciente' required>
                         <option value="" selected="" hidden="">Seleccione el Paciente</option>
                         <?php
                         if ($result) {
@@ -160,9 +237,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <table class="table table-bordered table-hover" id="detalleTable">
                 <thead class="tabla_cabecera">
                     <tr>
-                        <th style="width: 20%">Tipo</th>
-                        <th style="width: 30%">Item</th>
-                        <th style="width: 20%">Cantidad</th>
+                        <th style="width: 15%">Tipo</th>
+                        <th style="width: 45%">Item</th>
+                        <th style="width: 10%">Cantidad</th>
                         <th style="width: 10%">Precio</th>
                         <th style="width: 10%">Subtotal</th>
                         <th style="width: 10%">Acciones</th>
@@ -174,6 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </table>
             <button class="btn btn-primary" type="button" id="addDetalle"> <i class="fa-solid fa-plus"></i> Agregar Item</button><br><br>
             <br>
+            <label for="descuento">Descuento:</label>
+            <input class="form-control" style="width: 20%;" type="number" id="descuento" name="descuento"><br>
             <label for="total">Total:</label>
             <input class="form-control" style="width: 20%;" type="text" id="total" name="total" readonly><br>
             <button class="btn btn-success" style="width: 20%;" type="submit"><i class="fa-regular fa-floppy-disk"></i> Guardar Venta</button>
@@ -183,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php
     include 'footer.php';
     ?>
-  
+
     <script type="text/javascript">
         $('.select2').select2({});
     </script>
@@ -192,7 +271,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const addDetalleButton = document.getElementById("addDetalle");
             const detalleTableBody = document.querySelector("#detalleTable tbody");
             const totalInput = document.getElementById("total");
+            const descuentoInput = document.querySelector("#descuento");
 
+
+
+
+            descuentoInput.addEventListener("input", () => {
+                const descuentoValue = descuentoInput.value.trim(); // Obtener el valor del campo sin espacios en blanco
+
+                if (descuentoValue === "") {
+                    // Si el campo de descuento está vacío, establecer el valor del descuento en cero
+                    descuentoInput.value = "0";
+                } else {
+                    // Si se ingresa un valor, convertirlo a número
+                    const descuento = parseFloat(descuentoValue) || 0;
+                    const total = calcularTotal() - descuento;
+                    totalInput.value = total.toFixed(2);
+                }
+            });
+
+            function calcularTotal() {
+                let total = 0;
+                const detalleRows = detalleTableBody.querySelectorAll("tr");
+                detalleRows.forEach((row) => {
+                    const precio = parseFloat(row.querySelector(".precio").value) || 0;
+                    const cantidad = parseInt(row.querySelector(".cantidad").value) || 0;
+                    const subtotal = precio * cantidad || 0;
+                    row.querySelector(".subtotal").textContent = subtotal.toFixed(2);
+                    total += subtotal;
+                });
+                return total;
+            }
+
+            // Llama a la función para calcular el total inicial
+            totalInput.value = calcularTotal().toFixed(2);
 
             function updateSubtotal() {
                 let total = 0;
@@ -243,6 +355,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             }
 
+
+            /* // Agrega esta función para verificar el stock
+            function verificarStock(itemSelect, cantidadInput, stockError) {
+                const tipoItemSelect = itemSelect.closest("tr").querySelector(".tipo_item");
+                const selectedType = tipoItemSelect.value;
+                const selectedItemId = itemSelect.value;
+                const cantidad = parseInt(cantidadInput.value) || 0;
+
+                if (selectedType === "producto" && selectedItemId) {
+                    // Realizar la llamada AJAX para obtener el stock
+                    fetch(`get_stock.php?producto_id=${selectedItemId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const stock = parseInt(data.stock) || 0;
+                            if (cantidad > stock) {
+                                stockError.textContent = "¡La cantidad supera el stock disponible!";
+
+                                console.log('La cantidad supera el stock ');
+                            } else {
+                                stockError.textContent = "";
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error en la llamada AJAX: " + error);
+                        });
+                } else {
+                    stockError.textContent = "";
+                }
+            }
+
+            // Modifica la parte donde manejas el cambio en el campo de cantidad
+            $(".cantidad").change(function() {
+                const cantidadInput = $(this);
+                const itemSelect = cantidadInput.closest("tr").find(".item_id");
+                const stockError = cantidadInput.closest("tr").find(".stock-error");
+
+                verificarStock(itemSelect[0], cantidadInput[0], stockError[0]);
+                updateSubtotal();
+            }); */
+
+
+
+
             addDetalleButton.addEventListener("click", () => {
                 const newRow = document.createElement("tr");
                 newRow.innerHTML = `
@@ -260,14 +415,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Las opciones se cargarán dinámicamente aquí -->
                     </select>
                 </td>
-                <td><input type="number" step="1" name="detalles[cantidad][]" class="cantidad form-control" /></td>
+                <td><input type="number" step="1" min="1" name="detalles[cantidad][]" class="cantidad form-control" />
+                
+
+                </td>
+                
                 <td><input  name="detalles[precio][]" class="precio form-control" readonly/></td>
                 <td><label  name="detalles[subtotal][]" class="subtotal form-control" readonly/> 0.00</td>
                 
                 <td><button type="button" class="btn btn-danger deleteRow"><i class="fas fa-trash-alt"></i></button></td>
             `;
-                detalleTableBody.appendChild(newRow);
 
+
+
+                detalleTableBody.appendChild(newRow);
                 detalleTableBody.addEventListener("change", (event) => {
                     const target = event.target;
                     if (target.classList.contains("tipo_item") || target.classList.contains("item_id")) {
@@ -291,11 +452,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     console.log("Seleccion de id " + selectedItemId);
                                 });
                             }
+                            // Escucha eventos de cambio en los campos recién agregados
+                            newRow.querySelector(".tipo_item").addEventListener("change", updateSubtotal);
+                            newRow.querySelector(".cantidad").addEventListener("input", updateSubtotal);
+
                         }
 
                         console.log("Seleccion de items " + tipoItemSelect.value);
                     }
                 });
+
+
 
 
                 // Configurar la función de cambio de tipo y actualización de subtotal
@@ -313,7 +480,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             data.forEach((item) => {
                                 const option = document.createElement("option");
                                 option.value = item.id;
-                                option.textContent = "  (" + item.sesiones + ") - " + item.nombre + " - $" + item.total ;
+                                option.textContent = "  (" + item.sesiones + ") - " + item.nombre + " - $" + item.total;
                                 itemSelectNew.appendChild(option);
                             });
                         });
@@ -327,8 +494,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             detalleTableBody.addEventListener("click", handleDeleteRow);
         });
     </script>
-
-
 </body>
 
 </html>

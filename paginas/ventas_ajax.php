@@ -227,7 +227,8 @@ function verServicios($mysqli)
             'maasistida' => $row['maasistida'],
             'fmuscular' => $row['fmuscular'],
             'propiocepcion' => $row['propiocepcion'],
-            'epunta' => $row['epunta']
+            'epunta' => $row['epunta'],
+            'observaciones'=> $row['observaciones']
         );
     }
     $jsonstring = json_encode($json);
@@ -315,7 +316,8 @@ function verSesion($mysqli)
             'maasistida' => $row['maasistida'],
             'fmuscular' => $row['fmuscular'],
             'propiocepcion' => $row['propiocepcion'],
-            'epunta' => $row['epunta']
+            'epunta' => $row['epunta'],
+            'observaciones'=> $row['observaciones']
         );
     }
     $jsonstring = json_encode($json);
@@ -340,6 +342,7 @@ function crearCita($mysqli)
 
 function crearProcedimiento($mysqli)
 {
+    date_default_timezone_set('America/Guayaquil');
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
     $ID_CITA = $_POST['id_cita'];
     $ELECTROESTIMULACION = $_POST['electroestimulacion'];
@@ -354,20 +357,22 @@ function crearProcedimiento($mysqli)
     $FMUSCULAR = $_POST['fmuscular'];
     $PROPIOCEPCION = $_POST['propiocepcion'];
     $EPUNTA = $_POST['epunta'];
+    $OBSERVACIONES = $_POST['observaciones'];
     $USUARIO_ID = $_SESSION['id'];
-    $fechaActual = date("Y-m-d");
-    echo "Maasistida". $MAASISTIDA;
+    $fechaYHoraActual = date("Y-m-d H:i:s");
     $query = "INSERT INTO `consultas_fisioterapeuta_detalle`(`consulta_fisio_id`, `usuario_id`, 
                     `fecha`, `electroestimulacion`, `ultrasonido`, `magnetoterapia`, `laserterapia`, 
                     `termoterapia`, `masoterapia`, `crioterapia`, `malibre`, `maasistida`, 
-                    `fmuscular`, `propiocepcion`, `epunta`,`fk_id_cita`) 
-                    VALUES ($CONSULTA_FISIO_ID, $USUARIO_ID, '$fechaActual', $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
+                    `fmuscular`, `propiocepcion`, `epunta`,`fk_id_cita`, `observaciones`) 
+                    VALUES ($CONSULTA_FISIO_ID, $USUARIO_ID, '$fechaYHoraActual', $ELECTROESTIMULACION, $ULTRASONIDO, $MAGNETOTERAPIA, 
                     $LASERTERAPIA, $TERMOTERAPIA, $MASOTERAPIA, $CRIOTERAPIA, $MALIBRE, $MAASISTIDA, 
-                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA, $ID_CITA)";
+                    $FMUSCULAR, $PROPIOCEPCION, $EPUNTA, $ID_CITA, '$OBSERVACIONES')";
     $result = $mysqli->query($query);
 
     if (!$result) {
-        die('Query Failed.');
+
+        die('Query Failed 12'. $$mysqli->error);
+        echo  $$mysqli->error;
     }
 
     // Actualizar el campo numero_sesiones en la tabla consultas_fisioterapeuta
@@ -399,6 +404,7 @@ function actualizarStock($mysqli, $stock, $id)
 
 function actualizarProcedimiento($mysqli)
 {
+    date_default_timezone_set('America/Guayaquil');
     $CONSULTA_FISIO_ID = $_POST['consulta_fisio_id'];
     $CONSULTA_FISIO_DETALLE_ID = $_POST['consulta_fisio_detalle_id'];
     $ELECTROESTIMULACION = $_POST['electroestimulacion'];
@@ -414,13 +420,13 @@ function actualizarProcedimiento($mysqli)
     $PROPIOCEPCION = $_POST['propiocepcion'];
     $EPUNTA = $_POST['epunta'];
     $USUARIO_ID = $_SESSION['id'];
-
-    $fechaActual = date("Y-m-d");
+    $fechaActual = date("Y-m-d H:i:s");
+    $OBSERVACIONES = $_POST['observaciones'];
 
     $query = "UPDATE consultas_fisioterapeuta_detalle SET `usuario_id`=$USUARIO_ID, `fecha`='$fechaActual', `electroestimulacion`=$ELECTROESTIMULACION, `ultrasonido`=$ULTRASONIDO, 
                 `magnetoterapia`=$MAGNETOTERAPIA, `laserterapia`=$LASERTERAPIA, `termoterapia`=$TERMOTERAPIA, `masoterapia`=$MASOTERAPIA, 
                 `crioterapia`=$CRIOTERAPIA,`malibre`=$MALIBRE, `maasistida`=$MAASISTIDA, `fmuscular`=$FMUSCULAR,`propiocepcion`=$PROPIOCEPCION,
-                `epunta`=$EPUNTA WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID";
+                `epunta`=$EPUNTA, `observaciones`='$OBSERVACIONES' WHERE consulta_fisio_detalle_id=$CONSULTA_FISIO_DETALLE_ID";
     $result = $mysqli->query($query);
 
 
@@ -459,6 +465,7 @@ function actualizarEvaluacion($mysqli)
     }
 
     echo "Evaluación Actualizada";
+    
 }
 
 function actualizarEstado($mysqli)

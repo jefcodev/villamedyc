@@ -2,96 +2,50 @@
 
 class Seguridad
 {
-    //    public static $PAGINAS = array('lista_pacientes');
-
-    /**
-     * LISTADO DE PAGINAS Y PERMISOS DE ASISTENTES
-     * @var type 
-     */
-    public static $ASISTENTE = [
-        array(PAGINAS::LISTA_PACIENTES, ACCIONES::CREAR),
-        array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
-        array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR),
-        array(PAGINAS::LISTA_CITAS, ACCIONES::EDITAR, ACCIONES::CREAR)
-    ];
-
-    /**
-     * LISTADO DE PAGINAS Y PERMISOS DE FISITERAEUTAS
-     * @var type
-     */
-    public static $FISIOTERAPEUTA = [
-        array(PAGINAS::LISTA_PACIENTES, ACCIONES::EDITAR),
-        array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
-        array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR, ACCIONES::IMPRIMIR_CLASIFICADO, ACCIONES::EDITAR),
-        array(PAGINAS::EDITAR_CONSULTA, ACCIONES::EDITAR),
-        array(PAGINAS::INICIO, ACCIONES::ATENDER_CITA),
-        array(PAGINAS::LISTA_CITAS, ACCIONES::CREAR),
-        array(PAGINAS::LISTA_HISTORIAS, ACCIONES::VER),
-        array(PAGINAS::VER_HISTORIA_CLINICA, ACCIONES::VER)
-    ];
-
-    /**
-     * LISTADO DE PAGINAS Y PERMISOS DE DOCTORES
-     * @var type 
-     */
-    public static $DOCTOR = [
-        array(PAGINAS::LISTA_PACIENTES, ACCIONES::EDITAR),
-        array(PAGINAS::EDITAR_PACIENTE, ACCIONES::LEER, ACCIONES::EDITAR),
-        array(PAGINAS::LISTA_CONSULTAS, ACCIONES::IMPRIMIR, ACCIONES::IMPRIMIR_CLASIFICADO, ACCIONES::EDITAR),
-        array(PAGINAS::EDITAR_CONSULTA, ACCIONES::EDITAR),
-        array(PAGINAS::INICIO, ACCIONES::ATENDER_CITA),
-        array(PAGINAS::LISTA_CITAS, ACCIONES::CREAR),
-        array(PAGINAS::LISTA_HISTORIAS, ACCIONES::VER),
-        array(PAGINAS::VER_HISTORIA_CLINICA, ACCIONES::VER)
-    ];
-
     public static function tiene_permiso($rol, $pagina, $accion)
     {
-        if ($rol === 'asi') {
-            for ($i = 0; $i < count(self::$ASISTENTE); $i++) {
-                if (self::$ASISTENTE[$i][0] === $pagina) {
-                    $acciones = self::$ASISTENTE[$i];
-                    for ($j = 1; $j < count($acciones); $j++) {
-                        if ($acciones[$j] === $accion) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        if ($rol === 'doc') {
-            for ($i = 0; $i < count(self::$DOCTOR); $i++) {
-                if (self::$DOCTOR[$i][0] === $pagina) {
-                    $acciones = self::$DOCTOR[$i];
-                    for ($j = 1; $j < count($acciones); $j++) {
-                        if ($acciones[$j] === $accion) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        if ($rol === 'fis') {
-            for ($i = 0; $i < count(self::$FISIOTERAPEUTA); $i++) {
-                if (self::$FISIOTERAPEUTA[$i][0] === $pagina) {
-                    $acciones = self::$FISIOTERAPEUTA[$i];
-                    for ($j = 1; $j < count($acciones); $j++) {
-                        if ($acciones[$j] === $accion) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        if ($rol === 'adm') {
+        $permisos = self::obtener_permisos();
+
+        if (isset($permisos[$rol][$pagina]) && in_array($accion, $permisos[$rol][$pagina])) {
             return true;
         }
+
         return false;
     }
+
+    private static function obtener_permisos()
+    {
+        return [
+            'asi' => [
+                PAGINAS::LISTA_PACIENTES => [ACCIONES::CREAR],
+                PAGINAS::EDITAR_PACIENTE => [ACCIONES::LEER, ACCIONES::EDITAR],
+                // Otros permisos para asistentes
+            ],
+            'doc' => [
+                PAGINAS::LISTA_PACIENTES => [ACCIONES::EDITAR],
+                PAGINAS::EDITAR_PACIENTE => [ACCIONES::LEER, ACCIONES::EDITAR],
+                PAGINAS::LISTA_HISTORIAS => [ACCIONES::VER],
+                // Otros permisos para doctores
+            ],
+            'fis' => [
+                PAGINAS::LISTA_CONSULTAS => [ACCIONES::IMPRIMIR, ACCIONES::IMPRIMIR_CLASIFICADO, ACCIONES::EDITAR],
+                PAGINAS::EDITAR_CONSULTA => [ACCIONES::EDITAR],
+                PAGINAS::INICIO => [ACCIONES::ATENDER_CITA],
+                PAGINAS::LISTA_CITAS => [ACCIONES::CREAR],
+                PAGINAS::LISTA_HISTORIAS_FISIOTERAPEUTA => [ACCIONES::NAVEGAR, ACCIONES::VER],
+                //PAGINAS::CREAR_COMPRA => [ACCIONES::CREAR],
+                // Otros permisos para fisioterapeutas
+            ],
+            'adm' => [
+                PAGINAS::CREAR_EMPRESA => [ACCIONES::CREAR],
+                PAGINAS::CREAR_FUENTE => [ACCIONES::CREAR],
+                // Permisos de administrador
+            ],
+        ];
+    }
 }
+
+
 
 class ACCIONES
 {
@@ -121,6 +75,18 @@ class PAGINAS
     const CREAR_USUARIOS = 'crear_usuario';
     const EDITAR_USUARIOS = 'editar_usuario';
 
+    
+    /* Pacientes  */
+    const CREAR_EMPRESA = 'crear_empresa';
+    const CREAR_FUENTE = 'crear_fuente';
+
+
     /* Creación de inventario */
     const LISTA_PRODUCTOS = 'lista_productos';
+    const CREAR_COMPRA = 'crear_compra';
+
+    /* Fisioterapia */
+
+    const LISTA_HISTORIAS_FISIOTERAPEUTA ='lista_historias_fisioterapeuta';
+
 }

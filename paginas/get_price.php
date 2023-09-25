@@ -14,7 +14,7 @@ switch ($tipoItem) {
         break;
     case 'paquete':
         
-        $sql = "SELECT total FROM paquete_cabecera WHERE paquete_id = ?";
+        $sql = "SELECT ahorra FROM paquete_cabecera WHERE paquete_id = ?";
         break;
     default:
         echo json_encode(array('error' => 'Tipo de item no válido'));

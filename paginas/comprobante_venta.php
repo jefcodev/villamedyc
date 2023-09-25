@@ -33,12 +33,14 @@ $venta_id = $_GET['venta_id'];
 $consulta = "SELECT * FROM ventas_cabecera WHERE id='$venta_id' ";
 $resultado = $mysqli->query($consulta);
 $total_venta;
+$descuento;
 if ($resultado->num_rows > 0) {
     $cabecera_venta = $resultado->fetch_assoc();
     
     // Obtener el ID del cliente desde la cabecera de la venta
     $id_paciente = $cabecera_venta['id_paciente'];
     $total_venta = $cabecera_venta['total'];
+    $descuento = $cabecera_venta['descuento'];
     $fecha_cliente = $cabecera_venta['fecha_venta'] ;
     
     // Consultar el nombre del cliente utilizando el ID
@@ -124,8 +126,8 @@ while ($row_items = $resultado_citas->fetch_assoc()) {
         $pdf->Cell(28, 5, $nombre_servicio , 1, 0, 'C', 0);
         $pdf->Cell(6, 5, $row_items['cantidad'], 1, 0, 'C', 0);
         $pdf->Cell(8, 5, $row_items['precio_unitario'], 1, 0, 'C', 0);
-        $pdf->Cell(10, 5,$row_items['subtotal'], 'LRT', 'C', 0);
-        $pdf->Ln(0.01);
+        $pdf->Cell(10, 5,$row_items['subtotal'], 1, 0, 'C', 0);
+        $pdf->Ln();
 
     }
 
@@ -150,6 +152,9 @@ while ($row_items = $resultado_citas->fetch_assoc()) {
 }
 
 
+$pdf->Cell(47, 5, utf8_decode('Descuento'), 1, 0, 'R', 0);
+$pdf->Cell(10, 5, utf8_decode($descuento), 1, 0, 'C', 0);
+$pdf->Ln();
 $pdf->Cell(47, 5, utf8_decode('Total Pagado'), 1, 0, 'R', 1);
 $pdf->Cell(10, 5, utf8_decode($total_venta), 1, 0, 'C', 1);
 

@@ -25,11 +25,8 @@ if (!empty($_POST)) {
         $_SESSION['usuario'] = $rows['usuario'];
         $_SESSION['rol'] = $rows['rol'];
         $_SESSION["ultimoAcceso"] = time();
-        if ($rows['rol'] == 'fis') {
-            header("location: paginas/historias_clinicas.php");
-        } else {
-            header("location: paginas/inicio.php");
-        }
+        header("location: paginas/inicio.php");
+        
     } else
         $error = "El nombre o contraseña son incorrectos";
 }

@@ -13,13 +13,14 @@ $totalConsulta = 0;
 $totalPaquete = 0;
 
 
-$sql_paciente = "SELECT id_paciente, nombre_doctor, apellidos_doctor  from consultas_datos where id_consulta = $id_consulta";
+$sql_paciente = "SELECT id_paciente, id_doctor, nombre_doctor, apellidos_doctor  from consultas_datos where id_consulta = $id_consulta";
 
-$resultado = ($mysqli->query($sql_paciente)) ->fetch_assoc();
+$resultado = ($mysqli->query($sql_paciente))->fetch_assoc();
 
 $id_paciente = $resultado['id_paciente'];
-$user_doctor = $resultado['nombre_doctor'] .' '.$resultado['apellidos_doctor'];
-$estado = false ;
+$id_doctor = $resultado['id_doctor'];
+$user_doctor = $resultado['nombre_doctor'] . ' ' . $resultado['apellidos_doctor'];
+$estado = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     date_default_timezone_set('America/Guayaquil');
@@ -27,11 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // $id_paciente = $_POST['id_paciente'];
     //$usuario = $_POST['usuario'];
     $total = $_POST['total'];
+    $descuento = $_POST['descuento'];
 
     $detalles = $_POST['detalles'];
 
     // Insertar la cabecera de la venta
-    $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta,id_consulta ,id_paciente, usuario, total) VALUES ('$fecha_venta','$id_consulta', '$id_paciente', '$user_doctor', $total)";
+    $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta,id_consulta ,id_paciente, usuario, total, descuento, id_user) VALUES ('$fecha_venta','$id_consulta', '$id_paciente', '$user_doctor', '$total', '$descuento', '$id_doctor')";
     $mysqli->query($insert_cabecera_sql);
     $venta_id = $mysqli->insert_id;
 
@@ -48,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($mysqli->query($insert_detalle_sql)) {
 
-            if ($tipo_item === 'productos') {
+            if ($tipo_item === 'producto') {
                 $update_stock_sql = "UPDATE productos SET stock = stock - $cantidad WHERE id = $item_id";
 
                 if ($mysqli->query($update_stock_sql)) {
@@ -67,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($num_result->num_rows > 0) {
                         // Obtener la primera fila como un array asociativo
                         $row = $num_result->fetch_assoc();
-                        
+
                         // Extraer el valor de 'numero_sesiones' en una variable
                         $numero_sesiones = $row['numero_sesiones'];
-                        
+
                         // Ahora $numero_sesiones contiene el valor de 'numero_sesiones'
                         // y puedes usarlo en tu código
                         echo "Número de Sesiones: " . $numero_sesiones;
@@ -78,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo "No se encontraron resultados.";
                     }
                 }
-                
+
                 $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones)";
                 $mysqli->query($insert_sesiones);
 
@@ -110,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = true;
             echo "Error en la inserción: " . $mysqli->error;
         }
-
     }
 
     $actualizarEstado = "UPDATE consultas SET estado = 'pagado' WHERE id = $id_consulta";
@@ -152,13 +153,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </script>";
 
 
-    
-        
-    exit; // Asegúrate de que no haya más salida después de la redirección
+
+
+        exit; // Asegúrate de que no haya más salida después de la redirección
 
     }
-
-     
 }
 
 ?>
@@ -200,18 +199,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </table>
             </div>
         </div>
-        
+
         <h2>Nueva Venta</h2>
         <form id="compraForm" method="POST">
-            
+
 
             <br>
             <table class="table table-bordered table-hover" id="detalleTable">
                 <thead class="tabla_cabecera">
                     <tr>
-                        <th style="width: 20%">Tipo</th>
-                        <th style="width: 30%">Item</th>
-                        <th style="width: 20%">Cantidad</th>
+                        <th style="width: 15%">Tipo</th>
+                        <th style="width: 45%">Item</th>
+                        <th style="width: 10%">Cantidad</th>
                         <th style="width: 10%">Precio</th>
                         <th style="width: 10%">Subtotal</th>
                         <th style="width: 10%">Acciones</th>
@@ -223,6 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </table>
             <button class="btn btn-primary" type="button" id="addDetalle"> <i class="fa-solid fa-plus"></i> Agregar Item</button><br><br>
             <br>
+            <label for="descuento">Descuento:</label>
+            <input class="form-control" style="width: 20%;" type="number" id="descuento" name="descuento"><br>
             <label for="total">Total:</label>
             <input class="form-control" style="width: 20%;" type="text" id="total" name="total" readonly><br>
             <button class="btn btn-success" style="width: 20%;" type="submit"><i class="fa-regular fa-floppy-disk"></i> Guardar Venta</button>
@@ -232,16 +233,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php
     include 'footer.php';
     ?>
-  
-    
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const addDetalleButton = document.getElementById("addDetalle");
             const detalleTableBody = document.querySelector("#detalleTable tbody");
             const totalInput = document.getElementById("total");
+            const descuentoInput = document.querySelector("#descuento");
 
 
-            function updateSubtotal() {
+
+
+            descuentoInput.addEventListener("input", () => {
+                const descuentoValue = descuentoInput.value.trim(); // Obtener el valor del campo sin espacios en blanco
+
+                if (descuentoValue === "") {
+                    // Si el campo de descuento está vacío, establecer el valor del descuento en cero
+                    descuentoInput.value = "0";
+                } else {
+                    // Si se ingresa un valor, convertirlo a número
+                    const descuento = parseFloat(descuentoValue) || 0;
+                    const total = calcularTotal() - descuento;
+                    totalInput.value = total.toFixed(2);
+                }
+            });
+
+            function calcularTotal() {
                 let total = 0;
                 const detalleRows = detalleTableBody.querySelectorAll("tr");
                 detalleRows.forEach((row) => {
@@ -251,6 +269,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     row.querySelector(".subtotal").textContent = subtotal.toFixed(2);
                     total += subtotal;
                 });
+                return total;
+            }
+
+            // Llama a la función para calcular el total inicial
+            totalInput.value = calcularTotal().toFixed(2);
+
+            function updateSubtotal() {
+
+                let total = 0;
+
+                const detalleRows = detalleTableBody.querySelectorAll("tr");
+                detalleRows.forEach((row) => {
+                    const precio = parseFloat(row.querySelector(".precio").value) || 0;
+                    const cantidad = parseInt(row.querySelector(".cantidad").value) || 0;
+                    const subtotal = precio * cantidad || 0;
+                    row.querySelector(".subtotal").textContent = subtotal.toFixed(2);
+                    total += subtotal;
+                });
+                // Obtener el valor del descuento desde el campo de entrada
+
                 totalInput.value = total.toFixed(2);
             }
 
@@ -275,20 +313,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
             }
 
-           /*  function buscar_paciente() {
-                var numero_id = $("#numero_identidad").val();
-                $.ajax({
-                    url: 'buscar_paciente.php',
-                    type: 'post',
-                    data: {
-                        numero_identidad: numero_id
-                    },
-                    success: function(response) {
-                        $("#resultado_paciente").html(response);
-                        $('input[name="id_paciente"]').val($("#id_paciente_resultado").val());
-                    }
-                });
-            } */
+            /*  function buscar_paciente() {
+                 var numero_id = $("#numero_identidad").val();
+                 $.ajax({
+                     url: 'buscar_paciente.php',
+                     type: 'post',
+                     data: {
+                         numero_identidad: numero_id
+                     },
+                     success: function(response) {
+                         $("#resultado_paciente").html(response);
+                         $('input[name="id_paciente"]').val($("#id_paciente_resultado").val());
+                     }
+                 });
+             } */
 
             addDetalleButton.addEventListener("click", () => {
                 const newRow = document.createElement("tr");
@@ -307,7 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Las opciones se cargarán dinámicamente aquí -->
                     </select>
                 </td>
-                <td><input type="number" step="1" name="detalles[cantidad][]" class="cantidad form-control" /></td>
+                <td><input type="number" step="1" min="1" name="detalles[cantidad][]" class="cantidad form-control" /></td>
                 <td><input  name="detalles[precio][]" class="precio form-control" readonly/></td>
                 <td><label  name="detalles[subtotal][]" class="subtotal form-control" readonly/> 0.00</td>
                 
@@ -360,7 +398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             data.forEach((item) => {
                                 const option = document.createElement("option");
                                 option.value = item.id;
-                                option.textContent = "  (" + item.sesiones + ") - " + item.nombre + " - $" + item.total ;
+                                option.textContent = "  (" + item.sesiones + ") - " + item.nombre + " - $" + item.total;
                                 itemSelectNew.appendChild(option);
                             });
                         });

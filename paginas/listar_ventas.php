@@ -1,21 +1,11 @@
 <?php
+include '../conection/conection.php';
 include 'header.php';
 $pagina = PAGINAS::LISTA_USUARIOS;
 if (!Seguridad::tiene_permiso($rol, $pagina, ACCIONES::VER)) {
     header("location:./inicio.php?status=AD");
 }
-if (isset($status)) {
-    $close = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>';
-    if ($status === 'OK') {
-        $error = 'Producto creado correctamente';
-        $class = 'class="alert alert-success alert-dismissible fade show" role="alert"';
-    } else {
-        $error = 'Ocurrió un error al crear el producto';
-        $class = 'class="alert alert-danger alert-dismissible fade show" role="alert"';
-    }
-}
+
 ?>
 
 <head>
@@ -26,7 +16,7 @@ if (isset($status)) {
 <body>
     <section class="cuerpo">
         <h1>Listado de Ventas
-            <a href="reporte_ventas.php?fecha_inicio=<?php echo $_GET['fecha_inicio']; ?>&fecha_fin=<?php echo $_GET['fecha_fin']; ?>" target="_blank" class="btn btn-primary float-right">
+            <a href="reporte_ventas.php?fecha_inicio=<?php echo $_GET['fecha_inicio']; ?>&fecha_fin=<?php echo $_GET['fecha_fin']; ?>&id_user=<?php echo $_GET['id_user']; ?>" target="_blank" class="btn btn-primary float-right">
                 <i class="fas fa-file-pdf"></i> Crear reporte
             </a>
 
@@ -48,6 +38,24 @@ if (isset($status)) {
                     <input type="date" name="fecha_fin" class="form-control" required value="<?php echo isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : ''; ?>">
                 </div>
                 <div class="col-md-3">
+                    <label for="id_user">Usuario:</label>
+                    <select name="id_user" class="form-control">
+                        <option value="">Todos</option> <!-- Opción para mostrar todos los usuarios -->
+                        <?php
+                        // Consulta para obtener la lista de usuarios
+                        $sql_usuarios = "SELECT id, nombre, apellidos  FROM usuarios";
+                        $result_usuarios = $mysqli->query($sql_usuarios);
+
+                        while ($row_usuario = mysqli_fetch_array($result_usuarios)) {
+                            $selected = ($_GET['id_user'] == $row_usuario['id']) ? 'selected' : '';
+                            echo "<option value='" . $row_usuario['id'] . "' $selected>" . $row_usuario['nombre'] . ' ' . $row_usuario['apellidos'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+
+                <div class="col-md-3">
                     <br>
                     <button type="submit" class="btn btn-primary">Filtrar</button>
                 </div>
@@ -60,10 +68,9 @@ if (isset($status)) {
                     <thead class="tabla_cabecera">
                         <tr>
                             <th>Fecha Venta</th>
-                            <th>Cédula</th>
-                            <th>Paciente</th>
-                            <th>Doctor</th>
-                            <th>Precio Total</th>
+                            <th>Usuario</th>
+                            <th>Descuento</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,20 +78,27 @@ if (isset($status)) {
                         if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                             $fechaInicio = $_GET['fecha_inicio'];
                             $fechaFin = $_GET['fecha_fin'];
+                            $usuarioFiltro = $_GET['id_user'];
 
-                            $sql_citas = "SELECT * FROM consulta_ventas WHERE fecha_hora BETWEEN '$fechaInicio' AND '$fechaFin'";
+                            $sql_citas = "SELECT * FROM ventas_cabecera WHERE fecha_venta BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+                            // Agregar condición para filtrar por usuario si se selecciona uno
+                            if (!empty($usuarioFiltro)) {
+                                $sql_citas .= " AND id_user = '$usuarioFiltro'";
+                            }
+
                             $result_citas = $mysqli->query($sql_citas);
 
                             while ($row = mysqli_fetch_array($result_citas)) {
                                 echo "<tr>";
-                                echo "<td>" . $row['fecha_hora'] . "</td>";
-                                echo "<td>" . $row['cedula'] . "</td>";
-                                echo "<td>" . $row['apellidos_pacientes'].' '.$row['nombre_paciente'] .  "</td>";
-                                echo "<td>" . $row['nombre_doctor'].' ' .$row['apellido_doctor'] ."</td>";
-                                echo "<td>" . $row['valor_pagado'] . "</td>";
+                                echo "<td>" . $row['fecha_venta'] . "</td>";
+                                echo "<td>" . $row['id_user'] .  "</td>";
+                                echo "<td>" . $row['descuento'] . ' ' . $row['apellido_doctor'] . "</td>";
+                                echo "<td>" . $row['total'] . "</td>";
                                 echo "</tr>";
                             }
                         }
+
                         ?>
                     </tbody>
                 </table>

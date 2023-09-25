@@ -46,13 +46,13 @@ $id_cita = $_GET['id_cita'];
                 <div class="col-md-4">
                     <div class="form-group">
                         <b>Sesiones Pendientes:</b>
-                        <div ><?php echo $row_fisio['sesiones'] ?></div>
+                        <div><?php echo $row_fisio['sesiones'] ?></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <b>Total Sesiones:</b>
-                        
+
                         <div id="numero_sesiones"><?php echo $row_fisio['total_sesiones'] ?></div>
                     </div>
                 </div>
@@ -266,6 +266,14 @@ $id_cita = $_GET['id_cita'];
                                     </div>
                                 </label>
                             </div>
+                            <div class='col-md-12'>
+                                <label class='card'>
+                                    <div class='card-body'>
+                                        <label for="texto">Observaciones</label>
+                                        <textarea class="form-control" name="observaciones" id="observaciones" rows="3"></textarea>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -373,7 +381,7 @@ $id_cita = $_GET['id_cita'];
                                     </div><br>`;
                         cont++;
                     });
-                     
+
                     // $('#nuevo_procedimiento').attr("data-id", cont);
                     const numero_sesiones = Number($('#numero_sesiones').text());
                     const estado = $('#estado').text();
@@ -412,6 +420,11 @@ $id_cita = $_GET['id_cita'];
 
         function limpiarCheckBoxs() {
             var checkboxes = document.querySelectorAll('input[name="servicios"]');
+            const observacionesTextarea = document.getElementById('observaciones');
+                    if (observacionesTextarea) {
+                        // Asignar el valor del campo "observaciones" al elemento textarea
+                        observacionesTextarea.value = '';
+                    }
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = false;
             });
@@ -428,7 +441,12 @@ $id_cita = $_GET['id_cita'];
                 .then(decodificado => {
                     // console.log(decodificado);
                     const data = JSON.parse(decodificado);
-                    // console.log(data);
+                    //console.log(data);
+                    const observacionesTextarea = document.getElementById('observaciones');
+                    if (observacionesTextarea) {
+                        // Asignar el valor del campo "observaciones" al elemento textarea
+                        observacionesTextarea.value = data[0].observaciones;
+                    }
                     data.forEach(element => {
                         let checkboxes = document.querySelector("input[id='electroestimulacion']");
                         checkboxes.checked = Number(element.electroestimulacion);
@@ -454,6 +472,8 @@ $id_cita = $_GET['id_cita'];
                         checkboxes.checked = Number(element.propiocepcion);
                         checkboxes = document.querySelector("input[id='epunta']");
                         checkboxes.checked = Number(element.epunta);
+
+
                     });
                 })
                 .catch(function(error) {
@@ -477,6 +497,8 @@ $id_cita = $_GET['id_cita'];
             const id_cita = <?php echo json_encode($id_cita); ?>;
             const consulta_fisio_detalle_id = $('#procedimientoModalLabel').attr("data-id");
             const proceso = $('#procedimientoModalLabel').attr("data-proceso");
+            const observaciones = $("#observaciones").val();
+
             let action = "crear_procedimiento";
             if (proceso == "editar") {
                 action = "actualizar_procedimiento";
@@ -501,15 +523,30 @@ $id_cita = $_GET['id_cita'];
                 FD.append('fmuscular', $("#fmuscular").is(":checked"));
                 FD.append('propiocepcion', $("#propiocepcion").is(":checked"));
                 FD.append('epunta', $("#epunta").is(":checked"));
+                FD.append('observaciones', observaciones);
 
                 fetch("ventas_ajax.php", {
                         method: 'POST',
                         body: FD
                     }).then(respuesta => respuesta.text())
                     .then(decodificado => {
-                       // console.log(decodificado);
-                        alert(decodificado);
-                        location.reload();
+                        // console.log(decodificado);
+                        //alert(decodificado);
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Correcto',
+                            text: decodificado,
+                            showConfirmButton: false,
+                            timer: 1500
+
+                        });
+
+                        $('#procedimientoModal').modal('hide');
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
@@ -552,9 +589,14 @@ $id_cita = $_GET['id_cita'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                   // console.log(decodificado);
-                    alert(decodificado);
-                    location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Correcto',
+                        text: decodificado,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('#exampleModal').modal('hide');
                 })
                 .catch(function(error) {
                     console.log('Hubo un problema con la petición Fetch: ' + error.message);
@@ -570,7 +612,7 @@ $id_cita = $_GET['id_cita'];
                     body: FD
                 }).then(respuesta => respuesta.text())
                 .then(decodificado => {
-                   // console.log(decodificado);
+                    // console.log(decodificado);
                     alert(decodificado);
                     location.reload();
                 })
@@ -802,11 +844,17 @@ $id_cita = $_GET['id_cita'];
                                         <div class='col-md-12'>
                                             <b>Procedimientos realizados</b>
                                         </div>
-                                        <div class='col-md-3'>
+                                        <div class='col-md-12'>
                                             <div class='form-group'>
                                                 <ul>
                                                     ${lista}
                                                 </ul>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12'>
+                                            <div class='form-group'>
+                                            <b>Observaciones</b>
+                                                <p>${data[0].observaciones}</p>
                                             </div>
                                         </div>
                                     </div>`;

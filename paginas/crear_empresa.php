@@ -3,6 +3,18 @@ include 'header.php';
 include '../conection/conection.php';
 $class = '';
 
+
+$pagina = PAGINAS::CREAR_EMPRESA;
+
+$permisoCreacion = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
+
+if (!$permisoCreacion ) {
+    // El usuario no tiene permiso para acceder a esta página, redirige a la página de acceso denegado.
+    echo '<script>window.location.href = "acceso_denegado.php";</script>';
+    exit;
+}
+
+
 ?>
 
 <body>

@@ -3,8 +3,21 @@
 <?php
 include 'header.php';
 include '../conection/conection.php';
+//include './Seguridad.php';
+
 $class = '';
 $close = '';
+
+//$usuario = $_SESSION['usuario'];
+$pagina = PAGINAS::CREAR_COMPRA;
+$permisoCreacion = Seguridad::tiene_permiso($rol, $pagina, ACCIONES::CREAR);
+
+if (!$permisoCreacion ) {
+    // El usuario no tiene permiso para acceder a esta página, redirige a la página de acceso denegado.
+    echo '<script>window.location.href = "acceso_denegado.php";</script>';
+    exit;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha = $_POST['fecha'];

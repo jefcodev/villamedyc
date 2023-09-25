@@ -20,15 +20,11 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Identificación</th>
-                            <th>Fecha de nacimiento</th> 
-                            <th>Genero</th>
                             <th>Teléfono movil</th>
                             <th>Dirección</th>
-                            <th>Correo electrónico</th>
-                            <th>Fecha hora</th>
                             <?php
                             if ($permisoVer) {
-                                echo '<th>Ver</th>';
+                                echo '<th>Acciones</th>';
                             }
                             ?>
                         </tr>
@@ -43,15 +39,12 @@ $pagina = PAGINAS::LISTA_HISTORIAS;
                             echo "<td>" . $row['nombres'] . "</td>";
                             echo "<td>" . $row['apellidos'] . "</td>";
                             echo "<td>" . $row['numero_identidad'] . "</td>";
-                            echo "<td>" . $row['fecha_nacimiento'] . "</td>";
-                            echo "<td>" . $row['genero'] . "</td>";
                             echo "<td>" . $row['telefono_movil'] . "</td>";
                             echo "<td>" . $row['direccion'] . "</td>";
-                            echo "<td>" . $row['correo_electronico'] . "</td>";
-                            echo "<td>" . $row['fecha_hora'] . "</td>";
+                           
 
                             if ($permisoVer) {
-                                echo "<td><a class='btn btn-primary btn-sm' href='historia_clinica.php?id_paciente=" . $row['id'] . "'><i style='font-size:18px' class='fas fa-eye'></i></a></td>";
+                                echo "<td><a class='btn btn-primary btn-sm' target='_black' href='historia_clinica.php?id_paciente=" . $row['id'] . "'><i style='font-size:18px' class='fas fa-eye'></i></a></td>";
                             }
                             echo "</tr>";
                         }
