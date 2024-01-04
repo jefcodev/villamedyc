@@ -21,7 +21,10 @@ if ($result->num_rows > 0) {
 ?>
 
 
-
+<head>
+    <title>Lista de servicios</title>
+    <link href="../css/search.min.css" rel="stylesheet">
+</head>
 <body>
     <section class="cuerpo">
         <div class="d-flex justify-content-center">
@@ -37,8 +40,8 @@ if ($result->num_rows > 0) {
         </div>
         <h1 class="text-center">Lista servicios</h1><br>
         <br>
-        <table class="table">
-            <thead>
+        <table class="table table-bordered table-hover" id="indexhistoriah">
+            <thead class="tabla_cabecera">
                 <tr>
                     <th>Id</th>
                     <th>Nombre Servicio</th>
@@ -53,7 +56,7 @@ if ($result->num_rows > 0) {
                         <td><?php echo $servicio['titulo_servicio']; ?></td>
                         <td><?php echo $servicio['valor_adicional']; ?></td>
                         <td>
-                            <button class="btn btn-primary btn-sm editarServicioBtn" data-id="<?php echo $id; ?>">Ver</button>
+                            <button class="btn btn-primary btn-sm editarServicioBtn" data-id="<?php echo $id; ?>">Editar</button>
                         </td>
                     </tr>
                 <?php } ?>
@@ -135,7 +138,7 @@ if ($result->num_rows > 0) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-modal-close>Cerrar</button>
-                    <!-- <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button> -->
+                    <button type="button" class="btn btn-primary" onclick="guardarCambiosServicio()">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -225,7 +228,7 @@ if ($result->num_rows > 0) {
             var total = $("#total_pago").text();
             var valorAdicional = $("#valor_adicional").val();
 
-            if (tituloServicio && productosSeleccionados.length > 0) {
+           /*  if (tituloServicio && productosSeleccionados.length > 0) { */
                 // console.log(servicioId)
                 // console.log(total)
                 // console.log(valorAdicional)
@@ -246,13 +249,15 @@ if ($result->num_rows > 0) {
                         // console.log(data);
                         location.reload();
                         alert(decodificado);
+
+                    
                     })
                     .catch(function(error) {
                         console.log('Hubo un problema con la petición Fetch: ' + error.message);
                     });
-            } else {
+           /*  } else {
                 alert('Debe ingresar un título de servicio y seleccionar al menos un producto');
-            }
+            } */
 
             // Realizar una petición AJAX para guardar los cambios en la base de datos
 
@@ -320,6 +325,37 @@ if ($result->num_rows > 0) {
             productosSeleccionados.splice(index, 1);
             actualizarTablaProductos();
             actualizarTotalPago();
+        });
+    </script>
+    <script src="../js/jquerysearch.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#indexhistoriah').DataTable({
+                language: {
+                    sProcessing: "Procesando...",
+                    sLengthMenu: "Mostrar _MENU_ registros",
+                    sZeroRecords: "No se encontraron resultados",
+                    sEmptyTable: "Ningún dato disponible en esta tabla",
+                    sInfo: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    sInfoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    sInfoPostFix: "",
+                    sSearch: "Buscar:",
+                    sUrl: "",
+                    sInfoThousands: ",",
+                    sLoadingRecords: "Cargando...",
+                    oPaginate: {
+                        sFirst: "Primero",
+                        sLast: "Último",
+                        sNext: "Siguiente",
+                        sPrevious: "Anterior"
+                    },
+                    oAria: {
+                        sSortAscending: ": Activar para ordenar la columna de manera ascendente",
+                        sSortDescending: ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
         });
     </script>
 </body>

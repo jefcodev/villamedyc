@@ -4,7 +4,7 @@ class NumeroALetras {
 
     private static $UNIDADES = [
         '',
-        'UN ',
+        'UNO ',
         'DOS ',
         'TRES ',
         'CUATRO ',
@@ -26,7 +26,7 @@ class NumeroALetras {
         'VEINTE '
     ];
     private static $DECENAS = [
-        'VENTI',
+        'VEINTI',
         'TREINTA ',
         'CUARENTA ',
         'CINCUENTA ',
@@ -94,7 +94,7 @@ class NumeroALetras {
 
         if (intval($cientos) > 0) {
             if ($cientos == '001') {
-                $converted .= 'UN ';
+                $converted .= 'UNO ';
             } else if (intval($cientos) > 0) {
                 $converted .= sprintf('%s ', self::convertGroup($cientos));
             }
@@ -135,10 +135,10 @@ class NumeroALetras {
         switch ($valor) {
             case 'Mon': return 'lunes';
             case 'Tue': return 'martes';
-            case 'Wed': return 'mi®¶rcoles';
+            case 'Wed': return 'mi√©rcoles';
             case 'Thu': return 'jueves';
             case 'Fri': return 'viernes';
-            case 'Sat': return 's®¢bado';
+            case 'Sat': return 's√°bado';
             case 'Sun': return 'domingo';
             default:
                 break;
@@ -146,18 +146,18 @@ class NumeroALetras {
     }
     public static function mesesTraducida($valor) {
         switch ($valor) {
-            case 'January': return 'enero';
-            case 'February': return 'febrero';
-            case 'March': return 'marzo';
-            case 'April': return 'abril';
-            case 'May': return 'mayo';
-            case 'June': return 'junio';
-            case 'July': return 'julio';
-            case 'August': return 'agosto';
-            case 'September': return 'septiembre';
-            case 'October': return 'octubre';
-            case 'November': return 'noviembre';
-            case 'December': return 'diciembre';
+            case 'January': return 'ENERO';
+            case 'February': return 'FEBRERO';
+            case 'March': return 'MARZO';
+            case 'April': return 'ABRIL';
+            case 'May': return 'MAYO';
+            case 'June': return 'JUNIO';
+            case 'July': return 'JULIO';
+            case 'August': return 'AGOSTO';
+            case 'September': return 'SEPTIEMBRE';
+            case 'October': return 'OCTUBRE';
+            case 'November': return 'NOVIEMBRE';
+            case 'December': return 'DICIEMBRE';
             default:
                 break;
         }

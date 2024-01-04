@@ -66,7 +66,7 @@ if (isset($status)) {
                                 <select class="form-control" id="doctor" name="doctor" required>
                                     <option value="" selected="" hidden="">Seleccione el Doctor</option>
                                     <?php
-                                    $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'fis' or  rol = 'doc'";
+                                    $sql_traer_doctor = "SELECT * FROM usuarios WHERE rol = 'fis' or  rol = 'doc' or  rol = 'adm'";
                                     $consulta_traer_doctor = $mysqli->query($sql_traer_doctor);
                                     while ($row = mysqli_fetch_array($consulta_traer_doctor)) {
                                         echo "<option value='" . $row['id'] . "'>" . $row['nombre'] . ' ' . $row['apellidos'] . "</option>";

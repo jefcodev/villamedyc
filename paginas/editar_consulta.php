@@ -82,23 +82,30 @@ if (isset($_POST['btn_editar_consulta'])) {
                             <?php echo $close; ?>
                         </div>
                     </div>
-
-
-                </div>
-
-                            <div class="row">
-                            <b style="font-size: 18px">Detalles de consulta:</b><br><br>
-                            </div>
+               </div>
                 <div class="row">
-                    
-
-                    
+                    <b style="font-size: 18px">Detalles de consulta:</b><br><br>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <p style="font-size: 17px">Detalles de consulta:</p>
                         <textarea class="form-control" title="descripcion_precio" placeholder="Descripción precio" id="descripcion_precio" name="descripcion_precio"><?php echo $rowconsulta['descripcion_precio']; ?></textarea>
-
                     </div>
-
+                    <b style="font-size: 18px">Receta</b><br>
+                    <label for=""> Crear receta</label>
+                    
+                    <div id="formularioReceta" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Receta</label>
+                                <textarea class="form-control" id="receta" name="receta" placeholder="Receta"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Indicaciones</label>
+                                <textarea class="form-control" id="indicaciones" name="indicaciones" placeholder="Indicaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">

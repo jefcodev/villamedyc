@@ -67,8 +67,8 @@ function crearVenta($mysqli)
         $query = "INSERT INTO `consultas_fisioterapeuta`(`paciente_id`, `paquete_id`, 
                     `fecha`, `profesion`, `tipo_trabajo`, `sedestacion_prolongada`, `esfuerzo_fisico`, 
                     `habitos`, `antecedentes_diagnostico`, `tratamientos_anteriores`, `contracturas`, 
-                    `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`)  
-                    VALUES ($PACIENTE_ID, $PAQUETE_ID, '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender')";
+                    `irradiacion`, `hacia_donde`, `intensidad`, `sensaciones`, `limitacion_movilidad`, `estado_atencion`, `motivo_consulta`)  
+                    VALUES ($PACIENTE_ID, $PAQUETE_ID, '$fechaActual', '', '', 0, 0, '', '', '', '', 0, '', '', '', 0, 'Por Atender', '')";
         $result = $mysqli->query($query);
         if (!$result) {
             die('Query Failed.');
@@ -178,7 +178,8 @@ function verCita($mysqli)
             'hacia_donde' => $row['hacia_donde'],
             'intensidad' => $row['intensidad'],
             'sensaciones' => $row['sensaciones'],
-            'limitacion_movilidad' => $row['limitacion_movilidad']
+            'limitacion_movilidad' => $row['limitacion_movilidad'],
+            'motivo_consulta' => $row['motivo_consulta']
         );
     }
     $jsonstring = json_encode($json);
@@ -284,7 +285,8 @@ function verEvaluacion($mysqli)
             'hacia_donde' => $row['hacia_donde'],
             'intensidad' => $row['intensidad'],
             'sensaciones' => $row['sensaciones'],
-            'limitacion_movilidad' => $row['limitacion_movilidad']
+            'limitacion_movilidad' => $row['limitacion_movilidad'],
+            'motivo_consulta' => $row['motivo_consulta'],
         );
     }
     $jsonstring = json_encode($json);
@@ -452,12 +454,13 @@ function actualizarEvaluacion($mysqli)
     $INTENSIDAD = $_POST['intensidad'];
     $SENSACIONES = $_POST['sensaciones'];
     $LIMITACION_MOVILIDAD = $_POST['limitacion_movilidad'];
+    $MOTIVO_CONSULTA = $_POST['motivo_consulta'];
     $query = "UPDATE `consultas_fisioterapeuta` SET `profesion`='$PROFESION', 
                 `tipo_trabajo`='$TIPO_TRABAJO', `sedestacion_prolongada`='$SEDESTACION_PROLONGADA', 
                 `esfuerzo_fisico`='$ESFUERZO_FISICO', `habitos`='$HABITOS', `antecedentes_diagnostico`='$ANTECEDENTES_DIAGNOSTICO',
                 `tratamientos_anteriores`='$TRATAMIENTOS_ANTERIORES', `contracturas`='$CONTRACTURAS', `irradiacion`='$IRRADIACION', 
                 `hacia_donde`='$HACIA_DONDE', `intensidad`='$INTENSIDAD', `sensaciones`='$SENSACIONES', 
-                `limitacion_movilidad`='$LIMITACION_MOVILIDAD'
+                `limitacion_movilidad`='$LIMITACION_MOVILIDAD',`motivo_consulta`='$MOTIVO_CONSULTA'
                 WHERE `consulta_fisio_id`='$CONSULTA_FISIO_ID'";
     $result = $mysqli->query($query);
     if (!$result) {

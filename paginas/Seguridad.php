@@ -26,6 +26,9 @@ class Seguridad
                 PAGINAS::EDITAR_PACIENTE => [ACCIONES::LEER, ACCIONES::EDITAR],
                 PAGINAS::LISTA_HISTORIAS => [ACCIONES::VER],
                 PAGINAS::INICIO => [ACCIONES::ATENDER_CITA],
+                PAGINAS::LISTA_CONSULTAS => [ACCIONES::EDITAR],
+                PAGINAS::LISTA_HISTORIAS_FISIOTERAPEUTA => [ACCIONES::NAVEGAR, ACCIONES::VER],
+                
                 // Otros permisos para doctores
             ],
             'fis' => [
@@ -33,6 +36,7 @@ class Seguridad
                 PAGINAS::EDITAR_CONSULTA => [ACCIONES::EDITAR],
                 PAGINAS::INICIO => [ACCIONES::ATENDER_CITA],
                 PAGINAS::LISTA_CITAS => [ACCIONES::CREAR],
+                PAGINAS::LISTA_HISTORIAS => [ACCIONES::VER],
                 PAGINAS::LISTA_HISTORIAS_FISIOTERAPEUTA => [ACCIONES::NAVEGAR, ACCIONES::VER],
                 //PAGINAS::CREAR_COMPRA => [ACCIONES::CREAR],
                 // Otros permisos para fisioterapeutas
@@ -41,6 +45,9 @@ class Seguridad
                 PAGINAS::CREAR_EMPRESA => [ACCIONES::CREAR],
                 PAGINAS::CREAR_FUENTE => [ACCIONES::CREAR],
                 PAGINAS::CREAR_COMPRA => [ACCIONES::CREAR],
+                PAGINAS::INICIO => [ACCIONES::ATENDER_CITA],
+                PAGINAS::LISTA_HISTORIAS_FISIOTERAPEUTA => [ACCIONES::NAVEGAR, ACCIONES::VER],
+                PAGINAS::LISTA_HISTORIAS => [ACCIONES::VER],
                 // Permisos de administrador
             ],
         ];
@@ -61,6 +68,7 @@ class ACCIONES
     const IMPRIMIR = 'IMPRIMIR';
     const IMPRIMIR_CLASIFICADO = 'IMPRIMIR_CLASIFICADO';
     const ATENDER_CITA = 'ATENDER_CITA';
+    const CANCELAR_CITA = 'CANCELAR_CITA';
 }
 
 class PAGINAS

@@ -8,20 +8,20 @@ class PDF extends FPDF
     function Header()
     {
         // Logo
-    $this->Image('../img/logo.png',70,6,60);
-    
-    $this->Ln(25);
+        $this->Image('../img/logo.png', 70, 6, 60);
+
+        $this->Ln(25);
     }
 
     // Page footer
     function Footer()
     {
         // Position at 1.5 cm from bottom
-    $this->SetY(-15);
-    // Arial italic 8
-    $this->SetFont('Arial','I',8);
-    // Page number
-    $this->Cell(0,10,utf8_decode('Página ').$this->PageNo().'/{nb}',0,0,'C');
+        $this->SetY(-15);
+        // Arial italic 8
+        $this->SetFont('Arial', 'I', 8);
+        // Page number
+        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo() . '/{nb}', 0, 0, 'C');
     }
 }
 
@@ -42,7 +42,7 @@ $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times', 'B', 15);
-$pdf->Cell(190, 10, utf8_decode('Historia Clínica '). utf8_decode(' N° ') . $id_paciente,0, 0,'C' ,0);
+$pdf->Cell(190, 10, utf8_decode('Historia Clínica ') . utf8_decode(' N° ') . $id_paciente, 0, 0, 'C', 0);
 $pdf->Ln(15);
 
 $pdf->SetFont('Times', '', 11);
@@ -53,7 +53,7 @@ $pdf->SetDrawColor(182, 182, 182);
 // Lectura de array 
 while ($row = $resultado->fetch_assoc()) {
     $pdf->Cell(50, 10, ' NOMBRES Y APELLIDOS', 1, 0, 'C', 1);
-    $pdf->Cell(140, 10, utf8_decode($row['nombres']) .' '. utf8_decode($row['apellidos']), 1, 0, 'C', 0);
+    $pdf->Cell(140, 10, utf8_decode($row['nombres']) . ' ' . utf8_decode($row['apellidos']), 1, 0, 'C', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 10, ' FECHA DE NACIMIENTO', 1, 0, 'C', 1);
     $pdf->Cell(45, 10, utf8_decode($row['fecha_nacimiento']), 1, 0, 'C', 0);
@@ -83,7 +83,7 @@ while ($row = $resultado->fetch_assoc()) {
 }
 
 $pdf->SetFont('Times', 'B', 15);
-$pdf->Cell(190, 15, utf8_decode('Consultas '), 0,0,'C', 0);
+$pdf->Cell(190, 15, utf8_decode('Consultas '), 0, 0, 'C', 0);
 $pdf->Ln(15);
 $pdf->SetFont('Times', '', 11);
 
@@ -95,23 +95,23 @@ $resultado_citas = $mysqli->query($cosulta_citas);
 while ($row_citas = $resultado_citas->fetch_assoc()) {
     $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('DOCTOR'), 1, 0, 'C', 1);
-    $pdf->Cell(45, 10, $row_citas['nombre_doctor'] . ' ' . $row_citas['apellidos_doctor'], 1, 0, 'C', 0);
+    $pdf->Cell(45, 10, utf8_decode($row_citas['nombre_doctor']) . ' ' . $row_citas['apellidos_doctor'], 1, 0, 'C', 0);
     $pdf->Cell(50, 10, utf8_decode('FECHA'), 1, 0, 'C', 1);
-    $pdf->Cell(45, 10, $row_citas['fecha_hora'], 1, 0, 'C', 0);
+    $pdf->Cell(45, 10, utf8_decode($row_citas['fecha_hora']), 1, 0, 'C', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('MOTIVO CONSULTA'), 1, 0, 'C', 1);
-    $pdf->Cell(140, 10, $row_citas['motivo_consulta'], 1, 0, 'L', 0);
+    $pdf->Cell(140, 10, utf8_decode($row_citas['motivo_consulta']), 1, 0, 'L', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 6, utf8_decode('EXAMEN FÍSICO'), 1, 0, 'C', 1);
-    $pdf->MultiCell(140,6,$row_citas['examen_fisico'], 'LRT', 'L', false);
+    $pdf->MultiCell(140, 6, utf8_decode($row_citas['examen_fisico']), 'LRT', 'L', false);
     $pdf->Cell(50, 10, utf8_decode('DIAGNÓSTICO'), 1, 0, 'C', 1);
-    $pdf->Cell(140, 10, $row_citas['diagnostico'], 1, 0, 'L', 0);
+    $pdf->Cell(140, 10, utf8_decode($row_citas['diagnostico']), 1, 0, 'L', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('TRATAMIENTO'), 1, 0, 'C', 1);
-    $pdf->Cell(140, 10, $row_citas['tratamiento'], 1, 0, 'L', 0);
+    $pdf->Cell(140, 10, utf8_decode($row_citas['tratamiento']), 1, 0, 'L', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('OBSERVACIONES'), 1, 0, 'C', 1);
-    $pdf->Cell(140, 10, $row_citas['observaciones'], 1, 0, 'L', 0);
+    $pdf->Cell(140, 10, utf8_decode($row_citas['observaciones']), 1, 0, 'L', 0);
     $pdf->Ln(10);
     $pdf->Cell(50, 10, utf8_decode('PESO'), 1, 0, 'C', 1);
     $pdf->Cell(45, 10, $row_citas['peso'], 1, 0, 'L', 0);
@@ -124,6 +124,24 @@ while ($row_citas = $resultado_citas->fetch_assoc()) {
     $pdf->Cell(50, 10, utf8_decode('SATURACIÓN'), 1, 0, 'C', 1);
     $pdf->Cell(140, 10, $row_citas['saturacion'], 1, 0, 'L', 0);
     $pdf->Ln(10);
+
+    if (!empty($row_citas['receta']) && !empty($row_citas['indicaciones'])) {
+        $pdf->Cell(190, 6, utf8_decode('RECETA'), 0, 0, 'C', 0);
+        $pdf->Ln(6);
+        $pdf->Cell(50, 6, utf8_decode('RECETA'), 1, 0, 'C', 1);
+        $pdf->MultiCell(140, 6, utf8_decode($row_citas['receta']), 'LRT', 'L', false);
+        $pdf->Cell(50, 6, utf8_decode('INDICACONES'), 1, 0, 'C', 1);
+        $pdf->MultiCell(140, 6, utf8_decode($row_citas['indicaciones']), 'LRTB', 'L', false);
+        $pdf->Ln(6);
+    }
+    if (!empty($row_citas['examenes']) && !empty($row_citas['tratamiento_fisio'])) {
+        $pdf->Cell(190, 6, utf8_decode('OBSERVACIONES'), 0, 0, 'C', 0);
+        $pdf->Ln(6);
+        $pdf->Cell(50, 6, utf8_decode('OBSERVACIONES'), 1, 0, 'C', 1);
+        $pdf->MultiCell(140, 6, utf8_decode($row_citas['examenes']), 'LRT', 'L', false);
+        $pdf->Cell(50, 6, utf8_decode('OBSERVACIONES'), 1, 0, 'C', 1);
+        $pdf->MultiCell(140, 6, utf8_decode($row_citas['tratamiento_fisio']), 'LRTB', 'L', false);
+        $pdf->Ln(6);
+    }
 }
 $pdf->Output();
-

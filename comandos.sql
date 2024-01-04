@@ -307,3 +307,118 @@ join `pacientes` `p` on
     (`cf`.`paciente_id` = `p`.`id`))
 join `paquete_cabecera` `pa` on
     (`cf`.`paquete_id` = `pa`.`paquete_id`));
+
+/* Citas datos */
+`u`.`rol` as `rol`,
+
+
+
+/* Cambios en el servidor */
+
+create  table receta_fisio (
+id INT AUTO_INCREMENT PRIMARY KEY,
+examenes  VARCHAR(255),
+tratamiento  VARCHAR(255),
+id_cita INT,
+FOREIGN KEY (id_cita) REFERENCES citas(id)
+);
+
+
+
+
+/* Vista */
+
+
+CREATE VIEW `consulta_receta_fisio` AS
+select
+    `r`.`id` AS `id_receta`,
+    `r`.`examenes` AS `examenes`,
+    `r`.`tratamiento` AS `tratamiento`,
+    `c`.`motivo_consulta` AS `motivo_consulta`,
+    `c`.`fecha_hora` AS `fecha_hora`,
+    `c`.`diagnostico` AS `diagnostico`,
+    `p`.`nombres` AS `nombres_paciente`,
+    `p`.`apellidos` AS `apellidos_paciente`,
+    `u`.`id` AS `id_doctor`,
+    `p`.`id` AS `id_paciente`,
+    `u`.`nombre` AS `nombre_doctor`,
+    `u`.`apellidos` AS `apellido_doctor`
+from
+    ((((`receta_fisio` `r`
+join `consultas` `c` on
+    (`r`.`id_cita` = `c`.`id_cita`))
+join `pacientes` `p` on
+    (`c`.`id_paciente` = `p`.`id`))
+join `citas` `ci` on
+    (`r`.`id_cita` = `ci`.`id`))
+join `usuarios` `u` on
+    (`ci`.`id_doctor` = `u`.`id`));
+
+
+
+/* Add */
+
+alter table pacientes add institucion varchar(255);
+alter table pacientes add descripcion varchar(255);
+alter table pacientes add tipo_contingencia varchar(255);
+
+/* Agregar datos a vista  */
+
+`p`.`ocupacion` AS `ocupacion`,
+    `p`.`institucion` AS `institucion`,
+    `p`.`descripcion` AS `descripcion`,
+    `p`.`tipo_contingencia` AS `tipo_contingencia`,
+
+
+alter table consultas  add hea varchar(255);
+
+
+
+/* Empezar desde cero */
+
+
+/* Cargar inventario */
+delete from  ventas_detalle ;
+delete from  ventas_cabecera ;
+delete from compra_detalle ;
+delete from compra_cabecera;
+delete from productos ;
+
+
+
+
+
+
+/* Nuevos cambios */
+
+
+-- prueba.consulta_fisio source
+/* Agregar un nueva dato de consuta id_paciente */
+create or replace
+algorithm = UNDEFINED view `consulta_fisio` as
+select
+	`p`.`id` as `id_paciente`,    
+	`p`.`nombres` as `nombre_paciente`,
+    `p`.`apellidos` as `apellidos_paciente`,
+    `p`.`numero_identidad` as `cedula`,
+    `pa`.`titulo_paquete` as `nombre_paquete`,
+    `pa`.`numero_sesiones` as `sesiones_t`,
+    `cf`.`numero_sesiones` as `sesiones`,
+    `cf`.`consulta_fisio_id` as `id_fisi`,
+    `cf`.`total_sesiones` as `total_sesiones`
+from
+    ((`consultas_fisioterapeuta` `cf`
+join `pacientes` `p` on
+    (`cf`.`paciente_id` = `p`.`id`))
+join `paquete_cabecera` `pa` on
+    (`cf`.`paquete_id` = `pa`.`paquete_id`));
+
+
+
+
+    alter table consultas_fisioterapeuta add motivo_consulta varchar(255);
+
+
+
+/* Nuevos cambios */
+

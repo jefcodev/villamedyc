@@ -22,9 +22,13 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $antecedentes_personales = $_POST['antecedentes_personales'];
     $antecedentes_familiares = $_POST['antecedentes_familiares'];
 
+    $institucion = $_POST['institucion'];
+    $descripcion = $_POST['descripcion'];
+    $tipo_contingencia = $_POST['tipo_contingencia'];
+
     $sql = "UPDATE pacientes SET numero_identidad = '$numero_identidad', nombres = '$nombres', apellidos='$apellidos', fecha_nacimiento='$fecha_nacimiento', genero= '$genero',telefono_fijo='$telefono_fijo',"
-            . "telefono_movil= '$telefono_movil', direccion='$direccion', raza='$raza', ocupacion='$ocupacion', estado_civil='$estado_civil',correo_electronico='$correo_electronico',antecedentes_personales='$antecedentes_personales',"
-            . "antecedentes_familiares ='$antecedentes_familiares' WHERE id='$id_paciente' ";
+        . "telefono_movil= '$telefono_movil', direccion='$direccion', raza='$raza', ocupacion='$ocupacion', estado_civil='$estado_civil',correo_electronico='$correo_electronico',antecedentes_personales='$antecedentes_personales',"
+        . "antecedentes_familiares ='$antecedentes_familiares', institucion ='$institucion', descripcion ='$descripcion', tipo_contingencia ='$tipo_contingencia' WHERE id='$id_paciente' ";
     $result = $mysqli->query($sql);
     $resultado = "";
 
@@ -39,25 +43,37 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         $resultado = $resultado . '<option value = "Masculino">Maculino</option>';
         $resultado = $resultado . '<option value = "Femenino">Femenino</option>';
         $resultado = $resultado . '</select>';
+        $resultado = $resultado . '<input class = "form-control" title = "Teléfono móvil" placeholder = "Teléfono móvil" value = "' . $telefono_movil . '" id = "telefono_movil" name = "telefono_movil" />';
         $resultado = $resultado . '<input class = "form-control" title = "Teléfono fijo" placeholder = "Teléfono fijo" value = "' . $telefono_fijo . '" id = "telefono_fijo" name = "telefono_fijo" /></div>';
         $resultado = $resultado . '<div class = "col-md-4">';
-        $resultado = $resultado . '<input class = "form-control" title = "Teléfono móvil" placeholder = "Teléfono móvil" value = "' . $telefono_movil . '" id = "telefono_movil" name = "telefono_movil" />';
         $resultado = $resultado . '<input class = "form-control" title = "Dirección" placeholder = "Dirección" value = "' . $direccion . '" id = "direccion" name = "direccion" />';
         $resultado = $resultado . '<select class = "form-control" id = "raza" name = "raza" title = "Seleccione la Raza">';
         $resultado = $resultado . '<option value = "' . $raza . '" selected = "">' . $raza . '</option>';
         $resultado = $resultado . '<option value = "Mestiza">Mestiza</option>';
         $resultado = $resultado . '<option value="Negra">Negra</option>';
         $resultado = $resultado . '<option value = "Blanca">Blanca</option></select>';
-        $resultado = $resultado . '<input class="form-control" title="Ocupación" placeholder="Ocupación" value="' . $ocupacion . '" id="ocupacion" name="ocupacion" />';
         $resultado = $resultado . '<select class = "form-control" id = "estado_civil" name = "estado_civil" title = "Seleccione Estado Civil">';
         $resultado = $resultado . '<option value="' . $estado_civil . '" selected="">' . $estado_civil . '</option>';
         $resultado = $resultado . '<option value = "Casado">Casado</option>';
         $resultado = $resultado . '<option value="Soltero">Soltero</option>';
         $resultado = $resultado . '<option value = "Union libre">Unión libre</option></select>';
-        $resultado = $resultado . '<input class="form-control" title="Correo electrónico" placeholder="Correo electrónico"  value="' . $correo_electronico . '" id="correo_electronico" name="correo_electronico" /></div>';
-        $resultado = $resultado . '<div class = "col-md-4">';
+        $resultado = $resultado . '<input class="form-control" title="Correo electrónico" placeholder="Correo electrónico"  value="' . $correo_electronico . '" id="correo_electronico" name="correo_electronico" />';
         $resultado = $resultado . '<textarea class="form-control" title="Antecedentes personales" placeholder="Antecedentes personales" id="antecedentes_personales" name="antecedentes_personales">' . $antecedentes_personales . '</textarea>';
-        $resultado = $resultado . '<textarea class = "form-control" title = "Antecedentes familiares" placeholder = "Antecedentes familiares" id = "antecedentes_familiares" name = "antecedentes_familiares">' . $antecedentes_familiares . '</textarea><br>';
+        $resultado = $resultado . '<textarea class = "form-control" title = "Antecedentes familiares" placeholder = "Antecedentes familiares" id = "antecedentes_familiares" name = "antecedentes_familiares">' . $antecedentes_familiares . '</textarea></div><br>';
+        $resultado = $resultado . '<div class = "col-md-4">';
+        $resultado = $resultado . '<input class="form-control" title="Institución" placeholder="Institución" value="' . $institucion . '" id="institucion" name="institucion" />';
+        $resultado = $resultado . '<input class="form-control" title="Ocupación" placeholder="Ocupación" value="' . $ocupacion . '" id="ocupacion" name="ocupacion" />';
+        $resultado = $resultado . '<input class="form-control" title="Descripción" placeholder="Descripción" value="' . $descripcion . '" id="descripcion" name="descripcion" />';
+        $resultado = $resultado . '<select class="form-control" id="tipo_contingencia" name="tipo_contingencia" title="Seleccione Tipo Contingencia">';
+        $resultado = $resultado . '<option value="' . $tipo_contingencia . '" selected="">' . $tipo_contingencia . '</option>';
+        $resultado = $resultado . '<option value="Enfermedad general">Enfermedad general</option>';
+        $resultado = $resultado . '<option value="Enfermedad catastrófica">Enfermedad catastrófica</option>';
+        $resultado = $resultado . '<option value="Maternidad">Maternidad</option>';
+        $resultado = $resultado . '<option value="Presunción de accidente de trabajo">Presunción de accidente de trabajo</option>';
+        $resultado = $resultado . '<option value="Presunción de enfermedad profesional">Presunción de enfermedad profesional</option>';
+        $resultado = $resultado . '<option value="Certificado de salud">Certificado de salud</option>';
+        $resultado = $resultado . '</select>';
+
         $resultado = $resultado . '<div class="alert alert-success alert-dismissible fade show" role="alert">';
         $resultado = $resultado . 'Se editaron y guardaron correctamente los datos del paciente <button style="top: -2.35rem" type="button" class="close" data-dismiss="alert" aria-label="Close">';
         $resultado = $resultado . '<span aria-hidden="true">&times;</span>';

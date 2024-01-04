@@ -19,41 +19,55 @@ $id_cita = $_GET['id_cita'];
         <div style="padding: 1% 2% 1% 2%; border: 2px solid rgba(0, 0, 0, 0.2); border-radius: 8px; box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.2)">
             <b style="font-size: 18px">Datos de consulta</b><br>
             <div class="row" id="edicion_paciente">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Nombres:</b>
                         <div><?php echo $row_fisio['nombre_paciente'] . ' ' . $row_fisio['apellidos_paciente'] ?></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Número Identidad:</b>
                         <div><?php echo $row_fisio['cedula'] ?></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Historia Clinica:</b>
                         <p><?php echo "VM-002-" . $id_consulta ?></p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Paquete:</b>
                         <div><?php echo $row_fisio['nombre_paquete'] ?></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Sesiones Pendientes:</b>
                         <div><?php echo $row_fisio['sesiones'] ?></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <b>Total Sesiones:</b>
 
                         <div id="numero_sesiones"><?php echo $row_fisio['total_sesiones'] ?></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <b>H Fisioterapia:</b>
+                        <div><?php echo "<a class='btn btn-primary btn-sm' target='_black' href='historia_clinica_fisio.php?id_paciente=" . $row_fisio['id_paciente'] . "'><i style='font-size:14px' class='fas fa-eye'></i> Ver</a>"; ?></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <b>H Traumatología:</b>
+
+                        <div><?php echo "<a class='btn btn-primary btn-sm' target='_black' href='historia_clinica.php?id_paciente=" . $row_fisio['id_paciente'] . "'><i style='font-size:14px' class='fas fa-eye'></i> Ver</a>"; ?></div>
+
                     </div>
                 </div>
             </div>
@@ -86,6 +100,14 @@ $id_cita = $_GET['id_cita'];
                         </button>
                     </div>
                     <div class="modal-body" id="modal-body">
+                        <b style="font-size: 18px">Consulta</b><br><br>
+            
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea class="form-control" title="Motivo de consulta" placeholder="Motivo de consulta" id="motivo_consulta" name="motivo_consulta"></textarea>
+                            </div>
+                    
+                        </div>
                         <b style="font-size: 18px">Factores Ocupacionales</b><br><br>
                         <div class="row">
                             <div class="col-md-6">
@@ -110,7 +132,6 @@ $id_cita = $_GET['id_cita'];
 
 
                         <b style="font-size: 18px">Diagnóstico</b><br><br>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <textarea class="form-control" title="Antecedentes del diagnóstico" placeholder="Antecedentes del diagnóstico" id="antecedentes_diagnostico" name="antecedentes_diagnostico"></textarea>
@@ -142,7 +163,7 @@ $id_cita = $_GET['id_cita'];
                             <div class="col-md-6">
                                 <select class="form-control" id="limitacion_movilidad" name="limitacion_movilidad" title="Limitación de la Movilidad">
                                     <option value="0">Seleccione</option>
-                                    <option value="1">Crujidos</option>
+                                    <option value="1">Sonido Articular</option>
                                     <optgroup label="Osteoarticular">
                                         <option value="2">Topes articulares</option>
                                         <option value="3">Musculo Tendinosos</option>
@@ -343,6 +364,7 @@ $id_cita = $_GET['id_cita'];
                     $("#esfuerzo_fisico").val(data[0].esfuerzo_fisico);
                     $("#habitos").val(data[0].habitos);
                     $("#antecedentes_diagnostico").val(data[0].antecedentes_diagnostico);
+                    $("#motivo_consulta").val(data[0].motivo_consulta);
                     $("#tratamientos_anteriores").val(data[0].tratamientos_anteriores);
                     $("#contracturas").val(data[0].contracturas);
                     $("#irradiacion").val(data[0].irradiacion);
@@ -576,6 +598,7 @@ $id_cita = $_GET['id_cita'];
             FD.append('esfuerzo_fisico', $("#esfuerzo_fisico").val());
             FD.append('habitos', $("#habitos").val());
             FD.append('antecedentes_diagnostico', $("#antecedentes_diagnostico").val());
+            FD.append('motivo_consulta', $("#motivo_consulta").val());
             FD.append('tratamientos_anteriores', $("#tratamientos_anteriores").val());
             FD.append('contracturas', $("#contracturas").val());
             FD.append('irradiacion', $("#irradiacion").val());
@@ -673,7 +696,7 @@ $id_cita = $_GET['id_cita'];
                     }
 
                     if (data[0].limitacion_movilidad == "1") {
-                        limitacion = "Crujidos";
+                        limitacion = "Sonido Articular";
                     }
                     if (data[0].limitacion_movilidad == "2") {
                         limitacion = "Topes Articulares";
@@ -683,6 +706,12 @@ $id_cita = $_GET['id_cita'];
                     }
 
                     let template = `<div class="row m-1 d-flex justify-content-center">
+                                        <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;'><b>Consulta</b></div>
+                                        <div class='col-md-12 m-1' style='border: 1px solid #c1c1c1;'>
+                                                <b>Motivo de consulta</b>
+                                                <p>${data[0].motivo_consulta}</p>
+                                        </div>
+                                        
                                         <div class='col-md-12 m-4' style='border-bottom: 1px solid #444;'><b>Factores Ocupacionales</b></div><br><br>
                                         <div class='col-md-5 m-1' style='border: 1px solid #c1c1c1;'>
                                                 <b>Profesión</b>

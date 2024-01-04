@@ -39,14 +39,12 @@ $pagina = PAGINAS::LISTA_CONSULTAS;
                             echo "<td>" . $row['apellidos'] . "</td>";
                             echo "<td>" . $row['fecha_hora'] . "</td>";
                             echo "<td>" . $row['motivo_consulta'] . "</td>";
-                            if ($row['certificado'] == null) {
-                                $certificado = '';
-                            } else {
-                                $certificado = "<a class='btn btn-warning btn-sm ml-1' href='imprimir_certificado.php?idconsulta=" . $row['id'] . "'><i class='fas fa-print table-icon'></i></a>";
-                            }
+                           
+                            
                             echo "<td>";
                             if ($rol == 'adm' or ( $permisoEdicion and $row['id_doctor'] == $id_usuario)) {
                                 echo "<a class='btn btn-success btn-sm' href='editar_consulta.php?id_consulta=" . $row['id'] . "'><i class='fas fa-edit table-icon'></i></a>";
+                                echo "<a class='btn btn-warning btn-sm ml-1' target='_black' href='certificado.php?id_consulta=" . $row['id'] . "'><i class='fas fa-print table-icon'></i></a>";
                             }
                             if ($rol == 'adm' or $permisoImpresion) {
                                echo "<a class='btn btn-danger btn-sm ml-1' href='imprimir_consulta.php?idconsulta=" . $row['id'] . "'><i class='fas fa-print table-icon'></i></a>";

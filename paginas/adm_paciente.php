@@ -25,21 +25,19 @@ if (isset($_POST['btn_crear_paciente'])) {
     $fk_id_empresa = $_POST['empresa'];
     $fk_id_fuente = $_POST['fuente'];
 
+    $institucion = $_POST['institucion']; // Nuevo campo
+    $descripcion = $_POST['descripcion'];   // Nuevo campo
+    $tipo_contingencia = $_POST['tipo_contingencia']; // Nuevo campo
 
 
-    if (!empty($fk_id_empresa)) {
-        // Si fk_id_empresa tiene un valor, inclúyelo en la consulta
-        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
-            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_empresa,fk_id_fuente) "
-            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
-            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_empresa','$fk_id_fuente')";
-    } else {
-        // Si fk_id_empresa no tiene valor, inserta NULL en la columna
-        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
-            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_fuente) "
-            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
-            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_fuente')";
-    }
+    // Decidir qué consulta SQL ejecutar según si $fk_id_empresa tiene un valor
+    $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+        . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, "
+        . "fk_id_empresa, fk_id_fuente, institucion, descripcion, tipo_contingencia) VALUES ('$numero_identidad', '$nombres', '$apellidos', "
+        . "'$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', '$direccion', '$raza', '$ocupacion', '$estado_civil', "
+        . "'$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', "
+        . (!empty($fk_id_empresa) ? "'$fk_id_empresa'" : 'NULL') . ", '$fk_id_fuente', '$institucion', '$descripcion', '$tipo_contingencia')";
+
 
     $query_crear_paciente = $mysqli->query($sql_crear_paciente);
     if ($query_crear_paciente == TRUE) {
@@ -67,29 +65,28 @@ if (isset($_POST['btn_crear_paciente_cita'])) {
     $antecedentes_familiares = $_POST['antecedentes_familiares'];
     $fk_id_empresa = $_POST['empresa'];
     $fk_id_fuente = $_POST['fuente'];
-
-    if (!empty($fk_id_empresa)) {
-        // Si fk_id_empresa tiene un valor, inclúyelo en la consulta
-        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
-            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_empresa, fk_id_fuente) "
-            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
-            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_empresa', '$fk_id_fuente')";
-    } else {
-        // Si fk_id_empresa no tiene valor, inserta NULL en la columna
-        $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
-            . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, fk_id_fuente) "
-            . "VALUES ('$numero_identidad', '$nombres', '$apellidos', '$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', "
-            . "'$direccion', '$raza', '$ocupacion', '$estado_civil', '$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', '$fk_id_fuente')";
-    }
     
+    $institucion = $_POST['institucion']; // Nuevo campo
+    $descripcion = $_POST['descripcion'];   // Nuevo campo
+    $tipo_contingencia = $_POST['tipo_contingencia']; // Nuevo campo
+
+
+    // Decidir qué consulta SQL ejecutar según si $fk_id_empresa tiene un valor
+    $sql_crear_paciente = "INSERT INTO pacientes (numero_identidad, nombres, apellidos, fecha_nacimiento, genero, telefono_fijo, telefono_movil, "
+        . "direccion, raza, ocupacion, estado_civil, correo_electronico, antecedentes_personales, antecedentes_familiares, fecha_hora, "
+        . "fk_id_empresa, fk_id_fuente, institucion, descripcion, tipo_contingencia) VALUES ('$numero_identidad', '$nombres', '$apellidos', "
+        . "'$fecha_nacimiento', '$genero', '$telefono_fijo', '$telefono_movil', '$direccion', '$raza', '$ocupacion', '$estado_civil', "
+        . "'$correo_electronico', '$antecedentes_personales', '$antecedentes_familiares', '$fecha_hora', "
+        . (!empty($fk_id_empresa) ? "'$fk_id_empresa'" : 'NULL') . ", '$fk_id_fuente', '$institucion', '$descripcion', '$tipo_contingencia')";
+
+
     $query_crear_paciente = $mysqli->query($sql_crear_paciente);
     if ($query_crear_paciente == TRUE) {
         header("location:crear_cita.php?id_paciente=" . $mysqli->insert_id);
         exit();
     } else {
-        
+
         echo  "Error: " . $mysqli->error;
-        
     }
 }
 

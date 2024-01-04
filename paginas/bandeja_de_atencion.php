@@ -32,17 +32,17 @@ $id_cita = $_GET['id_cita'];
                         <option value="Femenino">Femenino</option>
                     </select>
                     <input class="form-control" title="Teléfono fijo" placeholder="Teléfono fijo" value="<?php echo $rowspaciente['telefono_fijo']; ?>" id="telefono_fijo" name="telefono_fijo" />
+                    <input class="form-control" title="Teléfono móvil" placeholder="Teléfono móvil" value="<?php echo $rowspaciente['telefono_movil']; ?>" id="telefono_movil" name="telefono_movil" />
+                  
                 </div>
                 <div class="col-md-4">
-                    <input class="form-control" title="Teléfono móvil" placeholder="Teléfono móvil" value="<?php echo $rowspaciente['telefono_movil']; ?>" id="telefono_movil" name="telefono_movil" />
-                    <input class="form-control" title="Dirección" placeholder="Dirección" value="<?php echo $rowspaciente['direccion']; ?>" id="direccion" name="direccion" />
-                    <select class="form-control" id="raza" name="raza" title="Seleccione la Raza">
+                <input class="form-control" title="Dirección" placeholder="Dirección" value="<?php echo $rowspaciente['direccion']; ?>" id="direccion" name="direccion" />
+                     <select class="form-control" id="raza" name="raza" title="Seleccione la Raza">
                         <option value="<?php echo $rowspaciente['raza']; ?>" selected=""><?php echo $rowspaciente['raza']; ?></option>
                         <option value="Mestiza">Mestiza</option>
                         <option value="Negra">Negra</option>
                         <option value="Blanca">Blanca</option>
                     </select>
-                    <input class="form-control" title="Ocupación" placeholder="Ocupación" value="<?php echo $rowspaciente['ocupacion']; ?>" id="ocupacion" name="ocupacion" />
                     <select class="form-control" id="estado_civil" name="estado_civil" title="Seleccione Estado Civil">
                         <option value="<?php echo $rowspaciente['estado_civil']; ?>" selected=""><?php echo $rowspaciente['estado_civil']; ?></option>
                         <option value="Casado">Casado</option>
@@ -50,10 +50,25 @@ $id_cita = $_GET['id_cita'];
                         <option value="Union libre">Unión libre</option>
                     </select>
                     <input class="form-control" title="Correo electrónico" placeholder="Correo electrónico" value="<?php echo $rowspaciente['correo_electronico']; ?>" id="correo_electronico" name="correo_electronico" />
-                </div>
-                <div class="col-md-4">
                     <textarea class="form-control" title="Antecedentes personales" placeholder="Antecedentes personales" id="antecedentes_personales" name="antecedentes_personales"><?php echo $rowspaciente['antecedentes_personales']; ?></textarea>
                     <textarea class="form-control" title="Antecedentes familiares" placeholder="Antecedentes familiares" id="antecedentes_familiares" name="antecedentes_familiares"><?php echo $rowspaciente['antecedentes_familiares']; ?></textarea><br><br><br>
+                </div>
+
+ 
+                <div class="col-md-4">
+                    <input class="form-control" title="Institución" placeholder="Institución" value="<?php echo $rowspaciente['institucion']; ?>" id="institucion" name="institucion" />
+                    <input class="form-control" title="Ocupación" placeholder="Ocupación" value="<?php echo $rowspaciente['ocupacion']; ?>" id="ocupacion" name="ocupacion" />
+                    <input class="form-control" title="Descripción" placeholder="Descripción" value="<?php echo $rowspaciente['descripcion']; ?>" id="descripcion" name="descripcion" />
+                    <select class="form-control" id="tipo_contingencia" name="tipo_contingencia" title="Seleccione Tipo Contingencia">
+                        <option value="<?php echo $rowspaciente['tipo_contingencia']; ?>" selected=""><?php echo $rowspaciente['tipo_contingencia']; ?></option>
+                        <option value="Enfermedad general">Enfermedad general</option>
+                        <option value="Enfermedad catastrófica">Enfermedad catastrófica</option>
+                        <option value="Maternidad">Maternidad</option>
+                        <option value="Presunción de accidente de trabajo">Presunción de accident   e de trabajo</option>
+                        <option value="Presunción de enfermedad profesional">Presunción de enfermedad profesional</option>
+                        <option value="Certificado de salud">Certificado de salud</option>
+                    </select>
+                    
                     <input class="btn btn-primary float-right" type="button" name="btn_actualizar_paciente" id="btn_actualizar_paciente" value="Guardar datos del paciente" onclick="editar_paciente()" />
                 </div>
             </div>
@@ -98,10 +113,10 @@ $id_cita = $_GET['id_cita'];
 
                     <div class="row">
                         <div class="col-md-3">
-                            <input class="form-control" type="number" placeholder="Peso" id="peso" name="peso" required oninput="calcularIMC();">
+                            <input class="form-control" type="number" placeholder="Peso en kg" id="peso" name="peso" required oninput="calcularIMC();">
                         </div>
                         <div class="col-md-3">
-                            <input class="form-control" type="number" placeholder="Talla" id="talla" name="talla" required oninput="calcularIMC();">
+                            <input class="form-control" type="number" placeholder="Talla en m" id="talla" name="talla" required oninput="calcularIMC();">
                         </div>
                         <div class="col-md-3">
                             <input class="form-control" type="number" placeholder="IMC" id="imc" name="imc" readonly>
@@ -112,7 +127,7 @@ $id_cita = $_GET['id_cita'];
 
 
                         <div class="col-md-3">
-                            <input class="form-control" type="number" placeholder="Presión" id="presion" name="presion" required></input>
+                            <input class="form-control" type="text" placeholder="Presión" id="presion" name="presion" required></input>
                         </div>
                         <div class="col-md-3">
                             <input class="form-control" type="number" placeholder="Saturación" id="saturacion" name="saturacion" required></input>
@@ -129,6 +144,15 @@ $id_cita = $_GET['id_cita'];
                         </div>
 
                     </div>
+                    <b style="font-size: 18px">Historia de enfermedad HEA</b><br><br>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <textarea class="form-control" title="Historia de enfermedad HEA" placeholder="Historia de enfermedad HEA" id="hea" name="hea" required></textarea>
+                        </div>
+
+                    </div>
                     <b style="font-size: 18px">Receta</b><br>
                     <label for=""> Crear receta</label>
                     <input type="checkbox" id="hacerReceta" name="hacerReceta">
@@ -141,6 +165,22 @@ $id_cita = $_GET['id_cita'];
                             <div class="col-md-6">
                                 <label for="">Indicaciones</label>
                                 <textarea class="form-control" id="indicaciones" name="indicaciones" placeholder="Indicaciones"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <b style="font-size: 18px">Receta Fisioterapia</b><br>
+                    <label for=""> Crear receta</label>
+                    <input type="checkbox" id="hacerRecetaFisio" name="hacerRecetaFisio">
+                    <div id="formularioRecetaFisio" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Exámenes</label>
+                                <textarea class="form-control" id="examenes_fisio" name="examenes_fisio" placeholder="Exámenes"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Tratamiento</label>
+                                <textarea class="form-control" id="tratamiento_fisio" name="tratamiento_fisio" placeholder="Tratamiento Fisioterapia"></textarea>
                             </div>
                         </div>
                     </div>
@@ -168,6 +208,10 @@ $id_cita = $_GET['id_cita'];
             var formularioReceta = document.getElementById("formularioReceta");
             formularioReceta.style.display = this.checked ? "block" : "none";
         });
+        document.getElementById("hacerRecetaFisio").addEventListener("change", function() {
+            var formularioRecetaFisio = document.getElementById("formularioRecetaFisio");
+            formularioRecetaFisio.style.display = this.checked ? "block" : "none";
+        });
 
 
         var select = document.getElementById("cie_10");
@@ -193,7 +237,7 @@ $id_cita = $_GET['id_cita'];
 			var presion = document.getElementById("presion").value;
 			var saturacion = document.getElementById("saturacion").value;
 
-            if (motivoConsulta === "" || examenFisico === "" || tratamiento === "" || diagnostico === "" || observaciones === "" || certificado === "" || descripcionPrecio === ""|| peso === ""|| talla === "" || presion === "" || saturacion === "") {
+            if (motivoConsulta === "" || examenFisico === "" || tratamiento === "" || diagnostico === "" || observaciones === "" || certificado === "" || descripcionPrecio === ""/* || peso === ""|| talla === "" || presion === "" || saturacion === "" */) {
                 Swal.fire({
                     icon: 'info',
                     title: 'Campos incompletos',
@@ -232,6 +276,12 @@ $id_cita = $_GET['id_cita'];
             var correo_electronico = $("#correo_electronico").val();
             var antecedentes_personales = document.getElementById("antecedentes_personales").value;
             var antecedentes_familiares = document.getElementById("antecedentes_familiares").value;
+
+            var institucion = document.getElementById("institucion").value;
+            var descripcion = document.getElementById("descripcion").value;
+            var tipo_contingencia = document.getElementById("tipo_contingencia").value;
+
+
             $.ajax({
                 url: 'editar_paciente_ajax.php',
                 type: 'post',
@@ -251,6 +301,9 @@ $id_cita = $_GET['id_cita'];
                     correo_electronico: correo_electronico,
                     antecedentes_personales: antecedentes_personales,
                     antecedentes_familiares: antecedentes_familiares,
+                    institucion:institucion,
+                    descripcion: descripcion,
+                    tipo_contingencia: tipo_contingencia,
                 },
                 success: function(response) {
                     $("#edicion_paciente").html(response);
@@ -274,8 +327,14 @@ $id_cita = $_GET['id_cita'];
             var talla = $("#talla").val();
             var presion = $("#presion").val();
             var saturacion = $("#saturacion").val();
+
             var receta = $("#receta").val();
             var indicaciones = $("#indicaciones").val();
+
+            var examenes_fisio = $("#examenes_fisio").val();
+            var tratamiento_fisio = $("#tratamiento_fisio").val();
+            
+            var hea = $("#hea").val();
 
             $.ajax({
                 url: 'crear_consulta.php',
@@ -296,7 +355,10 @@ $id_cita = $_GET['id_cita'];
                     presion: presion,
                     saturacion: saturacion,
                     receta: receta,
-                    indicaciones: indicaciones
+                    indicaciones: indicaciones,
+                    examenes_fisio: examenes_fisio,
+                    tratamiento_fisio: tratamiento_fisio,
+                    hea:hea
                 },
                 success: function(response) {
                     $("#crear_consulta").html(response);

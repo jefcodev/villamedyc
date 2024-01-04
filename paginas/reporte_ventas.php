@@ -9,7 +9,7 @@ class PDF extends FPDF
         $this->Image('../img/logo.png', 70, 6, 60);
         $this->Ln(25);
         $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 10, 'Informe de Compras', 0, 1, 'C');
+        $this->Cell(0, 10, 'Informe de Ventas', 0, 1, 'C');
         $this->Ln(5);
     }
 
@@ -28,6 +28,12 @@ class PDF extends FPDF
         $totalSum = 0;
         $totalVentas = 0; // Contador de ventas
 
+        // Inicializar totales por tipo de pago
+        $totalesPorTipoPago = array(
+            /* 'Efectivo' => 0,
+            'Transferencia' => 0 */
+        );
+
         // Verificar que las fechas sean válidas
         if (!strtotime($fechaInicio) || !strtotime($fechaFin)) {
             $this->SetFont('Arial', 'B', 12);
@@ -36,20 +42,13 @@ class PDF extends FPDF
         }
 
         // Consultar las compras en el rango de fechas especificado
+        $sql = "SELECT v.fecha_venta, v.id_paciente, v.descuento, v.total, v.tipo_pago, u.usuario
+                FROM ventas_cabecera v
+                JOIN usuarios u ON v.id_user = u.id
+                WHERE v.fecha_venta BETWEEN '$fechaInicio' AND '$fechaFin'";
         if (!empty($id_user)) {
-            // Consulta cuando se proporciona el id_user
-            $sql = "SELECT v.fecha_venta, v.id_paciente, v.descuento, v.total, u.usuario
-                    FROM ventas_cabecera v
-                    JOIN usuarios u ON v.id_user = u.id
-                    WHERE v.fecha_venta BETWEEN '$fechaInicio' AND '$fechaFin' AND u.id = '$id_user'";
-        } else {
-            // Consulta cuando no se proporciona el id_user
-            $sql = "SELECT v.fecha_venta, v.id_paciente, v.descuento, v.total, u.usuario
-                    FROM ventas_cabecera v
-                    JOIN usuarios u ON v.id_user = u.id
-                    WHERE v.fecha_venta BETWEEN '$fechaInicio' AND '$fechaFin'";
+            $sql .= " AND u.id = '$id_user'";
         }
-
         $sql .= " ORDER BY v.fecha_venta";
 
         $result = $conn->query($sql);
@@ -73,6 +72,7 @@ class PDF extends FPDF
                 $usuario = utf8_decode($row['usuario']);
                 $descuento = $row['descuento'];
                 $total = $row['total'];
+                $tipoPago = $row['tipo_pago'];
 
                 $this->SetFont('Arial', '', 11);
                 $this->Cell(30, 10, $fecha, 1, 0, 'C');
@@ -83,13 +83,15 @@ class PDF extends FPDF
                 $totalSum += $total;
                 $totalVentas++;
 
+                // Actualizar los totales por tipo de pago
+                $totalesPorTipoPago[$tipoPago] += $total;
+
                 // Agregar el total al array de ventas por usuario
                 if (isset($ventasPorUsuario[$usuario])) {
                     $ventasPorUsuario[$usuario] += $total;
                 } else {
                     $ventasPorUsuario[$usuario] = $total;
                 }
-               
             }
             // Imprimir la suma total
             $this->SetFont('Arial', 'B', 11);
@@ -110,7 +112,29 @@ class PDF extends FPDF
                 $this->Ln(10);
             }
             $this->Ln(10);
-           
+
+            // Mostrar los totales por tipo de pago
+            $this->Cell(0, 10, 'Totales por Tipo de Pago', 0, 1, 'C');
+            $this->Cell(60, 10, 'Tipo de Pago', 1, 0, 'C', 1);
+            $this->Cell(40, 10, 'Total', 1, 0, 'C', 1);
+            $this->Ln(10);
+
+            foreach ($totalesPorTipoPago as $tipoPago => $total) {
+                $this->SetFont('Arial', '', 11);
+                $this->Cell(60, 10, $tipoPago, 1, 0, 'C');
+                $this->Cell(40, 10, $total, 1, 0, 'C');
+                $this->Ln(10);
+            }
+
+
+            // Mostrar el total de ventas
+            $this->Ln(10);
+            $this->Cell(60, 10, 'Productos', 1, 0, 'C', 1);
+            $this->Cell(60, 10, $totalVentas, 1, 0, 'C');
+
+
+            // Mostrar el total de ventas
+            $this->Ln(10);
             $this->Cell(60, 10, 'Pacientes', 1, 0, 'C', 1);
             $this->Cell(60, 10, $totalVentas, 1, 0, 'C');
         } else {
@@ -147,3 +171,4 @@ $conn->close();
 
 // Salida del PDF
 $pdf->Output();
+?>

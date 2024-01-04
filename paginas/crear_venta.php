@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total = $_POST['total'];
     $descuento = $_POST['descuento'];
     $detalles = $_POST['detalles'];
-
+    $tipo_pago = $_POST['tipo_pago'];
     // Iniciar una transacción
     $mysqli->begin_transaction();
 
@@ -46,11 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     $id_user = $_SESSION['id'];
+    $estado_pago = 'pendiente';
     if (!$error) {
         // Insertar la cabecera de la venta
-        $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta, id_paciente, total, usuario, descuento, id_user) VALUES (?, ?, ?, ?, ?, ?)";
+        // Define el estado de pago (por ejemplo, 'pendiente')
+
+        $insert_cabecera_sql = "INSERT INTO ventas_cabecera (fecha_venta, id_paciente, total, usuario, descuento, id_user, tipo_pago, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($insert_cabecera_sql);
-        $stmt->bind_param("ssisii", $fecha_venta, $id_paciente, $total, $usuario, $descuento,$id_user);
+        $stmt->bind_param("ssisiiss", $fecha_venta, $id_paciente, $total, $usuario, $descuento, $id_user, $tipo_pago, $estado_pago);
+
         if ($stmt->execute()) {
             $venta_id = $mysqli->insert_id;
 
@@ -85,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $row = $num_result->fetch_assoc();
 
                                 // Extraer el valor de 'numero_sesiones' en una variable
-                                $numero_sesiones = $row['numero_sesiones'];
+                                $numero_sesiones = $row['numero_sesiones'] * $cantidad;
 
                                 // Ahora $numero_sesiones contiene el valor de 'numero_sesiones'
                                 // y puedes usarlo en tu código
@@ -95,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
 
-                        $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones)";
+                        $insert_sesiones = "INSERT INTO consultas_fisioterapeuta(paciente_id, numero_sesiones, paquete_id, total_sesiones, estado, id_veta) values($id_paciente,$numero_sesiones, $item_id, $numero_sesiones, 'pendiente', $venta_id)";
                         $mysqli->query($insert_sesiones);
 
                         $paquete_detalle_sql = "SELECT pro_ser_id, cantidad FROM paquete_detalle WHERE paquete_id = $item_id and  tipo = 'Producto' ";
@@ -132,39 +136,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mysqli->commit();
 
 
-                // Si no hubo errores, muestra la alerta de éxito
                 echo "<script>
                         
-                        Swal.fire({
-                            title: 'Compra agregada',
-                            text: 'Compra agregada correctamente!',
-                            icon: 'success',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Imprimir!'
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                             
-                             var pdfUrl = 'comprobante_venta.php?venta_id=' + $venta_id; 
-            
-                            var pdfWindow = window.open(pdfUrl, '_blank');
-            
-                            pdfWindow.onload = function() {
-                            pdfWindow.print();
+                    Swal.fire({
+                        title: 'Compra generada',
+                        text: 'Compra generada correctamente!',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             window.location.href = 'inicio.php';
-                            };
-                            
-                           
-                            }
-                            else {
-                                window.location.href = 'inicio.php';
-                            }
-                            
-                          }
-                        );
-                          
-                        
+                        }
+                    });
+                    
                     </script>";
 
 
@@ -253,6 +236,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <br>
             <label for="descuento">Descuento:</label>
             <input class="form-control" style="width: 20%;" type="number" id="descuento" name="descuento"><br>
+            <select class="form-control" style="width: 20%;" title="Género" id="tipo_pago" name="tipo_pago" required>
+                <option value="" selected="" hidden="">Tipo Pago</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="transferencia">Tranferencia</option>
+                <option value="tarjeta">Tarjeta Débito o Crédito</option>
+            </select>
             <label for="total">Total:</label>
             <input class="form-control" style="width: 20%;" type="text" id="total" name="total" readonly><br>
             <button class="btn btn-success" style="width: 20%;" type="submit"><i class="fa-regular fa-floppy-disk"></i> Guardar Venta</button>
@@ -356,79 +345,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
 
-            /* // Agrega esta función para verificar el stock
-            function verificarStock(itemSelect, cantidadInput, stockError) {
-                const tipoItemSelect = itemSelect.closest("tr").querySelector(".tipo_item");
-                const selectedType = tipoItemSelect.value;
-                const selectedItemId = itemSelect.value;
-                const cantidad = parseInt(cantidadInput.value) || 0;
-
-                if (selectedType === "producto" && selectedItemId) {
-                    // Realizar la llamada AJAX para obtener el stock
-                    fetch(`get_stock.php?producto_id=${selectedItemId}`)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            const stock = parseInt(data.stock) || 0;
-                            if (cantidad > stock) {
-                                stockError.textContent = "¡La cantidad supera el stock disponible!";
-
-                                console.log('La cantidad supera el stock ');
-                            } else {
-                                stockError.textContent = "";
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error en la llamada AJAX: " + error);
-                        });
-                } else {
-                    stockError.textContent = "";
-                }
-            }
-
-            // Modifica la parte donde manejas el cambio en el campo de cantidad
-            $(".cantidad").change(function() {
-                const cantidadInput = $(this);
-                const itemSelect = cantidadInput.closest("tr").find(".item_id");
-                const stockError = cantidadInput.closest("tr").find(".stock-error");
-
-                verificarStock(itemSelect[0], cantidadInput[0], stockError[0]);
-                updateSubtotal();
-            }); */
-
-
 
 
             addDetalleButton.addEventListener("click", () => {
                 const newRow = document.createElement("tr");
                 newRow.innerHTML = `
-                <td>
-                    <select name="detalles[tipo_item][]" class="tipo_item form-control">
-                        <option value="">Seleccionar</option>
-                        <option value="producto">Producto</option>
-                        <option value="servicio">Servicio</option>
-                        <option value="paquete">Paquete</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="detalles[item_id][]" class="item_id form-control">
-                    
-                        <!-- Las opciones se cargarán dinámicamente aquí -->
-                    </select>
-                </td>
-                <td><input type="number" step="1" min="1" name="detalles[cantidad][]" class="cantidad form-control" />
-                
-
-                </td>
-                
-                <td><input  name="detalles[precio][]" class="precio form-control" readonly/></td>
-                <td><label  name="detalles[subtotal][]" class="subtotal form-control" readonly/> 0.00</td>
-                
-                <td><button type="button" class="btn btn-danger deleteRow"><i class="fas fa-trash-alt"></i></button></td>
-            `;
-
-
+        <td>
+            <select name="detalles[tipo_item][]" class="tipo_item form-control">
+                <option value="">Seleccionar</option>
+                <option value="producto">Producto</option>
+                <option value="servicio">Servicio</option>
+                <option value="paquete">Paquete</option>
+            </select>
+        </td>
+        <td>
+            <select class="select2 form-control item_id" data-rel="chosen" name="detalles[item_id][]">
+                <option value="" selected>Seleccionar</option>
+            </select>
+        </td>
+        <td><input type="number" step="1" min="1" name="detalles[cantidad][]" class="cantidad form-control" /></td>
+        <td><input name="detalles[precio][]" class="precio form-control" readonly/></td>
+        <td><label name="detalles[subtotal][]" class="subtotal form-control" readonly/> 0.00</td>
+        <td><button type="button" class="btn btn-danger deleteRow"><i class="fas fa-trash-alt"></i></button></td>
+    `;
 
                 detalleTableBody.appendChild(newRow);
+                
                 detalleTableBody.addEventListener("change", (event) => {
                     const target = event.target;
                     if (target.classList.contains("tipo_item") || target.classList.contains("item_id")) {
@@ -437,28 +379,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         const precioInput = row.querySelector(".precio");
                         const itemSelect = row.querySelector(".item_id");
 
+                        if (target.classList.contains("tipo_item")) {
+                            // Si cambia el tipo_item, restablecer la opción seleccionada en item_id
+                            itemSelect.value = ""; // Establecer como "Seleccionar producto"
+                        }
+
                         if (target.classList.contains("item_id")) {
                             const selectedType = tipoItemSelect.value;
                             const selectedItemId = itemSelect.value;
 
-                            // Realizar la llamada AJAX para obtener el precio solo si se ha seleccionado un item_id
                             if (selectedItemId) {
                                 obtenerPrecioDesdeBaseDeDatos(selectedType, selectedItemId, (precio) => {
-                                    // Asignar el precio al input correspondiente
                                     precioInput.value = precio;
-
-                                    // Actualizar subtotal y total
                                     updateSubtotal();
-                                    console.log("Seleccion de id " + selectedItemId);
                                 });
                             }
-                            // Escucha eventos de cambio en los campos recién agregados
-                            newRow.querySelector(".tipo_item").addEventListener("change", updateSubtotal);
-                            newRow.querySelector(".cantidad").addEventListener("input", updateSubtotal);
-
                         }
-
-                        console.log("Seleccion de items " + tipoItemSelect.value);
                     }
                 });
 
@@ -471,6 +407,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 tipoItemSelectNew.addEventListener("change", function() {
                     itemSelectNew.innerHTML = "";
+
+                    // Agrega una opción "Seleccionar producto" que esté seleccionada por defecto
+                    const defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.text = "Seleccionar";
+                    defaultOption.selected = true;
+                    itemSelectNew.appendChild(defaultOption);
                     const selectedType = tipoItemSelectNew.value;
 
                     // Llamada AJAX para obtener los datos de la base de datos
@@ -480,7 +423,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             data.forEach((item) => {
                                 const option = document.createElement("option");
                                 option.value = item.id;
-                                option.textContent = "  (" + item.sesiones + ") - " + item.nombre + " - $" + item.total;
+                                option.textContent = `(${item.sesiones}) - ${item.nombre} - $${item.total}`;
                                 itemSelectNew.appendChild(option);
                             });
                         });

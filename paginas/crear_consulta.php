@@ -20,16 +20,70 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     $certificado = $_POST['certificado'];
 
     /* Datos de IMC */
-    $peso = $_POST['peso'];
-    $talla = $_POST['talla'];
-    $presion = $_POST['presion'];
-    $saturacion = $_POST['saturacion'];
+  	$peso = isset($_POST['peso']) ? floatval($_POST['peso']) : 0;
+    $talla = isset($_POST['talla']) ? floatval($_POST['talla']) : 0;
+    $presion = isset($_POST['presion']) ? $_POST['presion'] : 0;
+    $saturacion = isset($_POST['saturacion']) ? floatval($_POST['saturacion']) : 0;
 
     /*Datos de receta */
-    $receta = $_POST ['receta'];
-    $indicaciones = $_POST['indicaciones'];
+    $receta = isset($_POST['receta']) ? $_POST['receta'] : null;
+    $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : null;
 
-    if (!empty($receta) && !empty($indicaciones)) {
+    /*Datos receta fisio  */
+    $examenes_fisio = isset($_POST['examenes_fisio']) ? $_POST['examenes_fisio'] : null;
+    $tratamiento_fisio = isset($_POST['tratamiento_fisio']) ? $_POST['tratamiento_fisio'] : null;
+
+    $hea = isset($_POST['hea']) ? $_POST['hea'] : null;
+
+
+    
+    if (!empty($tratamiento_fisio) && !empty($examenes_fisio) && !empty($receta) && !empty($indicaciones)) {
+
+        $sql_receta_fis = "INSERT INTO receta_fisio (examenes, tratamiento, id_cita) VALUES ('$examenes_fisio', '$tratamiento_fisio', $id_cita)";
+
+        $sql_receta = "INSERT INTO receta (receta, indicaciones, id_cita) VALUES ('$receta', '$indicaciones', $id_cita)";
+
+        if ($mysqli->query($sql_receta_fis)) {
+            // La inserción fue exitosa, ahora obtén el ID de la receta
+            $id_receta_fis = $mysqli->insert_id;
+            if ($mysqli->query($sql_receta)) {
+                $id_receta = $mysqli->insert_id;
+                echo "<script>
+                            Swal.fire({
+                                title: 'Imprimir' ,
+                                text: 'Imprimir Observaciones Totales!',
+                                icon: 'info',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Imprimir!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                
+                                var pdfUrl = 'receta_all.php?id_receta=' + $id_receta + '&id_receta_fis=' + $id_receta_fis;
+
+
+                                var pdfWindow = window.open(pdfUrl, '_blank');
+
+                                pdfWindow.onload = function() {
+                                pdfWindow.print();
+                                
+                                };
+                                
+                            
+                                }
+                                
+                            }
+                            );
+                    </script>";
+            }
+        } else {
+            // Manejo de errores si la inserción falla
+            echo "Error al insertar la receta: " . $mysqli->error;
+        }
+    }
+
+    if (!empty($receta) && !empty($indicaciones) && empty($tratamiento_fisio) && empty($examenes_fisio)) {
 
         $sql_receta = "INSERT INTO receta (receta, indicaciones, id_cita) VALUES ('$receta', '$indicaciones', $id_cita)";
         if ($mysqli->query($sql_receta)) {
@@ -54,7 +108,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
 
             pdfWindow.onload = function() {
             pdfWindow.print();
-            window.location.href = 'inicio.php';
+            
             };
             
            
@@ -65,17 +119,53 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
           
         
     </script>";
-
-
-
         } else {
             // Manejo de errores si la inserción falla
             echo "Error al insertar la receta: " . $mysqli->error;
         }
-
-
     }
-    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones, descripcion_precio, estado, peso, talla, presion, saturacion) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion')";
+    if (!empty($tratamiento_fisio) && !empty($examenes_fisio) && empty($receta) && empty($indicaciones)) {
+        $sql_receta_fis = "INSERT INTO receta_fisio (examenes, tratamiento, id_cita) VALUES ('$examenes_fisio', '$tratamiento_fisio', $id_cita)";
+        if ($mysqli->query($sql_receta_fis)) {
+            // La inserción fue exitosa, ahora obtén el ID de la receta
+            $id_receta_fis = $mysqli->insert_id;
+            echo "<script>
+            
+        Swal.fire({
+            title: 'Imprimir' ,
+            text: 'Imprimir Observaciones!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Imprimir!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+             
+             var pdfUrl = 'receta_fisio.php?id_receta=' + $id_receta_fis; 
+
+            var pdfWindow = window.open(pdfUrl, '_blank');
+
+            pdfWindow.onload = function() {
+            pdfWindow.print();
+            
+            };
+            
+           
+            }
+            
+          }
+        );
+          
+        
+    </script>";
+        } else {
+            // Manejo de errores si la inserción falla
+            echo "Error al insertar la receta: " . $mysqli->error;
+        }
+    }
+
+    $sql = "INSERT INTO consultas (id_paciente,motivo_consulta,examen_fisico,diagnostico,tratamiento,fecha_hora, id_cita, certificado, observaciones, descripcion_precio, estado, peso, talla, presion, saturacion, hea) VALUES ('$id_paciente','$motivo_consulta','$examen_fisico','$diagnostico','$tratamiento','$fecha_hora', '$id_cita', '$certificado', '$observaciones','$descripcion_precio','$estado', '$peso', '$talla','$presion','$saturacion', '$hea')";
     $result = $mysqli->query($sql);
     $resultado = "";
     if ($result === true) {
@@ -93,7 +183,7 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
         $id_consulta_edit = $id_consulta['id'];
         $resultado = $resultado . '<textarea class="form-control" placeholder="Diagnóstico" id="diagnostico" name="diagnostico">' . $diagnostico . '</textarea>';
         $resultado = $resultado . '<textarea class="form-control" placeholder="Oservaciones" id="observaciones" name="observaciones">' . $observaciones . '</textarea>';
-        $resultado = $resultado . '<input class="form-control" type="number" title="Días de certificado: no puede exceder los 60 días" placeholder="Días de certificado" id="certificado" name="certificado" value ="'.$certificado.'" min="1" max="60"/>';
+        $resultado = $resultado . '<input class="form-control" type="number" title="Días de certificado: no puede exceder los 60 días" placeholder="Días de certificado" id="certificado" name="certificado" value ="' . $certificado . '" min="1" max="60"/>';
         $resultado = $resultado . '<div class="alert alert-success alert-dismissible fade show" role="alert">';
         $resultado = $resultado . 'Consulta registrada con éxito. Para modificarla en el siguiente enlace <a class="btn btn-success btn-sm" href="editar_consulta.php?id_consulta=' . $id_consulta_edit . '">Aquí</a> <button type="button" class="close" data-dismiss="alert" aria-label="Close">';
         $resultado = $resultado . '<span aria-hidden="true">&times;</span>';
@@ -109,5 +199,3 @@ if (isset($_SESSION['usuario']) && (isset($_SESSION['rol']))) {
     }
     echo $resultado;
 }
-
-?>

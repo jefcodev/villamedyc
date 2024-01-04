@@ -85,7 +85,7 @@ $pdf->Ln(3);
 
 $cosulta_citas = "select * from ventas_detalle where venta_id ='$venta_id'";
 $resultado_citas = $mysqli->query($cosulta_citas);
-
+$ahorro ;
 
 $pdf->Cell(5, 5, utf8_decode('Tipo'), 1, 0, 'C', 1);
 $pdf->Cell(28, 5, utf8_decode('Descripción'), 1, 0, 'C', 1);
@@ -138,7 +138,8 @@ while ($row_items = $resultado_citas->fetch_assoc()) {
         $resultado_paq = $mysqli->query($consulta_paquete);
         $paque = $resultado_paq->fetch_assoc();
         $nombre_paquete = utf8_decode($paque['titulo_paquete']) ;
-        
+        $ahorro = $paque['total'] - $paque['ahorra'];
+
         $pdf->Cell(5, 5, 'PAQ', 1, 0, 'C', 0);
         $pdf->Cell(28, 5, $nombre_paquete , 1, 0, 'C', 0);
         $pdf->Cell(6, 5, $row_items['cantidad'], 1, 0, 'C', 0);
@@ -159,5 +160,15 @@ $pdf->Cell(47, 5, utf8_decode('Total Pagado'), 1, 0, 'R', 1);
 $pdf->Cell(10, 5, utf8_decode($total_venta), 1, 0, 'C', 1);
 
 
+$pdf->Ln(15);
+$pdf->Cell(0, 10, utf8_decode('Ahorro ') , 0, 0, 'C');
+$pdf->Ln(3);
+$pdf->Cell(0, 10, utf8_decode($ahorro ) , 0, 0, 'C');
+$pdf->Ln(3);
+$pdf->Cell(0, 10, utf8_decode('Total Ahorro ') , 0, 0, 'C');
+$pdf->Ln(3);
+$pdf->Cell(0, 10, utf8_decode($ahorro + $descuento ) , 0, 0, 'C');
+
+$pdf->Ln(3);
 $pdf->Output();
 ?>
